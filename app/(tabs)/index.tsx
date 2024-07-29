@@ -1,4 +1,4 @@
-// import HomeScreen from '../screen/HomeScreen';
+import HomeScreen from '../screen/HomeScreen';
 // import QuestionScreen from '../screen/QuestionScreen';
 // import WinnerScreen from "../screen/WinnerScreen";
 import LooserScreen from "../screen/LooserScreen";
@@ -6,10 +6,10 @@ import LooserScreen from "../screen/LooserScreen";
 function App() {
   return (
     <>
-      {/* <HomeScreen /> */}
+      <HomeScreen />
       {/* <QuestionScreen /> */}
       {/* <WinnerScreen /> */}
-      <LooserScreen />
+      {/* <LooserScreen /> */}
     </>
   );
 }
