@@ -1,31 +1,14 @@
-import React from 'react';
-import { View, Text, StyleSheet, Button } from 'react-native';
-
-function HomeScreen({ navigation }: { navigation: any }) {
+import { Image, View, Text } from "react-native";
+export default function Home() {
     return (
-        <View style={styles.container}>
-            <Text style={styles.title}>Home Screen</Text>
-            <Button
-                title="Go to Details"
-                onPress={() => navigation.navigate('Details')}
+        <View className="flex h-full bg-green-400">
+            <Image
+                source={{
+                    uri: "../../assets/images/person.jpeg",
+                }}
+                className="w-20 h-20 rounded-full"
             />
+            <Text className="text-black bg-yellow-400 text-xl">Hello World</Text>
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 16,
-        backgroundColor: '#e0f7fa',
-    },
-    title: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginBottom: 16,
-    },
-});
-
-export default HomeScreen;
