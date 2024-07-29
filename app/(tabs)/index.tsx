@@ -1,19 +1,10 @@
-import React, { useState } from 'react';
-import { View, TextInput } from 'react-native';
+import { Image, StyleSheet, Platform } from 'react-native';
+import Home from '../screen/HomeScreen';
 
-function App() {
-  const [text, setText] = useState('');
-
+export default function HomeScreen() {
   return (
-    <View className="flex-1 justify-center p-4">
-      <TextInput
-        value={text}
-        onChangeText={setText}
-        placeholder="Type something here..."
-        className="h-10 border border-gray-400 p-2"
-      />
-    </View>
+    <>
+      <Home />
+    </>
   );
 }
-
-export default App;
