@@ -1,0 +1,37 @@
+[
+  {
+    "id": 1,
+    "name": "Petrus Handika",
+    "price": 2873,
+    "icon": "champagne-glasses",
+    "image": "https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671142.jpg"
+  },
+  {
+    "id": 2,
+    "name": "Lee Thai",
+    "price": 1500,
+    "icon": "coffee",
+    "image": "https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671142.jpg"
+  },
+  {
+    "id": 3,
+    "name": "Jimin",
+    "price": 2000,
+    "icon": "beer",
+    "image": "https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671142.jpg"
+  },
+  {
+    "id": 4,
+    "name": "Oh Suggi",
+    "price": 2500,
+    "icon": "glass-cheers",
+    "image": "https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671142.jpg"
+  },
+  {
+    "id": 5,
+    "name": "Taehyun",
+    "price": 1800,
+    "icon": "cocktail",
+    "image": "https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671142.jpg"
+  }
+]
