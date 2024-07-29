@@ -1,6 +1,8 @@
 import { View, Text } from 'react-native'
-import { Avatar, Button } from 'react-native-elements';
-import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
+import { Button } from 'react-native-elements';
+import datas from "../../data/data.json";
+import CardList from '../../components/CardList';
+
 
 export default function LooserScreen() {
     return (
@@ -9,100 +11,15 @@ export default function LooserScreen() {
                 <Text className='text-white text-3xl'>Upppss..</Text>
                 <Text className='text-white text-3xl'>Better luck next time</Text>
             </View>
-            <View className='flex gap-3'>
-                <View className='flex flex-row items-center'>
-                    <Avatar
-                        size={"large"}
-                        rounded
-                        source={{
-                            uri:
-                                'https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671142.jpg',
-                        }}
+            <View className='flex'>
+                {datas.map((data, index) => (
+                    <CardList
+                        key={index}
+                        image={data.image}
+                        name={data.name}
+                        score={data.price}
                     />
-                    <View className='ml-3'>
-                        <Text className='text-white text-xl'>Petrus Handika</Text>
-                        <View className='flex flex-row gap-2 items-center'>
-                            <FontAwesome6 name='champagne-glasses' size={20} color='black' className='text-yellow-400' />
-                            <Text className='text-white text-2xl'>2873</Text>
-                        </View>
-                    </View>
-                </View>
-            </View>
-            <View className='flex gap-3'>
-                <View className='flex flex-row items-center'>
-                    <Avatar
-                        size={"large"}
-                        rounded
-                        source={{
-                            uri:
-                                'https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671142.jpg',
-                        }}
-                    />
-                    <View className='ml-3'>
-                        <Text className='text-white text-xl'>Petrus Handika</Text>
-                        <View className='flex flex-row gap-2 items-center'>
-                            <FontAwesome6 name='champagne-glasses' size={20} color='black' className='text-yellow-400' />
-                            <Text className='text-white text-2xl'>2873</Text>
-                        </View>
-                    </View>
-                </View>
-            </View>
-            <View className='flex gap-3'>
-                <View className='flex flex-row items-center'>
-                    <Avatar
-                        size={"large"}
-                        rounded
-                        source={{
-                            uri:
-                                'https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671142.jpg',
-                        }}
-                    />
-                    <View className='ml-3'>
-                        <Text className='text-white text-xl'>Petrus Handika</Text>
-                        <View className='flex flex-row gap-2 items-center'>
-                            <FontAwesome6 name='champagne-glasses' size={20} color='black' className='text-yellow-400' />
-                            <Text className='text-white text-2xl'>2873</Text>
-                        </View>
-                    </View>
-                </View>
-            </View>
-            <View className='flex gap-3'>
-                <View className='flex flex-row items-center'>
-                    <Avatar
-                        size={"large"}
-                        rounded
-                        source={{
-                            uri:
-                                'https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671142.jpg',
-                        }}
-                    />
-                    <View className='ml-3'>
-                        <Text className='text-white text-xl'>Petrus Handika</Text>
-                        <View className='flex flex-row gap-2 items-center'>
-                            <FontAwesome6 name='champagne-glasses' size={20} color='black' className='text-yellow-400' />
-                            <Text className='text-white text-2xl'>2873</Text>
-                        </View>
-                    </View>
-                </View>
-            </View>
-            <View className='flex gap-3'>
-                <View className='flex flex-row items-center'>
-                    <Avatar
-                        size={"large"}
-                        rounded
-                        source={{
-                            uri:
-                                'https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671142.jpg',
-                        }}
-                    />
-                    <View className='ml-3'>
-                        <Text className='text-white text-xl'>Petrus Handika</Text>
-                        <View className='flex flex-row gap-2 items-center'>
-                            <FontAwesome6 name='champagne-glasses' size={20} color='black' className='text-yellow-400' />
-                            <Text className='text-white text-2xl'>2873</Text>
-                        </View>
-                    </View>
-                </View>
+                ))}
             </View>
             <View className='flex flex-row gap-3 justify-center mt-10'>
                 <Button

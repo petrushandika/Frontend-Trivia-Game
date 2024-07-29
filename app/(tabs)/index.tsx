@@ -6,7 +6,7 @@ import LooserScreen from "../screen/LooserScreen";
 function App() {
   return (
     <>
-      <HomeScreen />
+      {/* <HomeScreen /> */}
       {/* <QuestionScreen /> */}
       {/* <WinnerScreen /> */}
       {/* <LooserScreen /> */}
