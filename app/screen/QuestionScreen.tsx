@@ -1,94 +1,96 @@
 import React, { useState } from 'react';
-import { Text, View, Image } from 'react-native';
+import { View, Text } from 'react-native';
+import { Button, LinearProgress } from 'react-native-elements';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-import { Button } from 'react-native-elements';
+import 'nativewind';
 
-function Question() {
-    const [pressedButton, setPressedButton] = useState<string | null>(null);
+const QuestionScreen = () => {
+    const [press, setPress] = useState<string | null>(null);
 
     const handlePress = (buttonName: string) => {
-        setPressedButton(buttonName);
+        setPress(buttonName);
     };
 
     const handleRelease = () => {
-        setPressedButton(null);
+        setPress(null);
     };
 
     return (
-        <View className='h-full mt-20 p-10'>
-            <View className='flex flex-row justify-between'>
-                <Text className='text-white text-3xl'>17</Text>
-                <View className='flex flex-row items-center gap-3'>
+        <View className='h-full p-5 bg-gray-800'>
+            <View className='flex my-auto rounded p-5' style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+                <View className='flex flex-row justify-end gap-3 mb-10'>
                     <FontAwesome6 name="crown" size={30} color="yellow" />
                     <Text className='text-white text-3xl'>2481</Text>
                 </View>
-            </View>
-            <View className='my-5'>
-                <Image
-                    source={require('../../assets/images/person.jpeg')}
-                    className='w-full rounded-xl'
-                />
-            </View>
-            <View className='flex gap-3'>
-                <Button
-                    title="Lee Tai"
-                    buttonStyle={{
-                        backgroundColor: pressedButton === 'Lee Tai' ? 'green' : 'white',
-                        borderRadius: 10,
-                        borderColor: 'black',
-                        paddingVertical: 10,
-                    }}
-                    titleStyle={{
-                        color: pressedButton === 'Lee Tai' ? 'white' : 'black',
-                        fontSize: 20
-                    }}
-                    onPressIn={() => handlePress('Lee Tai')}
-                    onPressOut={handleRelease}
-                />
-                <Button
-                    title="Jimin"
-                    buttonStyle={{
-                        backgroundColor: pressedButton === 'Jimin' ? 'red' : 'white',
-                        borderRadius: 10,
-                        borderColor: 'black',
-                        paddingVertical: 10,
-                    }}
-                    titleStyle={{
-                        color: pressedButton === 'Jimin' ? 'white' : 'black',
-                        fontSize: 20
-                    }}
-                    onPressIn={() => handlePress('Jimin')}
-                    onPressOut={handleRelease}
-                />
-                <Button
-                    title="Oh Suggi"
-                    buttonStyle={{
-                        backgroundColor: 'white',
-                        borderRadius: 10,
-                        borderColor: 'black',
-                        paddingVertical: 10,
-                    }}
-                    titleStyle={{
-                        color: 'black',
-                        fontSize: 20
-                    }}
-                />
-                <Button
-                    title="Taehyun"
-                    buttonStyle={{
-                        backgroundColor: 'white',
-                        borderRadius: 10,
-                        borderColor: 'black',
-                        paddingVertical: 10,
-                    }}
-                    titleStyle={{
-                        color: 'black',
-                        fontSize: 20
-                    }}
-                />
+                <View className='flex gap-y-5 mb-14'>
+                    <Text className='text-green-300 text-3xl text-center'>00 : 18</Text>
+                    <Text className='text-white text-xl text-center'>Blackpink's first single song in 2016 is known as</Text>
+                </View>
+                <View className='flex gap-y-5'>
+                    <Button
+                        title="Boom Ba Yah"
+                        buttonStyle={{
+                            backgroundColor: press === 'Boom Ba Yah' ? 'green' : 'white',
+                            borderRadius: 10,
+                            borderColor: 'black',
+                            paddingVertical: 10,
+                        }}
+                        titleStyle={{
+                            color: press === 'Boom Ba Yah' ? 'white' : 'black',
+                            fontSize: 20,
+                        }}
+                        onPressIn={() => handlePress('Boom Ba Yah')}
+                        onPressOut={handleRelease}
+                    />
+                    <Button
+                        title="Bang Bang Bang"
+                        buttonStyle={{
+                            backgroundColor: press === 'Bang Bang Bang' ? 'red' : 'white',
+                            borderRadius: 10,
+                            borderColor: 'black',
+                            paddingVertical: 10,
+                        }}
+                        titleStyle={{
+                            color: press === 'Bang Bang Bang' ? 'white' : 'black',
+                            fontSize: 20,
+                        }}
+                        onPressIn={() => handlePress('Bang Bang Bang')}
+                        onPressOut={handleRelease}
+                    />
+                    <Button
+                        title="Everything"
+                        buttonStyle={{
+                            backgroundColor: 'white',
+                            borderRadius: 10,
+                            borderColor: 'black',
+                            paddingVertical: 10,
+                        }}
+                        titleStyle={{
+                            color: 'black',
+                            fontSize: 20,
+                        }}
+                    />
+                    <Button
+                        title="Aloha"
+                        buttonStyle={{
+                            backgroundColor: 'white',
+                            borderRadius: 10,
+                            borderColor: 'black',
+                            paddingVertical: 10,
+                        }}
+                        titleStyle={{
+                            color: 'black',
+                            fontSize: 20,
+                        }}
+                    />
+                </View>
+                <View className='mt-12'>
+                    <Text className='text-white text-center mb-1'>4/20 Question</Text>
+                    <LinearProgress color="primary" />
+                </View>
             </View>
         </View>
     );
 }
 
-export default Question;
+export default QuestionScreen;
