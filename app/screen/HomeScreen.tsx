@@ -1,58 +1,78 @@
-// import { HeaderStyleInterpolators } from "@react-navigation/stack";
-import { Image, View, Text, ImageBackground, SafeAreaView } from "react-native";
+import { View, Image, Text } from 'react-native';
 import { Avatar, Button } from "react-native-elements";
-import AntDesign from "react-native-vector-icons/AntDesign";
-import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
 
-export default function HomeScreen({navigation} : {navigation:any}) {
+export default function HomeScreen({ navigation }: { navigation: any }) {
   return (
-     <SafeAreaView className="w-full h-full  bg-black">
-      <ImageBackground
-        source={require("@/assets/images/bg-kuis.png")}
-        resizeMode="cover"
-        className="flex-1 p-10"
-      >
-        <View className="flex flex-row items-center justify-between">
-          <Image
-            source={require("@/assets/images/icon-trivia.png")}
-            className="w-10 h-10"
-          />
-          <View className="flex flex-row items-center border-[1px] bg-slate-700 space-x-2 ">
+    <View className='flex-1 gap-10 mt-1'>
+      <View className='p-2'>
+        <View className='flex flex-row justify-between mb-2'>
+          <View className='flex-1 mr-2 bg-pink-200 rounded-lg'>
             <Image
-              source={require("@/assets/images/diamond.png")}
-              className="w-5 h-5"
+              source={require("../../assets/images/person1.jpg")}
+              className='w-full h-48'
             />
-            <Text className="text-white">21</Text>
-            <AntDesign name="plussquare" size={20} color="white" />
+          </View>
+          <View className='flex-1 bg-lime-200 rounded-lg'>
+            <Image
+              source={require("../../assets/images/person2.jpg")}
+              className='w-full h-48'
+            />
           </View>
         </View>
-
-        <View className="flex justify-center items-center mt-[90px] w-full space-y-3">
-          <Avatar
-            rounded
-            source={{
-              uri: "https://t3.ftcdn.net/jpg/06/17/13/26/360_F_617132669_YptvM7fIuczaUbYYpMe3VTLimwZwzlWf.jpg",
-            }}
-            size={80}
-          />
-          <FontAwesome6
-            name="pencil"
-            className="text-white absolute right-[110px] rounded-full p-1 bg-blue-600"
-            size={10}
-          />
-
-          <Text className="text-white text-lg">Molusca Bertulang</Text>
+        <View className='flex flex-row justify-between'>
+          <View className='flex-1 mr-2 bg-amber-200 rounded-lg'>
+            <Image
+              source={require("../../assets/images/person3.jpg")}
+              className='w-full h-48'
+            />
+          </View>
+          <View className='flex-1 bg-blue-200 rounded-lg'>
+            <Image
+              source={require("../../assets/images/person4.jpg")}
+              className='w-full h-48'
+            />
+          </View>
         </View>
-
-        <View className="flex justify-center items-center mt-28">
-          <Button
-            title="START GAME"
-            buttonStyle={{ backgroundColor: "green" }}
-            onPress={() => navigation.navigate("FindMatch")}
-          />
-        </View>
-      </ImageBackground>
-    </SafeAreaView>
-
+      </View>
+      <View>
+        <Text className='text-5xl font-semibold text-center'>Trivia Game Quiz</Text>
+        <Text className='text-base text-gray-500 text-center'>Perfect game to challange your</Text>
+        <Text className='text-base text-gray-500 text-center'>friends and have hours of fun!</Text>
+      </View>
+      <View className='flex flex-row items-center'>
+        <Avatar
+          rounded
+          source={{
+            uri: "https://cdn3d.iconscout.com/3d/premium/thumb/boy-avatar-8686451-7944083.png?f=webp",
+          }}
+          size={80}
+          containerStyle={{
+            borderColor: 'black',
+            borderWidth: 1,
+            marginLeft: 10,
+          }}
+        />
+        <Button
+          title="Start Game"
+          buttonStyle={{
+            backgroundColor: 'darkorange',
+            borderRadius: 50,
+            borderColor: 'black',
+            paddingVertical: 15,
+            width: '70%',
+          }}
+          titleStyle={{
+            color: 'white',
+            fontSize: 20,
+          }}
+          containerStyle={{
+            width: '100%',
+            marginLeft: 10,
+          }}
+          onPress={() => navigation.navigate("FindMatch")}
+        />
+      </View>
+    </View>
   );
 }
+
