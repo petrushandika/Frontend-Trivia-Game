@@ -6,6 +6,7 @@ import LoginScreen from '../screen/LoginScreen';
 import FindMatchScreen from '../screen/FindMatchScreen';
 import QuestionScreen from '../screen/QuestionScreen';
 import WinnerScreen from '../screen/WinnerScreen';
+import ChangeAva from '../../components/modal/changeAva';
 
 const Stack = createStackNavigator();
 
@@ -18,7 +19,8 @@ function AppNavigator() {
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="FindMatch" component={FindMatchScreen} /> */}
         {/* <Stack.Screen name="Question" component={QuestionScreen} options={{ headerShown: false }} /> */}
-        <Stack.Screen name="Winner" component={WinnerScreen} options={{ headerShown: false }} />
+        {/* <Stack.Screen name="Winner" component={WinnerScreen} options={{ headerShown: false }}/> */}
+        <Stack.Screen name="changeAva" component={ChangeAva} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
