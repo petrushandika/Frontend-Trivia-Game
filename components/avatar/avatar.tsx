@@ -1,61 +1,8 @@
 import { useState } from 'react';
-import { View, ScrollView, Text, StyleSheet } from 'react-native';
+import { View, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import { Avatar } from '@rneui/themed';
+import datas from '@/data/data.json';
 
-type AvatarData = {
-  image_url: string;
-};
-
-const dataList: AvatarData[] = [
-  {
-    image_url: 'https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671142.jpg',
-  },
-  {
-    image_url: 'https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671122.jpg',
-  },
-  {
-    image_url:
-      'https://static.vecteezy.com/system/resources/thumbnails/027/951/137/small_2x/stylish-spectacles-guy-3d-avatar-character-illustrations-png.png',
-  },
-  {
-    image_url:
-      'https://img.freepik.com/free-psd/3d-illustration-person-with-glasses_23-2149436185.jpg?size=338&ext=jpg&ga=GA1.1.2008272138.1722211200&semt=sph',
-  },
-  {
-    image_url:
-      'https://img.freepik.com/free-psd/3d-illustration-person-with-pink-hair_23-2149436186.jpg',
-  },
-  {
-    image_url:
-      'https://img.freepik.com/free-psd/3d-illustration-person_23-2149436182.jpg',
-  },
-  {
-    image_url: 'https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671142.jpg',
-  },
-  {
-    image_url: 'https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671122.jpg',
-  },
-  {
-    image_url:
-      'https://static.vecteezy.com/system/resources/thumbnails/027/951/137/small_2x/stylish-spectacles-guy-3d-avatar-character-illustrations-png.png',
-  },
-  {
-    image_url:
-      'https://img.freepik.com/free-psd/3d-illustration-person-with-glasses_23-2149436185.jpg?size=338&ext=jpg&ga=GA1.1.2008272138.1722211200&semt=sph',
-  },
-  {
-    image_url:
-      'https://img.freepik.com/free-psd/3d-illustration-person-with-pink-hair_23-2149436186.jpg',
-  },
-  {
-    image_url:
-      'https://img.freepik.com/free-psd/3d-illustration-person_23-2149436182.jpg',
-  },
-];
-
-type AvatarComponentProps = {};
-
-// Definisi fungsi chunk di luar komponen
 const chunkArray = (arr: any[], chunkSize: number) => {
   if (chunkSize <= 0) throw "Invalid chunk size";
   var R = [];
@@ -64,34 +11,65 @@ const chunkArray = (arr: any[], chunkSize: number) => {
   return R;
 };
 
-const Avatars: React.FunctionComponent<AvatarComponentProps> = () => {
+const Avatars: React.FunctionComponent = () => {
+  const [selectedAvatarId, setSelectedAvatarId] = useState<number | null>(null);
+
+  const handleAvatarPress = (item: any) => {
+    setSelectedAvatarId(item.id);
+    console.log(`Avatar clicked: ${item.name}`);
+  };
+
   return (
-    <>
-      <ScrollView>
-        {chunkArray(dataList, 4).map((chunk, chunkIndex) => (
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-around',
-              marginBottom: 30,
-            }}
-            key={chunkIndex}
-          >
-            {chunk.map((l, i) => (
+    <ScrollView style={styles.scrollView}>
+      {chunkArray(datas, 4).map((chunk, chunkIndex) => (
+        <View
+          style={styles.row}
+          key={chunkIndex}
+        >
+          {chunk.map((item, i) => (
+            <TouchableOpacity
+              key={`${chunkIndex}-${i}`}
+              onPress={() => handleAvatarPress(item)}
+              activeOpacity={0.6}
+              style={styles.avatarWrapper}
+            >
               <Avatar
-                size={55}
+                size={53}
                 rounded
-                source={l.image_url ? { uri: l.image_url } : {}}
-                key={`${chunkIndex}-${i}`}
+                source={item.image ? { uri: item.image } : {}}
+                containerStyle={[
+                  styles.avatarContainer,
+                  selectedAvatarId === item.id && styles.selectedAvatar
+                ]}
               />
-            ))}
-          </View>
-        ))}
-  
-         
-        </ScrollView>  
-    </>
+            </TouchableOpacity>
+          ))}
+        </View>
+      ))}
+    </ScrollView>
   );
 };
+
+const styles = StyleSheet.create({
+  scrollView: {
+    marginTop: 16,
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginBottom: 30,
+  },
+  avatarWrapper: {
+    padding: 5,
+  },
+  avatarContainer: {
+    borderWidth: 0,
+    borderColor: 'transparent',
+  },
+  selectedAvatar: {
+    borderWidth: 2,
+    borderColor: 'yellow',
+  },
+});
 
 export default Avatars;
