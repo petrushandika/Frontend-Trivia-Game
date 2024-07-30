@@ -4,34 +4,83 @@
     "name": "Petrus Handika",
     "price": 2873,
     "icon": "champagne-glasses",
-    "image": "https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671142.jpg"
+    "image": "https://img.freepik.com/premium-psd/3d-render-avatar-character_23-2150611774.jpg"
   },
   {
     "id": 2,
     "name": "Lee Thai",
     "price": 1500,
     "icon": "coffee",
-    "image": "https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671142.jpg"
+    "image": "https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671122.jpg"
   },
   {
     "id": 3,
     "name": "Jimin",
     "price": 2000,
     "icon": "beer",
-    "image": "https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671142.jpg"
+    "image": "https://st.depositphotos.com/1008402/58885/i/450/depositphotos_588852792-stock-illustration-illustration-smiling-man-cartoon-close.jpg"
   },
   {
     "id": 4,
     "name": "Oh Suggi",
     "price": 2500,
     "icon": "glass-cheers",
-    "image": "https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671142.jpg"
+    "image": "https://img.freepik.com/free-psd/3d-illustration-person-with-glasses_23-2149436185.jpg?size=338&ext=jpg&ga=GA1.1.2008272138.1722211200&semt=sph"
   },
   {
     "id": 5,
-    "name": "Taehyun",
+    "name": "Bella",
     "price": 1800,
     "icon": "cocktail",
+    "image": "https://img.freepik.com/free-psd/3d-illustration-person-with-pink-hair_23-2149436186.jpg"
+  },
+  {
+    "id": 6,
+    "name": "Alice",
+    "price": 2873,
+    "icon": "champagne-glasses",
+    "image": "https://img.freepik.com/free-psd/3d-illustration-person_23-2149436182.jpg"
+  },
+  {
+    "id": 7,
+    "name": "Tehyoung",
+    "price": 1500,
+    "icon": "coffee",
     "image": "https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671142.jpg"
+  },
+  {
+    "id": 8,
+    "name": "Edward",
+    "price": 2000,
+    "icon": "beer",
+    "image": "https://static.vecteezy.com/system/resources/thumbnails/027/951/137/small_2x/stylish-spectacles-guy-3d-avatar-character-illustrations-png.png"
+  },
+  {
+    "id": 9,
+    "name": "Anastasia",
+    "price": 2500,
+    "icon": "glass-cheers",
+    "image": "https://st.depositphotos.com/1008402/58769/i/450/depositphotos_587692484-stock-illustration-illustration-smiling-woman-cartoon-close.jpg"
+  },
+  {
+    "id": 10,
+    "name": "Kimmy",
+    "price": 1800,
+    "icon": "cocktail",
+    "image": "https://img.freepik.com/free-psd/3d-render-avatar-character_23-2150611734.jpg"
+  },
+  {
+    "id": 11,
+    "name": "Liam",
+    "price": 2500,
+    "icon": "glass-cheers",
+    "image": "https://img.freepik.com/free-psd/3d-rendering-boy-avatar-emoji_23-2150603408.jpg"
+  },
+  {
+    "id": 12,
+    "name": "Boy",
+    "price": 1800,
+    "icon": "cocktail",
+    "image": "https://img.freepik.com/free-psd/3d-render-avatar-character_23-2150611716.jpg?size=338&ext=jpg&ga=GA1.1.2008272138.1722211200&semt=ais_user"
   }
 ]
