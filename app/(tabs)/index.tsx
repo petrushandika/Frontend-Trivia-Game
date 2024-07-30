@@ -1,14 +1,13 @@
-// import HomeScreen from '../screen/HomeScreen';
-// import QuestionScreen from '../screen/QuestionScreen';
-// import WinnerScreen from "../screen/WinnerScreen";
-import CreateAva from "../../components/avatar/createAva";
+import HomeScreen from '../screen/HomeScreen';
+import QuestionScreen from '../screen/QuestionScreen';
+import WinnerScreen from "../screen/WinnerScreen";
 import LooserScreen from "../screen/LooserScreen";
 
 function App() {
   return (
     <>
       {/* <HomeScreen /> */}
-      {/* <QuestionScreen /> */}
+      <QuestionScreen />
       {/* <WinnerScreen /> */}
       {/* <LooserScreen /> */}
       <CreateAva/>
