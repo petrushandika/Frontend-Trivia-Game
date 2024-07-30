@@ -6,6 +6,7 @@ import LoginScreen from '../screen/LoginScreen';
 import FindMatchScreen from '../screen/FindMatchScreen';
 import QuestionScreen from '../screen/QuestionScreen';
 import WinnerScreen from '../screen/WinnerScreen';
+import ChangeAva from '../../components/modal/changeAva';
 
 const Stack = createStackNavigator();
 
