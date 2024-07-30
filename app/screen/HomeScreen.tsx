@@ -1,8 +1,9 @@
+// import { HeaderStyleInterpolators } from "@react-navigation/stack";
 import { Image, View, Text, ImageBackground, SafeAreaView } from "react-native";
 import { Avatar, Button } from "react-native-elements";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
-export default function Home() {
+export default function HomeScreen({navigation}) {
   return (
     <SafeAreaView className="w-full h-full">
       <View className="ml-auto mt-6">
@@ -36,6 +37,7 @@ export default function Home() {
           <Button
             title="Start Game"
             buttonStyle={{ backgroundColor: "green", borderRadius: 8 }}
+            onPress={() => navigation.navigate("FindMatch")}
           />
         </View>
       </ImageBackground>
