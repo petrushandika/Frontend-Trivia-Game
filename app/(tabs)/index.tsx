@@ -7,12 +7,10 @@ import AppNavigator from '../navigation/AppNavigator';
 
 function App() {
   return <AppNavigator />;
-      {/* <QuestionScreen /> */}
-      {/* <WinnerScreen /> */}
-      {/* <LooserScreen /> */}
-      {/* <FindMatchScreen /> */}
-  
-
+  // <QuestionScreen />
+  {/* <WinnerScreen /> */ }
+  {/* <LooserScreen /> */ }
+  {/* <FindMatchScreen /> */ }
 }
 
 export default App;
