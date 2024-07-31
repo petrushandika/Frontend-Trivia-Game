@@ -1,21 +1,23 @@
 import React, { useState } from "react";
-import { View, StyleSheet, Modal, Text } from "react-native";
-import { Button, Avatar } from "@rneui/themed";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { Card } from "@rneui/themed";
+import { View, StyleSheet, Modal, Text, Image, TouchableOpacity } from "react-native";
+import { Button } from "@rneui/themed";
 
-interface DialogComponentProps {}
-
-export default function AvaModal<DialogComponentProps>() {
+export default function BuyDiamonds() {
   const [modalVisible, setModalVisible] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
   const toggleModal = () => {
     setModalVisible(!modalVisible);
+  };
+
+  const handleImageClick = (image: string) => {
+    setSelectedImage(image);
   };
 
   return (
     <View style={styles.buttonContainer}>
       <Button
-        title="Open Multi Action Dialog"
+        title="Open Diamond Options"
         onPress={toggleModal}
         buttonStyle={styles.button}
       />
@@ -28,23 +30,61 @@ export default function AvaModal<DialogComponentProps>() {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <View style={styles.avatarGrid}>
-              {Array.from({ length: 6 }).map((_, index) => (
-                <Card key={index} containerStyle={styles.card}>
-                  <TouchableOpacity activeOpacity={0.6}>
-                    <View style={styles.avatarContainer}>
-                      <Avatar
-                        size="medium"
-                        rounded
-                        source={{
-                          uri: "https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671142.jpg",
-                        }}
-                      />
-                    </View>
-                    <Text style={styles.avatarText}>Free</Text>
-                  </TouchableOpacity>
-                </Card>
-              ))}
+            <View style={styles.diamondGrid}>
+              <TouchableOpacity
+                style={[
+                  styles.imageContainer,
+                  selectedImage === "100d" && styles.selectedImageContainer
+                ]}
+                onPress={() => handleImageClick("100d")}
+              >
+                <Image source={require("../../assets/images/100d.png")} style={styles.image} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[
+                  styles.imageContainer,
+                  selectedImage === "250d" && styles.selectedImageContainer
+                ]}
+                onPress={() => handleImageClick("250d")}
+              >
+                <Image source={require("../../assets/images/250d.png")} style={styles.image} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[
+                  styles.imageContainer,
+                  selectedImage === "500d" && styles.selectedImageContainer
+                ]}
+                onPress={() => handleImageClick("500d")}
+              >
+                <Image source={require("../../assets/images/500d.png")} style={styles.image} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[
+                  styles.imageContainer,
+                  selectedImage === "1000d" && styles.selectedImageContainer
+                ]}
+                onPress={() => handleImageClick("1000d")}
+              >
+                <Image source={require("../../assets/images/1000d.png")} style={styles.image} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[
+                  styles.imageContainer,
+                  selectedImage === "5000d" && styles.selectedImageContainer
+                ]}
+                onPress={() => handleImageClick("5000d")}
+              >
+                <Image source={require("../../assets/images/5000d.png")} style={styles.image} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[
+                  styles.imageContainer,
+                  selectedImage === "10000d" && styles.selectedImageContainer
+                ]}
+                onPress={() => handleImageClick("10000d")}
+              >
+                <Image source={require("../../assets/images/10000d.png")} style={styles.image} />
+              </TouchableOpacity>
             </View>
             <View style={styles.actionsContainer}>
               <Button
@@ -84,49 +124,34 @@ const styles = StyleSheet.create({
   },
   modalView: {
     margin: 20,
-    backgroundColor: "#a5a4d7",
-    borderRadius: 20,
+    backgroundColor: "rgba(255, 122, 0, 0.7)",
     padding: 35,
     alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
+    borderRadius: 20,
     elevation: 5,
   },
-  modalTitle: {
-    marginBottom: 15,
-    textAlign: "center",
-    fontSize: 20,
-    color: "white",
-  },
-  avatarGrid: {
+  diamondGrid: {
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "center",
+    margin: 2,
+    padding: 0,
   },
-  avatarContainer: {
+  imageContainer: {
     alignItems: "center",
-    marginVertical: 5,
-    borderColor: 'black',
-    borderWidth: 1,
-    borderRadius: 100,
+    marginVertical: 7,
+    padding: 1,
+    marginHorizontal: 2,
+    borderRadius: 10,  // Rounded corners
   },
-  avatarText: {
-    color: 'yellow',
-    textAlign: 'center',
-    marginTop: 5,
+  selectedImageContainer: {
+    borderColor: "yellow",
+    borderWidth: 3,
+    borderRadius: 10,  // Matching the border radius
   },
-  card: {
-    backgroundColor: '#aec4e1',
-    borderRadius: 10,
-    margin: 10,
-    padding: 10,
-    borderColor: 'black',
-    borderWidth: 1, 
+  image: {
+    width: 80,  // Adjust size if needed
+    height: 80,
   },
   actionsContainer: {
     flexDirection: "row",

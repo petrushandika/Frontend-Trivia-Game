@@ -34,7 +34,7 @@ const Avatars: React.FunctionComponent = () => {
               style={styles.avatarWrapper}
             >
               <Avatar
-                size={53}
+                size={59}
                 rounded
                 source={item.image ? { uri: item.image } : {}}
                 containerStyle={[
@@ -52,7 +52,7 @@ const Avatars: React.FunctionComponent = () => {
 
 const styles = StyleSheet.create({
   scrollView: {
-    marginTop: 16,
+    marginTop: 5,
   },
   row: {
     flexDirection: 'row',
@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   avatarWrapper: {
-    padding: 5,
+    paddingHorizontal: 10,
   },
   avatarContainer: {
     borderWidth: 0,
