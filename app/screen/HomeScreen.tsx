@@ -50,6 +50,7 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
             borderColor: 'black',
             borderWidth: 1,
             marginLeft: 10,
+            marginRight: 10
           }}
         />
         <Button
@@ -67,9 +68,8 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
           }}
           containerStyle={{
             width: '100%',
-            marginLeft: 10,
           }}
-          onPress={() => navigation.navigate("FindMatch")}
+          onPress={() => navigation.navigate("Match")}
         />
       </View>
     </View>
