@@ -1,7 +1,13 @@
 import AppNavigator from '../navigation/AppNavigator';
+import LeaderboardScreen from '../screen/LeaderboardScreen';
+
 
 function App() {
-  return <AppNavigator />;
+  return (
+    <AppNavigator />
+      // <LeaderboardScreen />
+    
+  );
 }
 
 export default App;
