@@ -1,15 +1,31 @@
 import React, { useState } from "react";
-import { View, StyleSheet, Modal, Text } from "react-native";
-import { Button, Avatar } from "@rneui/themed";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { Card } from "@rneui/themed";
+import { View, StyleSheet, Modal, Text, Image, TouchableOpacity } from "react-native";
+import { Avatar } from "@rneui/themed";
+import Data from "../../data/data.json";
+import { Button } from "@rneui/themed";
 
-interface DialogComponentProps {}
+
+interface IAva {
+  id: number;
+  image: string;
+  price: number;
+}
 
 export default function AvaModal<DialogComponentProps>() {
   const [modalVisible, setModalVisible] = useState(false);
+  const [selectedAvatar, setSelectedAvatar] = useState<number | null>(null);
+  const userDiamonds = 300;
+
   const toggleModal = () => {
     setModalVisible(!modalVisible);
+  };
+
+  const handleAvatarClick = (avatarId: number, cost: number) => {
+    if (cost > userDiamonds) {
+      alert("Your diamond does not enough, you have to buy at Shop");
+    } else {
+      setSelectedAvatar(avatarId);
+    }
   };
 
   return (
@@ -17,7 +33,6 @@ export default function AvaModal<DialogComponentProps>() {
       <Button
         title="Open Multi Action Dialog"
         onPress={toggleModal}
-        buttonStyle={styles.button}
       />
 
       <Modal
@@ -28,34 +43,42 @@ export default function AvaModal<DialogComponentProps>() {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
+            <Text style={styles.modalTitle}>Choose an Avatar</Text>
             <View style={styles.avatarGrid}>
-              {Array.from({ length: 6 }).map((_, index) => (
-                <Card key={index} containerStyle={styles.card}>
-                  <TouchableOpacity activeOpacity={0.6}>
-                    <View style={styles.avatarContainer}>
-                      <Avatar
-                        size="medium"
-                        rounded
-                        source={{
-                          uri: "https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671142.jpg",
-                        }}
-                      />
-                    </View>
-                    <Text style={styles.avatarText}>Free</Text>
-                  </TouchableOpacity>
-                </Card>
+              {Data.slice(0, 6).map((avatar: IAva) => (
+                <TouchableOpacity
+                  key={avatar.id}
+                  style={[
+                    styles.avatarContainer,
+                    selectedAvatar === avatar.id && styles.selectedAvatar,
+                  ]}
+                  onPress={() => handleAvatarClick(avatar.id, avatar.price)}
+                >
+                  <Avatar
+                    size="large"
+                    rounded
+                    source={{ uri: avatar.image }}
+                  />
+                  <Text style={styles.avatarText}>{avatar.price === 0 ? 'Free' : avatar.price}</Text>
+                  {avatar.price > 0 && (
+                    <Image
+                      source={require("../../assets/images/diamont.png")}
+                      style={styles.diamondImage}
+                    />
+                  )}
+                </TouchableOpacity>
               ))}
             </View>
             <View style={styles.actionsContainer}>
               <Button
                 title="Cancel"
-                buttonStyle={styles.cancelButton}
                 onPress={toggleModal}
+                style={styles.cancelButton}
               />
               <Button
                 title="Save"
-                buttonStyle={styles.saveButton}
                 onPress={toggleModal}
+                style={styles.saveButton}
               />
             </View>
           </View>
@@ -66,11 +89,6 @@ export default function AvaModal<DialogComponentProps>() {
 }
 
 const styles = StyleSheet.create({
-  button: {
-    borderRadius: 6,
-    width: 220,
-    margin: 20,
-  },
   buttonContainer: {
     margin: 20,
     justifyContent: "center",
@@ -84,17 +102,10 @@ const styles = StyleSheet.create({
   },
   modalView: {
     margin: 20,
-    backgroundColor: "#a5a4d7",
-    borderRadius: 20,
+    backgroundColor: "rgba(255, 122, 0, 0.7)",
     padding: 35,
     alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
+    borderRadius: 20,
     elevation: 5,
   },
   modalTitle: {
@@ -106,27 +117,31 @@ const styles = StyleSheet.create({
   avatarGrid: {
     flexDirection: "row",
     flexWrap: "wrap",
-    justifyContent: "center",
+    justifyContent: "flex-start",
+    width: "100%",
   },
   avatarContainer: {
     alignItems: "center",
     marginVertical: 5,
-    borderColor: 'black',
+    padding: 5,
+    marginHorizontal: 2,
     borderWidth: 1,
-    borderRadius: 100,
+    borderColor: 'transparent',
   },
   avatarText: {
     color: 'yellow',
     textAlign: 'center',
     marginTop: 5,
   },
-  card: {
-    backgroundColor: '#aec4e1',
-    borderRadius: 10,
-    margin: 10,
-    padding: 10,
-    borderColor: 'black',
-    borderWidth: 1, 
+  selectedAvatar: {
+    borderColor: 'yellow',
+    borderWidth: 2,
+  },
+  diamondImage: {
+    width: 15,
+    height: 15,
+    marginLeft: 5,
+    marginTop: 7,
   },
   actionsContainer: {
     flexDirection: "row",
@@ -144,5 +159,5 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingHorizontal: 20,
     marginLeft: 10,
-  },
+  }
 });
