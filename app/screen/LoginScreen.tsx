@@ -13,7 +13,7 @@ import { Text } from "@rneui/themed";
 import { Button } from "react-native-elements";
 import AntDesign from "@expo/vector-icons/AntDesign";
 
-function Login() {
+function LoginScreen() {
   const inputAccessoryViewID = "uniqueID";
   const initialText = "";
   const [email, setEmail] = useState(initialText);
@@ -83,7 +83,7 @@ function Login() {
                 name="email"
                 size={24}
                 color="black"
-                style={{ position: "absolute", left: 10, top: 18 }} 
+                style={{ position: "absolute", left: 10, top: 18 }}
               />
             </View>
 
@@ -102,7 +102,7 @@ function Login() {
                 name="key"
                 size={24}
                 color="black"
-                style={{ position: "absolute", left: 10, top: 18 }}  
+                style={{ position: "absolute", left: 10, top: 18 }}
               />
             </View>
           </ScrollView>
@@ -113,7 +113,7 @@ function Login() {
               buttonStyle={{
                 backgroundColor: "#ff7a00",
                 borderRadius: 100,
-                paddingVertical: 10,
+                paddingVertical: 15,
                 width: buttonWidth,
               }}
               titleStyle={{
@@ -140,7 +140,7 @@ function Login() {
               buttonStyle={{
                 backgroundColor: "#a28bfc",
                 borderRadius: 100,
-                paddingVertical: 10,
+                paddingVertical: 15,
                 width: buttonWidth,
               }}
               titleStyle={{
@@ -164,4 +164,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default LoginScreen;

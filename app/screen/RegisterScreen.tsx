@@ -13,7 +13,7 @@ import { Text } from "@rneui/themed";
 import { Button } from "react-native-elements";
 import AntDesign from "@expo/vector-icons/AntDesign";
 
-function Register() {
+function RegisterScreen() {
   const inputAccessoryViewID = "uniqueID";
   const initialText = "";
   const [email, setEmail] = useState(initialText);
@@ -24,29 +24,123 @@ function Register() {
     setPassword(initialText);
   };
 
+  // Width for buttons and input fields
+  const buttonWidth = 320;
+
   return (
     <>
       <ImageBackground
-        source={require("../../assets/images/bg-dark.png")}
-        resizeMode="cover"
         className="flex-1"
       >
-        <View className="m-auto items-center">
+        <View className="m-auto items-center" style={{ marginTop: 100 }}>
           <Image
-            source={require("../../assets/images/newname.png")}
+            source={require("../../assets/images/triviagame.png")}
             className="w-38 h-38"
           />
 
+          {/* <Text
+            
+            style={{
+              color: "black",
+              fontFamily: "sans-serif",
+              fontSize: 70, // Increase font size for better visibility
+              fontWeight: "bold", // Add font weight for emphasis
+              marginBottom: 10, // Add margin bottom for spacing
+              alignSelf: 'flex-start', // Align text to the left
+              marginLeft: 10, 
+            }}
+          >
+            SIGN IN
+          </Text>
+          <Text
+            style={{
+              fontSize: 16, // Adjust font size for consistency
+              color: "gray", // Use a gray color for a subtle look
+              marginBottom: 30, // Add margin bottom to separate from input fields
+              alignSelf: 'flex-start', // Align text to the left
+              marginLeft: 10,
+            }}
+          >
+            Sign in with email
+          </Text> */}
+          <ScrollView
+            keyboardDismissMode="interactive"
+            className="flex"
+          >
+            <View style={{ position: "relative", marginBottom: 20 }}>
+              <TextInput
+                style={{ width: buttonWidth, }}
+                className="p-4 pl-12 border border-black rounded-full h-[60px]"
+                inputAccessoryViewID={inputAccessoryViewID}
+                onChangeText={setEmail}
+                value={email}
+                placeholder={"Email"}
+                placeholderTextColor={"black"}
+
+              />
+              <Fontisto
+                name="email"
+                size={24}
+                color="black"
+                style={{ position: "absolute", left: 10, top: 18 }}
+              />
+            </View>
+
+            <View style={{ position: "relative", marginBottom: 30 }}>
+              <TextInput
+                style={{ width: buttonWidth }}
+                className="p-4 pl-12 border border-black rounded-full h-[60px]"
+                inputAccessoryViewID={inputAccessoryViewID}
+                onChangeText={setPassword}
+                value={password}
+                placeholder={"Password"}
+                placeholderTextColor={"black"}
+                secureTextEntry={true}
+              />
+              <FontAwesome5
+                name="key"
+                size={24}
+                color="black"
+                style={{ position: "absolute", left: 10, top: 18 }}
+              />
+            </View>
+          </ScrollView>
+
           <View style={{ padding: 20 }}>
             <Button
-              title="Sign Up with Google"
+              title="Sign Up"
               buttonStyle={{
-                backgroundColor: "#ad2366",
-                borderRadius: 10,
-                borderColor: "black",
-                borderWidth: 1,
-                paddingVertical: 10,
-                paddingHorizontal: 30,
+                backgroundColor: "#ff7a00",
+                borderRadius: 100,
+                paddingVertical: 15,
+                width: buttonWidth,
+              }}
+              titleStyle={{
+                color: "white",
+                fontSize: 20,
+              }}
+            />
+          </View>
+
+          <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 10 }}>
+            <Text>Already have an account?</Text>
+            <TouchableOpacity
+              onPress={() => {
+                /* Handle sign in navigation */
+              }}
+            >
+              <Text style={{ fontSize: 16, fontWeight: "bold", color: "#ff7a00" }}>Sign In</Text>
+            </TouchableOpacity>
+          </View>
+
+          <View style={{ padding: 20 }}>
+            <Button
+              title="Continue with Google"
+              buttonStyle={{
+                backgroundColor: "#a28bfc",
+                borderRadius: 100,
+                paddingVertical: 15,
+                width: buttonWidth,
               }}
               titleStyle={{
                 color: "white",
@@ -63,64 +157,10 @@ function Register() {
               iconPosition="left"
             />
           </View>
-
-          <Text h4 style={{ color: "white", fontFamily: "sans-serif", marginBottom: 1}}>
-            OR
-          </Text>
-          <ScrollView
-            keyboardDismissMode="interactive"
-            className="flex mt-10 m-auto "
-          >
-        
-            <View style={{ position: "relative" }}>
-              <TextInput
-                className="p-4 pl-10 mt-1 max-w-md text-white border border-white rounded-lg h-[50px] w-[270px] bg-black"
-                inputAccessoryViewID={inputAccessoryViewID}
-                onChangeText={setEmail}
-                value={email}
-                placeholder={"Password"}
-                placeholderTextColor={"white"}
-              />
-              <FontAwesome5
-                name="key"
-                size={24}
-                color="white"
-                style={{ position: "absolute", left: 10, top: "50%",  transform: [{ translateY: -12 }] }}
-              />
-            </View>
-          </ScrollView>
-          
-          <View style={{ padding: 20 }}>
-            <Button
-              title="Sign Up "
-              buttonStyle={{
-                backgroundColor: "#0acf83",
-                borderRadius: 10,
-                borderColor: "black",
-                borderWidth: 1,
-                paddingVertical: 10,
-                paddingHorizontal: 100,
-              }}
-              titleStyle={{
-                color: "white",
-                fontSize: 20,
-              }}
-            />
-          </View>
-          <Text style={{color: "white"}}>
-            Already have an account?{" "}
-            <TouchableOpacity
-              onPress={() => {
-                /* Handle sign in navigation */
-              }}
-            >
-              <Text style={{fontSize: 16, color: 'white', fontWeight: 'bold'}}>Sign In</Text>
-            </TouchableOpacity>
-          </Text>
         </View>
       </ImageBackground>
     </>
   );
 }
 
-export default Register;
+export default RegisterScreen;
