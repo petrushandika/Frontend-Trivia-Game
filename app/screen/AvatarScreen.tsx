@@ -10,9 +10,9 @@ import {
 } from "react-native";
 import { Text, Button } from "@rneui/themed";
 import Feather from "@expo/vector-icons/Feather";
-import Avatars from "../../components/avatar/avatar"; // Pastikan pathnya benar
+import Avatars from "../../components/avatar/CardAvatar";
 
-function CreateAva({ navigation }: {navigation: any}) {
+function AvatarScreen({ navigation }: { navigation: any }) {
   const inputAccessoryViewID = "uniqueID";
   const [name, setName] = useState("");
 
@@ -64,7 +64,6 @@ const styles = StyleSheet.create({
   },
   container: {
     alignItems: "center",
-    marginTop: 100,
   },
   image: {},
   title: {
@@ -95,7 +94,7 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   button: {
-    backgroundColor: "#ff7a00", // Warna tombol sesuai dengan login
+    backgroundColor: "#ff7a00",
     borderRadius: 100,
     paddingVertical: 13,
     width: 320,
@@ -113,7 +112,7 @@ const styles = StyleSheet.create({
   },
   modalView: {
     margin: 20,
-    backgroundColor: "#0acf83", // Ganti sesuai tema jika perlu
+    backgroundColor: "#0acf83",
     borderRadius: 20,
     padding: 35,
     alignItems: "center",
@@ -128,4 +127,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default CreateAva;
+export default AvatarScreen;

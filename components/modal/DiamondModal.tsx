@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, StyleSheet, Modal, Text, Image, TouchableOpacity } from "react-native";
 import { Button } from "@rneui/themed";
 
-export default function BuyDiamonds() {
+export default function DiamondModal() {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 

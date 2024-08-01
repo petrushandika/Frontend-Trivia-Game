@@ -11,7 +11,7 @@ interface IAva {
   price: number;
 }
 
-export default function AvaModal<DialogComponentProps>() {
+export default function AvatarModal<DialogComponentProps>() {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedAvatar, setSelectedAvatar] = useState<number | null>(null);
   const userDiamonds = 300;

@@ -12,10 +12,9 @@ import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { Text } from "@rneui/themed";
 import { Button } from "react-native-elements";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import * as Linking from "expo-linking"
 import * as WebBrowser from 'expo-web-browser';
 
-function Login({ navigation }: { navigation: any }) {
+function LoginScreen() {
   const inputAccessoryViewID = "uniqueID";
   const initialText = "";
   const [email, setEmail] = useState(initialText);
@@ -31,11 +30,9 @@ function Login({ navigation }: { navigation: any }) {
 
   
   const handleLogin = () => {
-    // Linking.openURL(
-    //   "https://df73-2404-8000-1005-a6b5-7b99-35d2-4747-94a5.ngrok-free.app/google/redirect"
-    // );
-    WebBrowser.openAuthSessionAsync("https://df73-2404-8000-1005-a6b5-7b99-35d2-4747-94a5.ngrok-free.app/google/redirect");
-    navigation.navigate("Home");
+    WebBrowser.openAuthSessionAsync(
+      "https://8192-2404-8000-1005-37ac-ce3-c8b-4107-96d1.ngrok-free.app/google/redirect"
+    );
   };
 
   return (
@@ -75,60 +72,64 @@ function Login({ navigation }: { navigation: any }) {
           >
             Sign in with email
           </Text> */}
-        <ScrollView keyboardDismissMode="interactive" className="flex">
-          <View style={{ position: "relative", marginBottom: 20 }}>
-            <TextInput
-              style={{ width: buttonWidth }}
-              className="p-4 pl-12 border border-black rounded-full h-[60px]"
-              inputAccessoryViewID={inputAccessoryViewID}
-              onChangeText={setEmail}
-              value={email}
-              placeholder={"Email"}
-              placeholderTextColor={"black"}
-            />
-            <Fontisto
-              name="email"
-              size={24}
-              color="black"
-              style={{ position: "absolute", left: 10, top: 18 }}
+          <ScrollView
+            keyboardDismissMode="interactive"
+            className="flex"
+          >
+            <View style={{ position: "relative", marginBottom: 20 }}>
+              <TextInput
+                style={{ width: buttonWidth, }}
+                className="p-4 pl-12 border border-black rounded-full h-[60px]"
+                inputAccessoryViewID={inputAccessoryViewID}
+                onChangeText={setEmail}
+                value={email}
+                placeholder={"Email"}
+                placeholderTextColor={"black"}
+
+              />
+              <Fontisto
+                name="email"
+                size={24}
+                color="black"
+                style={{ position: "absolute", left: 10, top: 18 }}
+              />
+            </View>
+
+            <View style={{ position: "relative", marginBottom: 30 }}>
+              <TextInput
+                style={{ width: buttonWidth }}
+                className="p-4 pl-12 border border-black rounded-full h-[60px]"
+                inputAccessoryViewID={inputAccessoryViewID}
+                onChangeText={setPassword}
+                value={password}
+                placeholder={"Password"}
+                placeholderTextColor={"black"}
+                secureTextEntry={true}
+              />
+              <FontAwesome5
+                name="key"
+                size={24}
+                color="black"
+                style={{ position: "absolute", left: 10, top: 18 }}
+              />
+            </View>
+          </ScrollView>
+
+          <View style={{ padding: 20 }}>
+            <Button
+              title="Sign In"
+              buttonStyle={{
+                backgroundColor: "#ff7a00",
+                borderRadius: 100,
+                paddingVertical: 15,
+                width: buttonWidth,
+              }}
+              titleStyle={{
+                color: "white",
+                fontSize: 20,
+              }}
             />
           </View>
-
-          <View style={{ position: "relative", marginBottom: 30 }}>
-            <TextInput
-              style={{ width: buttonWidth }}
-              className="p-4 pl-12 border border-black rounded-full h-[60px]"
-              inputAccessoryViewID={inputAccessoryViewID}
-              onChangeText={setPassword}
-              value={password}
-              placeholder={"Password"}
-              placeholderTextColor={"black"}
-              secureTextEntry={true}
-            />
-            <FontAwesome5
-              name="key"
-              size={24}
-              color="black"
-              style={{ position: "absolute", left: 10, top: 18 }}
-            />
-          </View>
-        </ScrollView>
-
-        <View style={{ padding: 20 }}>
-          <Button
-            title="Sign In"
-            buttonStyle={{
-              backgroundColor: "#ff7a00",
-              borderRadius: 100,
-              paddingVertical: 10,
-              width: buttonWidth,
-            }}
-            titleStyle={{
-              color: "white",
-              fontSize: 20,
-            }}
-          />
-        </View>
 
         <View
           style={{
@@ -151,35 +152,36 @@ function Login({ navigation }: { navigation: any }) {
           </TouchableOpacity>
         </View>
 
-        <View style={{ padding: 20 }}>
-          <Button
-            onPress={() => handleLogin()}
-            title="Continue with Google"
-            buttonStyle={{
-              backgroundColor: "#a28bfc",
-              borderRadius: 100,
-              paddingVertical: 10,
-              width: buttonWidth,
-            }}
-            titleStyle={{
-              color: "white",
-              fontSize: 20,
-            }}
-            icon={
-              <AntDesign
-                name="google"
-                size={24}
-                color="white"
-                style={{ marginRight: 10 }}
-              />
-            }
-            iconPosition="left"
-          />
-        </View>
+
+          <View style={{ padding: 20 }}>
+            <Button
+              onPress={() => handleLogin()}
+              title="Continue with Google"
+              buttonStyle={{
+                backgroundColor: "#a28bfc",
+                borderRadius: 100,
+                paddingVertical: 15,
+                width: buttonWidth,
+              }}
+              titleStyle={{
+                color: "white",
+                fontSize: 20,
+              }}
+              icon={
+                <AntDesign
+                  name="google"
+                  size={24}
+                  color="white"
+                  style={{ marginRight: 10 }}
+                />
+              }
+              iconPosition="left"
+            />
+          </View>
       </View>
       {/* </ImageBackground> */}
     </>
   );
 }
 
-export default Login;
+export default LoginScreen;

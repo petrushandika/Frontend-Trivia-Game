@@ -7,11 +7,11 @@ const chunkArray = (arr: any[], chunkSize: number) => {
   if (chunkSize <= 0) throw "Invalid chunk size";
   var R = [];
   for (var i = 0; i < arr.length; i += chunkSize)
-      R.push(arr.slice(i, i + chunkSize));
+    R.push(arr.slice(i, i + chunkSize));
   return R;
 };
 
-const Avatars: React.FunctionComponent = () => {
+const CardAvatar: React.FunctionComponent = () => {
   const [selectedAvatarId, setSelectedAvatarId] = useState<number | null>(null);
 
   const handleAvatarPress = (item: any) => {
@@ -72,4 +72,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Avatars;
+export default CardAvatar;
