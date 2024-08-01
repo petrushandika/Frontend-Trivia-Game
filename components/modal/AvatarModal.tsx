@@ -1,40 +1,51 @@
 import React, { useState } from "react";
-import { View, StyleSheet, Modal, Text, Image, TouchableOpacity } from "react-native";
-import { Avatar } from "@rneui/themed";
+import { View, StyleSheet, Modal, Text, Image, TouchableOpacity, ScrollView } from "react-native";
+import { Avatar, Button } from "@rneui/themed";
 import Data from "../../data/data.json";
-import { Button } from "@rneui/themed";
-
 
 interface IAva {
   id: number;
   image: string;
-  price: number;
+  price: number | string;
 }
 
-export default function AvatarModal<DialogComponentProps>() {
-  const [modalVisible, setModalVisible] = useState(false);
-  const [selectedAvatar, setSelectedAvatar] = useState<number | null>(null);
-  const userDiamonds = 300;
+interface AvatarModalProps {
+  modalVisible: boolean;
+  toggleModal: () => void;
+  setSelectedAvatar: (avatar: string) => void;
+}
 
-  const toggleModal = () => {
-    setModalVisible(!modalVisible);
-  };
+export default function AvatarModal({ modalVisible, toggleModal, setSelectedAvatar }: AvatarModalProps) {
+  const [localSelectedAvatar, setLocalSelectedAvatar] = useState<number | null>(null);
+  const [alertVisible, setAlertVisible] = useState(false);
+  const userDiamonds = 0;
 
-  const handleAvatarClick = (avatarId: number, cost: number) => {
-    if (cost > userDiamonds) {
-      alert("Your diamond does not enough, you have to buy at Shop");
+  const handleAvatarClick = (avatarId: number, price: number | string, image: string) => {
+    if (typeof price === "number" && price > userDiamonds) {
+      setAlertVisible(true);
     } else {
-      setSelectedAvatar(avatarId);
+      setLocalSelectedAvatar(avatarId);
     }
   };
 
-  return (
-    <View style={styles.buttonContainer}>
-      <Button
-        title="Open Multi Action Dialog"
-        onPress={toggleModal}
-      />
+  const sortedAvatars = [...Data].sort((a, b) => {
+    const priceA = typeof a.price === "string" ? 0 : a.price;
+    const priceB = typeof b.price === "string" ? 0 : b.price;
+    return priceA - priceB;
+  });
 
+  const handleSave = () => {
+    if (localSelectedAvatar !== null) {
+      const selectedAvatarImage = sortedAvatars.find(avatar => avatar.id === localSelectedAvatar)?.image;
+      if (selectedAvatarImage) {
+        setSelectedAvatar(selectedAvatarImage);
+      }
+    }
+    toggleModal();
+  };
+
+  return (
+    <>
       <Modal
         animationType="slide"
         transparent={true}
@@ -43,54 +54,82 @@ export default function AvatarModal<DialogComponentProps>() {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={styles.modalTitle}>Choose an Avatar</Text>
-            <View style={styles.avatarGrid}>
-              {Data.slice(0, 6).map((avatar: IAva) => (
-                <TouchableOpacity
-                  key={avatar.id}
-                  style={[
-                    styles.avatarContainer,
-                    selectedAvatar === avatar.id && styles.selectedAvatar,
-                  ]}
-                  onPress={() => handleAvatarClick(avatar.id, avatar.price)}
-                >
-                  <Avatar
-                    size="large"
-                    rounded
-                    source={{ uri: avatar.image }}
-                  />
-                  <Text style={styles.avatarText}>{avatar.price === 0 ? 'Free' : avatar.price}</Text>
-                  {avatar.price > 0 && (
-                    <Image
-                      source={require("../../assets/images/diamont.png")}
-                      style={styles.diamondImage}
+            <ScrollView contentContainerStyle={styles.scrollViewContainer}>
+              <View style={styles.avatarGrid}>
+                {sortedAvatars.map((avatar: IAva) => (
+                  <TouchableOpacity
+                    key={avatar.id}
+                    style={[
+                      styles.avatarContainer,
+                      localSelectedAvatar === avatar.id && styles.selectedAvatar,
+                    ]}
+                    onPress={() => handleAvatarClick(avatar.id, avatar.price, avatar.image)}
+                  >
+                    <Avatar
+                      size="large"
+                      rounded
+                      source={{ uri: avatar.image }}
+                      containerStyle={styles.avatar}
                     />
-                  )}
-                </TouchableOpacity>
-              ))}
-            </View>
+                    <View style={styles.avatarInfo}>
+                      <Text style={styles.avatarText}>{avatar.price === "Free" ? 'Free' : avatar.price}</Text>
+                      {avatar.price !== "Free" && (
+                        <Image
+                          source={require("../../assets/images/diamond.png")}
+                          style={styles.diamondImage}
+                        />
+                      )}
+                    </View>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </ScrollView>
             <View style={styles.actionsContainer}>
               <Button
                 title="Cancel"
+                buttonStyle={styles.cancelButton}
                 onPress={toggleModal}
-                style={styles.cancelButton}
               />
               <Button
                 title="Save"
-                onPress={toggleModal}
-                style={styles.saveButton}
+                buttonStyle={styles.saveButton}
+                onPress={handleSave}
               />
             </View>
           </View>
         </View>
       </Modal>
-    </View>
+
+      {/* Custom Alert Modal */}
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={alertVisible}
+        onRequestClose={() => setAlertVisible(false)}
+      >
+        <View style={styles.alertCenteredView}>
+          <View style={styles.alertModalView}>
+          <Image
+              source={{ uri: 'https://cdn-icons-png.flaticon.com/512/9587/9587077.png' }} // URL to your image
+              style={styles.alertIcon}
+            />
+            <Text style={styles.alertTitle}>Oops!</Text>
+            <Text style={styles.alertMessage}>You don't have enough diamonds. Please visit the shop to buy more!</Text>
+            <Button
+              title="OK"
+              buttonStyle={styles.alertButton}
+              onPress={() => setAlertVisible(false)}
+            />
+          </View>
+        </View>
+      </Modal>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
-  buttonContainer: {
-    margin: 20,
+  scrollViewContainer: {
+    flexGrow: 1,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -98,66 +137,122 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 22,
+    backgroundColor: "rgba(0, 0, 0, 0.5)", // Semi-transparent background
   },
   modalView: {
     margin: 20,
-    backgroundColor: "rgba(255, 122, 0, 0.7)",
-    padding: 35,
+    backgroundColor: "#fff",
+    padding: 20,
     alignItems: "center",
     borderRadius: 20,
     elevation: 5,
-  },
-  modalTitle: {
-    marginBottom: 15,
-    textAlign: "center",
-    fontSize: 20,
-    color: "white",
+    height: "50%", // Adjust height proportionally
+    width: "90%", // Adjust width to be smaller than screen
+
   },
   avatarGrid: {
     flexDirection: "row",
     flexWrap: "wrap",
-    justifyContent: "flex-start",
+    justifyContent: "space-between",
     width: "100%",
   },
   avatarContainer: {
+    width: "30%",
+    aspectRatio: 1,
     alignItems: "center",
-    marginVertical: 5,
     padding: 5,
-    marginHorizontal: 2,
+    margin: 5,
     borderWidth: 1,
     borderColor: 'transparent',
+    borderRadius: 10, // Rounded border
+    backgroundColor: "#f8f8f8", // Light background color for avatar container
   },
-  avatarText: {
-    color: 'yellow',
-    textAlign: 'center',
+  avatar: {
+    width: "100%",
+    aspectRatio: 1,
+  },
+  avatarInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
     marginTop: 5,
   },
+  avatarText: {
+    color: '#333',
+    textAlign: 'center',
+  },
   selectedAvatar: {
-    borderColor: 'yellow',
+    borderColor: '#ff7a00',
     borderWidth: 2,
   },
   diamondImage: {
     width: 15,
     height: 15,
     marginLeft: 5,
-    marginTop: 7,
   },
   actionsContainer: {
     flexDirection: "row",
     justifyContent: "center",
     marginTop: 20,
+    width: "100%",
   },
   cancelButton: {
     backgroundColor: "red",
     borderRadius: 10,
     paddingHorizontal: 20,
+    paddingVertical: 10,
     marginRight: 10,
   },
   saveButton: {
     backgroundColor: "green",
     borderRadius: 10,
     paddingHorizontal: 20,
+    paddingVertical: 10,
     marginLeft: 10,
+  },
+  // Styles for the alert modal
+  alertCenteredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.7)", // Darker semi-transparent background
+  },
+  alertModalView: {
+    margin: 20,
+    backgroundColor: "#fffae5", // Light yellow background
+    borderRadius: 15,
+    padding: 30,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
+    elevation: 10
+  },
+  alertIcon: {
+    width: 50,
+    height: 50,
+    marginBottom: 20,
+  },
+  alertTitle: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 10,
+    textAlign: "center",
+    color: "#ff5722", // Vibrant orange color
+  },
+  alertMessage: {
+    fontSize: 18,
+    marginBottom: 20,
+    textAlign: "center",
+    color: "#333",
+  },
+  alertButton: {
+    backgroundColor: "#ff5722", // Vibrant orange color
+    borderRadius: 10,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
   }
 });

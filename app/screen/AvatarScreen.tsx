@@ -1,64 +1,54 @@
 import React, { useState } from "react";
-import {
-  ScrollView,
-  TextInput,
-  View,
-  Image,
-  Modal,
-  StyleSheet,
-  TouchableOpacity,
-} from "react-native";
+import { ScrollView, TextInput, View, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { Text, Button } from "@rneui/themed";
 import Feather from "@expo/vector-icons/Feather";
-import ChooseAvatar from "../../components/avatar/ChooseAvatar";
+import CardAvatar from "../../components/avatar/ChooseAvatar"; // Import the updated CardAvatar component
+import ErrorBoundary from "@/components/avatar/ErrorBoudary";
 
-function CardAvatarcreen({ navigation }: { navigation: any }) {
+function CardAvatarScreen({ navigation }: { navigation: any }) {
   const inputAccessoryViewID = "uniqueID";
   const [name, setName] = useState("");
 
   return (
-    <>
-      <View style={styles.scrollViewContent}>
-        <View style={styles.container}>
-          <Image
-            source={require("../../assets/images/triviagame.png")}
-            style={styles.image}
+    <View style={styles.viewContent}>
+      <View style={styles.container}>
+        <Image
+          source={require("../../assets/images/triviagame.png")}
+          style={styles.image}
+        />
+        <Text h4 style={styles.title}>
+          Create Your Avatar
+        </Text>
+        <ErrorBoundary>
+        <CardAvatar />
+        </ErrorBoundary>
+        
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.input}
+            inputAccessoryViewID={inputAccessoryViewID}
+            onChangeText={setName}
+            value={name}
+            placeholder={"Name"}
+            placeholderTextColor={"black"}
           />
-          <Text h4 style={styles.title}>
-            Create Your Avatar
-          </Text>
-          <ChooseAvatar />
-          <View style={styles.inputContainer}>
-            <TextInput
-              style={styles.input}
-              inputAccessoryViewID={inputAccessoryViewID}
-              onChangeText={setName}
-              value={name}
-              placeholder={"Name"}
-              placeholderTextColor={"black"}
-            />
-            <Feather name="edit" size={24} color="black" style={styles.icon} />
-          </View>
-          <View style={styles.buttonContainer}>
-            <Button
-              title="Save"
-              buttonStyle={styles.button}
-              titleStyle={styles.buttonTitle}
-              onPress={() => navigation.navigate('Home')}
-            />
-          </View>
+          <Feather name="edit" size={24} color="black" style={styles.icon} />
+        </View>
+        <View style={styles.buttonContainer}>
+          <Button
+            title="Save"
+            buttonStyle={styles.button}
+            titleStyle={styles.buttonTitle}
+            onPress={() => navigation.navigate('Home')}
+          />
         </View>
       </View>
-    </>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  background: {
-    flex: 1,
-    padding: 20,
-  },
-  scrollViewContent: {
+  viewContent: {
     margin: 'auto',
     justifyContent: 'center',
   },
@@ -104,27 +94,6 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 20,
   },
-  centeredView: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 22,
-  },
-  modalView: {
-    margin: 20,
-    backgroundColor: "#0acf83",
-    borderRadius: 20,
-    padding: 35,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  }
 });
 
-export default CardAvatarcreen;
+export default CardAvatarScreen;

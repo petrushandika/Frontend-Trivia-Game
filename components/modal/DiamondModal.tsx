@@ -120,54 +120,52 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 22,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   modalView: {
-    margin: 20,
-    backgroundColor: "rgba(255, 122, 0, 0.7)",
-    padding: 35,
+    width: '90%',
+    backgroundColor: "#fff",
+    padding: 20,
     alignItems: "center",
     borderRadius: 20,
-    elevation: 5,
+    elevation: 10,
   },
   diamondGrid: {
     flexDirection: "row",
     flexWrap: "wrap",
-    justifyContent: "center",
-    margin: 2,
-    padding: 0,
+    justifyContent: "space-around",
+    width: "100%",
+    marginBottom: 20,
   },
   imageContainer: {
     alignItems: "center",
-    marginVertical: 7,
-    padding: 1,
-    marginHorizontal: 2,
-    borderRadius: 10,  // Rounded corners
+    margin: 5,
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: "transparent",
   },
   selectedImageContainer: {
-    borderColor: "yellow",
-    borderWidth: 3,
-    borderRadius: 10,  // Matching the border radius
+    borderColor: "#ffab00", // Bright yellow for selection
   },
   image: {
-    width: 80,  // Adjust size if needed
+    width: 80,
     height: 80,
   },
   actionsContainer: {
     flexDirection: "row",
-    justifyContent: "center",
-    marginTop: 20,
+    justifyContent: "space-between",
+    width: "100%",
   },
   cancelButton: {
     backgroundColor: "red",
     borderRadius: 10,
     paddingHorizontal: 20,
-    marginRight: 10,
+    paddingVertical: 10,
   },
   saveButton: {
     backgroundColor: "green",
     borderRadius: 10,
     paddingHorizontal: 20,
-    marginLeft: 10,
+    paddingVertical: 10,
   },
 });

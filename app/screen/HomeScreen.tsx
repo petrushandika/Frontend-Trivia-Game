@@ -1,7 +1,16 @@
+import React, { useState } from 'react';
 import { View, Image, Text } from 'react-native';
 import { Avatar, Button } from "react-native-elements";
+import AvatarModal from '../../components/modal/AvatarModal'; 
 
 export default function HomeScreen({ navigation }: { navigation: any }) {
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedAvatar, setSelectedAvatar] = useState("https://cdn3d.iconscout.com/3d/premium/thumb/boy-avatar-8686451-7944083.png?f=webp");
+
+  const toggleModal = () => {
+    setModalVisible(!modalVisible);
+  };
+
   return (
     <View className='flex-1 gap-10 mt-1'>
       <View className='p-2'>
@@ -43,7 +52,7 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
         <Avatar
           rounded
           source={{
-            uri: "https://cdn3d.iconscout.com/3d/premium/thumb/boy-avatar-8686451-7944083.png?f=webp",
+            uri: selectedAvatar,
           }}
           size={80}
           containerStyle={{
@@ -52,6 +61,7 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
             marginLeft: 10,
             marginRight: 10
           }}
+          onPress={toggleModal}
         />
         <Button
           title="Start Game"
@@ -72,7 +82,11 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
           onPress={() => navigation.navigate("Match")}
         />
       </View>
+      <AvatarModal
+        modalVisible={modalVisible}
+        toggleModal={toggleModal}
+        setSelectedAvatar={setSelectedAvatar}
+      />
     </View>
   );
 }
-

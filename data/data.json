@@ -1,86 +1,144 @@
 [
-  {
-    "id": 1,
-    "name": "Petrus Handika",
-    "price": 2873,
-    "icon": "champagne-glasses",
-    "image": "https://img.freepik.com/premium-psd/3d-render-avatar-character_23-2150611774.jpg"
-  },
-  {
-    "id": 2,
-    "name": "Lee Thai",
-    "price": 1500,
-    "icon": "coffee",
-    "image": "https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671122.jpg"
-  },
-  {
-    "id": 3,
-    "name": "Jimin",
-    "price": 2000,
-    "icon": "beer",
-    "image": "https://st.depositphotos.com/1008402/58885/i/450/depositphotos_588852792-stock-illustration-illustration-smiling-man-cartoon-close.jpg"
-  },
-  {
-    "id": 4,
-    "name": "Oh Suggi",
-    "price": 2500,
-    "icon": "glass-cheers",
-    "image": "https://img.freepik.com/free-psd/3d-illustration-person-with-glasses_23-2149436185.jpg?size=338&ext=jpg&ga=GA1.1.2008272138.1722211200&semt=sph"
-  },
-  {
-    "id": 5,
-    "name": "Bella",
-    "price": 1800,
-    "icon": "cocktail",
-    "image": "https://img.freepik.com/free-psd/3d-illustration-person-with-pink-hair_23-2149436186.jpg"
-  },
-  {
-    "id": 6,
-    "name": "Alice",
-    "price": 2873,
-    "icon": "champagne-glasses",
-    "image": "https://img.freepik.com/free-psd/3d-illustration-person_23-2149436182.jpg"
-  },
-  {
-    "id": 7,
-    "name": "Tehyoung",
-    "price": 1500,
-    "icon": "coffee",
-    "image": "https://img.freepik.com/free-psd/3d-illustration-person_23-2149436182.jpg"
-  },
-  {
-    "id": 8,
-    "name": "Edward",
-    "price": 2000,
-    "icon": "beer",
-    "image": "https://static.vecteezy.com/system/resources/thumbnails/027/951/137/small_2x/stylish-spectacles-guy-3d-avatar-character-illustrations-png.png"
-  },
-  {
-    "id": 9,
-    "name": "Anastasia",
-    "price": 2500,
-    "icon": "glass-cheers",
-    "image": "https://st.depositphotos.com/1008402/58769/i/450/depositphotos_587692484-stock-illustration-illustration-smiling-woman-cartoon-close.jpg"
-  },
-  {
-    "id": 10,
-    "name": "Kimmy",
-    "price": 1800,
-    "icon": "cocktail",
-    "image": "https://img.freepik.com/free-psd/3d-render-avatar-character_23-2150611734.jpg"
-  },
-  {
-    "id": 11,
-    "name": "Liam",
-    "price": 2500,
-    "icon": "glass-cheers",
-    "image": "https://img.freepik.com/free-psd/3d-rendering-boy-avatar-emoji_23-2150603408.jpg"
-  },
-  {
-    "id": 12,
-    "name": "Boy",
-    "price": 1800,
-    "icon": "cocktail",
-    "image": "https://img.freepik.com/free-psd/3d-render-avatar-character_23-2150611716.jpg?size=338&ext=jpg&ga=GA1.1.2008272138.1722211200&semt=ais_user"
-  }
-]
+    {
+      "id": 1,
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRDDmiVTnO-q6o7cyUX-heAOkwujoITTsmkACrn6pWCHjErlrGWUYbjm9KijC5XABr1cbw&usqp=CAU",
+      "isPremium": false,
+      "price": 60,
+      "createdAt": "2024-08-01T06:39:49.299Z",
+      "updatedAt": "2024-08-01T08:16:43.392Z"
+    },
+    {
+      "id": 2,
+      "image": "https://cdn3d.iconscout.com/3d/premium/thumb/mohawk-hair-man-9606858-7759146.png",
+      "isPremium": false,
+      "price": 40,
+      "createdAt": "2024-08-01T06:39:49.853Z",
+      "updatedAt": "2024-08-01T08:13:59.466Z"
+    },
+    {
+      "id": 3,
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnQHMerhHDL_bNgCCHoyHf5d7maNVrXaIFD3Oc-p6gJ2m5T7WgfnjKqsmX1PTX4fhEhxk&usqp=CAU",
+      "isPremium": false,
+      "price": 50,
+      "createdAt": "2024-08-01T06:39:49.857Z",
+      "updatedAt": "2024-08-01T08:16:43.392Z"
+    },
+    {
+      "id": 4,
+      "image": "https://cdn3d.iconscout.com/3d/premium/thumb/bald-hair-man-with-beanie-hat-9606385-7766930.png?f=webp",
+      "isPremium": false,
+      "price": 70,
+      "createdAt": "2024-08-01T06:39:49.861Z",
+      "updatedAt": "2024-08-01T08:19:08.245Z"
+    },
+    {
+      "id": 5,
+      "image": "https://cdn3d.iconscout.com/3d/premium/thumb/short-hair-woman-with-vr-9606837-7759125.png?f=webp",
+      "isPremium": false,
+      "price": 40,
+      "createdAt": "2024-08-01T06:39:49.868Z",
+      "updatedAt": "2024-08-01T08:05:37.022Z"
+    },
+    {
+      "id": 6,
+      "image": "https://img.freepik.com/free-psd/3d-render-avatar-character_23-2150611716.jpg?size=338&ext=jpg&ga=GA1.1.2008272138.1722470400&semt=ais_hybrid",
+      "isPremium": false,
+      "price": "Free",
+      "createdAt": "2024-08-01T06:39:49.872Z",
+      "updatedAt": "2024-08-01T08:05:37.022Z"
+    },
+    {
+      "id": 7,
+      "image": "https://img.freepik.com/free-psd/3d-render-avatar-character_23-2150611722.jpg?size=338&ext=jpg&ga=GA1.1.2008272138.1722470400&semt=ais_hybrid",
+      "isPremium": false,
+      "price": "Free",
+      "createdAt": "2024-08-01T06:39:49.877Z",
+      "updatedAt": "2024-08-01T08:05:37.022Z"
+    },
+    {
+      "id": 8,
+      "image": "https://cdn3d.iconscout.com/3d/premium/thumb/woman-wearing-hijab-9606853-7759141.png?f=webp",
+      "isPremium": false,
+      "price": 80,
+      "createdAt": "2024-08-01T06:39:49.883Z",
+      "updatedAt": "2024-08-01T08:23:45.945Z"
+    },
+    {
+      "id": 9,
+      "image": "https://img.freepik.com/free-psd/3d-illustration-person-with-glasses_23-2149436185.jpg?size=338&ext=jpg&ga=GA1.1.2008272138.1722470400&semt=ais_hybrid",
+      "isPremium": false,
+      "price": "Free",
+      "createdAt": "2024-08-01T06:39:49.887Z",
+      "updatedAt": "2024-08-01T08:03:25.634Z"
+    },
+    {
+      "id": 10,
+      "image": "https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436178.jpg?size=338&ext=jpg&ga=GA1.1.2008272138.1722470400&semt=ais_hybrid",
+      "isPremium": false,
+      "price": "Free",
+      "createdAt": "2024-08-01T06:39:49.891Z",
+      "updatedAt": "2024-08-01T08:03:25.634Z"
+    },
+    {
+      "id": 11,
+      "image": "https://img.freepik.com/free-psd/3d-render-avatar-character_23-2150611737.jpg?size=338&ext=jpg&ga=GA1.1.2008272138.1722470400&semt=ais_hybrid",
+      "isPremium": false,
+      "price": "Free",
+      "createdAt": "2024-08-01T06:39:49.895Z",
+      "updatedAt": "2024-08-01T08:03:25.634Z"
+    },
+    {
+      "id": 12,
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRc2A4OqoLmxkD9uA5EI9Xrz5K0fkTeWp0Os-UhQCScURvC5kf_efv2h0i1BiD6z78aOmA&usqp=CAU",
+      "price": "Free"
+    },
+    {
+      "id": 13,
+      "image": "https://cdn3d.iconscout.com/3d/premium/thumb/boy-9251892-7590884.png?f=webp",
+      "isPremium": true,
+      "price": 100,
+      "createdAt": "2024-08-01T06:39:49.900Z",
+      "updatedAt": "2024-08-01T08:23:45.945Z"
+    },
+    {
+      "id": 14,
+      "image": "https://cdn3d.iconscout.com/3d/premium/thumb/bald-hair-man-with-vr-9606391-7766936.png?f=webp",
+      "isPremium": true,
+      "price": 150,
+      "createdAt": "2024-08-01T06:39:49.901Z",
+      "updatedAt": "2024-08-01T08:23:45.945Z"
+    },
+    {
+      "id": 15,
+      "image": "https://cdn3d.iconscout.com/3d/premium/thumb/boy-9251893-7590885.png?f=webp",
+      "isPremium": true,
+      "price": 200,
+      "createdAt": "2024-08-01T06:39:49.902Z",
+      "updatedAt": "2024-08-01T08:23:45.945Z"
+    },
+    {
+      "id": 16,
+      "image": "https://cdn3d.iconscout.com/3d/premium/thumb/girl-9251891-7590883.png?f=webp",
+      "isPremium": true,
+      "price": 250,
+      "createdAt": "2024-08-01T06:39:49.903Z",
+      "updatedAt": "2024-08-01T08:23:45.945Z"
+    },
+    {
+      "id": 17,
+      "image": "https://cdn3d.iconscout.com/3d/premium/thumb/girl-9251894-7590886.png?f=webp",
+      "isPremium": true,
+      "price": 300,
+      "createdAt": "2024-08-01T06:39:49.904Z",
+      "updatedAt": "2024-08-01T08:23:45.945Z"
+    },
+    {
+      "id": 18,
+      "image": "https://cdn3d.iconscout.com/3d/premium/thumb/girl-9251873-7590865.png?f=webp",
+      "isPremium": true,
+      "price": 350,
+      "createdAt": "2024-08-01T06:39:49.905Z",
+      "updatedAt": "2024-08-01T08:23:45.945Z"
+    }
+  ]
+  
