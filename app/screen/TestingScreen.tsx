@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { View, Text, Alert, Button, StyleSheet } from 'react-native';
+import { View, Text, Alert, Button } from 'react-native';
 import io from 'socket.io-client';
 
-const socket = io('https://fbc5-2404-8000-1005-a6b5-b8c3-2981-fa0a-2aa5.ngrok-free.app/', {
+const socket = io('https://2f43-2404-8000-1005-37ac-b9aa-a1e6-e965-51fc.ngrok-free.appn', {
     transports: ['websocket'],
 });
 

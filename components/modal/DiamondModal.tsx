@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, StyleSheet, Modal, Text, Image, TouchableOpacity } from "react-native";
 import { Button } from "@rneui/themed";
+import API from "@/networks/api";
 
 export default function DiamondModal() {
   const [modalVisible, setModalVisible] = useState(false);
@@ -13,6 +14,14 @@ export default function DiamondModal() {
   const handleImageClick = (image: string) => {
     setSelectedImage(image);
   };
+
+  useEffect(() => {
+    async function GET_PAYMENT() {
+      const response = await API.PAYMENT.CREATE()
+      return response.data;
+    }
+    GET_PAYMENT()
+  }, [])
 
   return (
     <View style={styles.buttonContainer}>
@@ -142,15 +151,15 @@ const styles = StyleSheet.create({
     marginVertical: 7,
     padding: 1,
     marginHorizontal: 2,
-    borderRadius: 10,  // Rounded corners
+    borderRadius: 10,
   },
   selectedImageContainer: {
     borderColor: "yellow",
     borderWidth: 3,
-    borderRadius: 10,  // Matching the border radius
+    borderRadius: 10,
   },
   image: {
-    width: 80,  // Adjust size if needed
+    width: 80,
     height: 80,
   },
   actionsContainer: {
