@@ -31,6 +31,7 @@ function LoginScreen() {
     <>
       <ImageBackground
         className="flex-1"
+        style={{ padding: 20 }} // Add padding to avoid content touching the edges
       >
         <View className="m-auto items-center" style={{ marginTop: 100 }}>
           <Image
