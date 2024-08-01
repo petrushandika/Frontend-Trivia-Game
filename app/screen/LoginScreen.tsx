@@ -12,6 +12,7 @@ import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { Text } from "@rneui/themed";
 import { Button } from "react-native-elements";
 import AntDesign from "@expo/vector-icons/AntDesign";
+import * as WebBrowser from 'expo-web-browser';
 
 function LoginScreen() {
   const inputAccessoryViewID = "uniqueID";
@@ -27,19 +28,26 @@ function LoginScreen() {
   // Width for buttons and input fields
   const buttonWidth = 320;
 
+  
+  const handleLogin = () => {
+    WebBrowser.openAuthSessionAsync(
+      "https://8192-2404-8000-1005-37ac-ce3-c8b-4107-96d1.ngrok-free.app/google/redirect"
+    );
+  };
+
   return (
     <>
-      <ImageBackground
+      {/* <ImageBackground
         className="flex-1"
         style={{ padding: 20 }} // Add padding to avoid content touching the edges
-      >
-        <View className="m-auto items-center" style={{ marginTop: 100 }}>
-          <Image
-            source={require("../../assets/images/triviagame.png")}
-            className="w-38 h-38"
-          />
+      > */}
+      <View className="m-auto items-center bg-white" style={{ marginTop: 100 }}>
+        <Image
+          source={require("../../assets/images/triviagame.png")}
+          className="w-38 h-38"
+        />
 
-          {/* <Text
+        {/* <Text
             
             style={{
               color: "black",
@@ -123,19 +131,31 @@ function LoginScreen() {
             />
           </View>
 
-          <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 10 }}>
-            <Text>Don't have an account? </Text>
-            <TouchableOpacity
-              onPress={() => {
-                /* Handle sign in navigation */
-              }}
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            marginVertical: 10,
+          }}
+        >
+          <Text>Don't have an account? </Text>
+          <TouchableOpacity
+            onPress={() => {
+              /* Handle sign in navigation */
+            }}
+          >
+            <Text
+              style={{ fontSize: 16, fontWeight: "bold", color: "#ff7a00" }}
             >
-              <Text style={{ fontSize: 16, fontWeight: "bold", color: "#ff7a00" }}>Sign Up</Text>
-            </TouchableOpacity>
-          </View>
+              Sign Up
+            </Text>
+          </TouchableOpacity>
+        </View>
+
 
           <View style={{ padding: 20 }}>
             <Button
+              onPress={() => handleLogin()}
               title="Continue with Google"
               buttonStyle={{
                 backgroundColor: "#a28bfc",
@@ -158,8 +178,8 @@ function LoginScreen() {
               iconPosition="left"
             />
           </View>
-        </View>
-      </ImageBackground>
+      </View>
+      {/* </ImageBackground> */}
     </>
   );
 }

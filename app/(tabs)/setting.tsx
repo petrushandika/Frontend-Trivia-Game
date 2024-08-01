@@ -1,9 +1,10 @@
 import { View, Text } from 'react-native'
+import Login from '../screen/LoginScreen'
 
 const setting = () => {
     return (
         <View>
-            <Text>setting</Text>
+            <Login />
         </View>
     )
 }
