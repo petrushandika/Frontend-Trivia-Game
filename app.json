@@ -37,10 +37,10 @@
       "router": {
         "origin": false
       },
-      "eas": {
-        "projectId": "a549bd04-e95f-449e-aa13-0c66ac9b6b5e"
-      }
+      // "eas": {
+      //   "projectId": "a549bd04-e95f-449e-aa13-0c66ac9b6b5e"
+      // }
     },
-    "owner": "boys"
+    "owner": "boys" 
   }
 }

@@ -20,7 +20,7 @@ export default function QuestionScreen({ navigation }: { navigation: any }) {
         <View className='mt-10 p-5 h-full bg-blue-400'>
             <View className='gap-y-10'>
                 <View className='flex flex-row justify-between p-5 rounded-full'>
-                    <View className='flex flex-row gap-x-3'>
+                    <View className='flex flex-row items-center gap-x-3'>
                         <FontAwesome6 name="crown" size={20} color="yellow" />
                         <Text className='text-white text-xl'>2481</Text>
                     </View>
