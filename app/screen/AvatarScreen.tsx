@@ -10,9 +10,9 @@ import {
 } from "react-native";
 import { Text, Button } from "@rneui/themed";
 import Feather from "@expo/vector-icons/Feather";
-import Avatars from "../../components/avatar/CardAvatar";
+import ChooseAvatar from "../../components/avatar/ChooseAvatar";
 
-function AvatarScreen({ navigation }: { navigation: any }) {
+function CardAvatarcreen({ navigation }: { navigation: any }) {
   const inputAccessoryViewID = "uniqueID";
   const [name, setName] = useState("");
 
@@ -27,7 +27,7 @@ function AvatarScreen({ navigation }: { navigation: any }) {
           <Text h4 style={styles.title}>
             Create Your Avatar
           </Text>
-          <Avatars />
+          <ChooseAvatar />
           <View style={styles.inputContainer}>
             <TextInput
               style={styles.input}
@@ -127,4 +127,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default AvatarScreen;
+export default CardAvatarcreen;

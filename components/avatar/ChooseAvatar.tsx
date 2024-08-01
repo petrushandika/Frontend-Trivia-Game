@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { View, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import { Avatar } from '@rneui/themed';
 import datas from '@/data/data.json';
+import API from '@/networks/api';
 
 const chunkArray = (arr: any[], chunkSize: number) => {
   if (chunkSize <= 0) throw "Invalid chunk size";
@@ -18,6 +19,15 @@ const CardAvatar: React.FunctionComponent = () => {
     setSelectedAvatarId(item.id);
     console.log(`Avatar clicked: ${item.name}`);
   };
+
+  async function GET_AVATAR() {
+    const response = await API.AVATAR.GET_ALL()
+    console.log("ok", response.data);
+  }
+
+  useEffect(() => {
+    GET_AVATAR()
+  }, [])
 
   return (
     <ScrollView style={styles.scrollView}>
