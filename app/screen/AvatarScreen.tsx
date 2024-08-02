@@ -3,7 +3,7 @@ import { ScrollView, TextInput, View, Image, StyleSheet, TouchableOpacity } from
 import { Text, Button } from "@rneui/themed";
 import Feather from "@expo/vector-icons/Feather";
 import CardAvatar from "../../components/avatar/ChooseAvatar"; // Import the updated CardAvatar component
-import ErrorBoundary from "@/components/avatar/ErrorBoudary";
+import ErrorBoundary from "../../components/avatar/ErrorBoudary";
 
 function CardAvatarScreen({ navigation }: { navigation: any }) {
   const inputAccessoryViewID = "uniqueID";
