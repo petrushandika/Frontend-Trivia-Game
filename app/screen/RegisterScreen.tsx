@@ -12,8 +12,12 @@ import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { Text } from "@rneui/themed";
 import { Button } from "react-native-elements";
 import AntDesign from "@expo/vector-icons/AntDesign";
+import * as WebBrowser from "expo-web-browser";
 
-function RegisterScreen() {
+
+WebBrowser.maybeCompleteAuthSession();
+
+function RegisterScreen({navigation} : {navigation : any}) {
   const inputAccessoryViewID = "uniqueID";
   const initialText = "";
   const [email, setEmail] = useState(initialText);
@@ -23,6 +27,16 @@ function RegisterScreen() {
     setEmail(initialText);
     setPassword(initialText);
   };
+
+  const handleLogin = () => {
+    WebBrowser.openAuthSessionAsync(
+      "https://871d-2404-8000-1005-37ac-d060-5fa8-3ba0-ae50.ngrok-free.app/google/redirect"
+
+    );
+    WebBrowser.dismissBrowser()
+    navigation.navigate('Avatar')
+  };
+
 
   // Width for buttons and input fields
   const buttonWidth = 320;
@@ -135,6 +149,7 @@ function RegisterScreen() {
 
           <View style={{ padding: 20 }}>
             <Button
+            onPress={() => handleLogin()}
               title="Continue with Google"
               buttonStyle={{
                 backgroundColor: "#a28bfc",

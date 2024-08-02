@@ -12,7 +12,8 @@ import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { Text } from "@rneui/themed";
 import { Button } from "react-native-elements";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import * as WebBrowser from 'expo-web-browser';
+import * as Google from "expo-auth-session/providers/google";
+
 
 function LoginScreen() {
   const inputAccessoryViewID = "uniqueID";
@@ -27,13 +28,6 @@ function LoginScreen() {
 
   // Width for buttons and input fields
   const buttonWidth = 320;
-
-  
-  const handleLogin = () => {
-    WebBrowser.openAuthSessionAsync(
-      "https://8192-2404-8000-1005-37ac-ce3-c8b-4107-96d1.ngrok-free.app/google/redirect"
-    );
-  };
 
   return (
     <>
@@ -155,7 +149,6 @@ function LoginScreen() {
 
           <View style={{ padding: 20 }}>
             <Button
-              onPress={() => handleLogin()}
               title="Continue with Google"
               buttonStyle={{
                 backgroundColor: "#a28bfc",
