@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { View, Image, Text } from 'react-native';
+import { View, Image, Text, TouchableOpacity } from 'react-native';
 import { Avatar, Button } from "react-native-elements";
-import AvatarModal from '../../components/modal/AvatarModal'; 
+import { Icon } from 'react-native-elements';
+import AvatarModal from '../../components/modal/AvatarModal';
 
 export default function HomeScreen({ navigation }: { navigation: any }) {
   const [modalVisible, setModalVisible] = useState(false);
@@ -45,7 +46,7 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
       </View>
       <View>
         <Text className='text-5xl font-semibold text-center'>Trivia Game Quiz</Text>
-        <Text className='text-base text-gray-500 text-center'>Perfect game to challange your</Text>
+        <Text className='text-base text-gray-500 text-center'>Perfect game to challenge your</Text>
         <Text className='text-base text-gray-500 text-center'>friends and have hours of fun!</Text>
       </View>
       <View className='flex flex-row items-center'>
@@ -82,6 +83,21 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
           onPress={() => navigation.navigate("Match")}
         />
       </View>
+      <TouchableOpacity
+        style={{
+          position: 'absolute',
+          top: 40,
+          right: 20,
+        }}
+        onPress={() => navigation.navigate("DiamondShop")}
+      >
+        <Icon
+          name="diamond"
+          type="font-awesome"
+          size={30}
+          color="black"
+        />
+      </TouchableOpacity>
       <AvatarModal
         modalVisible={modalVisible}
         toggleModal={toggleModal}

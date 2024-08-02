@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { View, StyleSheet, Modal, Text, Image, TouchableOpacity, ScrollView } from "react-native";
 import { Avatar, Button } from "@rneui/themed";
 import Data from "../../data/data.json";
+import { useNavigation } from '@react-navigation/native'; // import navigation hook
 
 interface IAva {
   id: number;
@@ -17,8 +18,9 @@ interface AvatarModalProps {
 
 export default function AvatarModal({ modalVisible, toggleModal, setSelectedAvatar }: AvatarModalProps) {
   const [localSelectedAvatar, setLocalSelectedAvatar] = useState<number | null>(null);
-  const [alertVisible, setAlertVisible] = useState(false);
+  const [alertVisible, setAlertVisible] = useState<boolean>(false);
   const userDiamonds = 0;
+  const navigation = useNavigation(); // use the navigation hook
 
   const handleAvatarClick = (avatarId: number, price: number | string, image: string) => {
     if (typeof price === "number" && price > userDiamonds) {
@@ -28,7 +30,7 @@ export default function AvatarModal({ modalVisible, toggleModal, setSelectedAvat
     }
   };
 
-  const sortedAvatars = [...Data].sort((a, b) => {
+  const sortedAvatars: IAva[] = [...Data].sort((a: IAva, b: IAva) => {
     const priceA = typeof a.price === "string" ? 0 : a.price;
     const priceB = typeof b.price === "string" ? 0 : b.price;
     return priceA - priceB;
@@ -42,6 +44,16 @@ export default function AvatarModal({ modalVisible, toggleModal, setSelectedAvat
       }
     }
     toggleModal();
+  };
+
+  const handleYes = () => {
+    setAlertVisible(false);
+    toggleModal(); // Ensure modal is closed
+    navigation.navigate("DiamondShop"); // Navigate to the diamond shop page
+  };
+
+  const handleNo = () => {
+    setAlertVisible(false);
   };
 
   return (
@@ -109,17 +121,24 @@ export default function AvatarModal({ modalVisible, toggleModal, setSelectedAvat
       >
         <View style={styles.alertCenteredView}>
           <View style={styles.alertModalView}>
-          <Image
+            <Image
               source={{ uri: 'https://cdn-icons-png.flaticon.com/512/9587/9587077.png' }} // URL to your image
               style={styles.alertIcon}
             />
             <Text style={styles.alertTitle}>Oops!</Text>
             <Text style={styles.alertMessage}>You don't have enough diamonds. Please visit the shop to buy more!</Text>
-            <Button
-              title="OK"
-              buttonStyle={styles.alertButton}
-              onPress={() => setAlertVisible(false)}
-            />
+            <View style={styles.alertActionsContainer}>
+              <Button
+                title="Go to Shop"
+                buttonStyle={styles.alertButtonYes}
+                onPress={handleYes}
+              />
+              <Button
+                title="No"
+                buttonStyle={styles.alertButtonNo}
+                onPress={handleNo}
+              />
+            </View>
           </View>
         </View>
       </Modal>
@@ -249,8 +268,20 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#333",
   },
-  alertButton: {
+  alertActionsContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+    marginTop: 20,
+  },
+  alertButtonYes: {
     backgroundColor: "#ff5722", // Vibrant orange color
+    borderRadius: 10,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+  },
+  alertButtonNo: {
+    backgroundColor: "gray",
     borderRadius: 10,
     paddingHorizontal: 20,
     paddingVertical: 10,
