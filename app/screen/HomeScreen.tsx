@@ -1,7 +1,75 @@
-import { View, Image, Text } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Image, Text, Alert } from 'react-native';
 import { Avatar, Button } from "react-native-elements";
+import io from 'socket.io-client';
+
+const socket = io('https://2f43-2404-8000-1005-37ac-b9aa-a1e6-e965-51fc.ngrok-free.app', {
+  transports: ['websocket'],
+});
 
 export default function HomeScreen({ navigation }: { navigation: any }) {
+  const [userId, setUserId] = useState('');
+  const [roomId, setRoomId] = useState('');
+
+  useEffect(() => {
+    socket.on('connect', () => {
+      console.log('Connected to server');
+      const id = 'user-' + Math.random();
+      setUserId(id);
+      socket.emit('findMatch', id);
+    });
+
+    socket.on('matchFound', ({ roomId, userId }) => {
+      setRoomId(roomId);
+      console.log(`Match found: Room ID ${roomId}, User ID ${userId}`);
+      Alert.alert('Match Found', `Room ID: ${roomId}\nYour User ID: ${userId}`);
+    });
+
+    socket.on('roomFull', (roomId) => {
+      console.log(`Room ${roomId} is full`);
+      Alert.alert('Room Full', `Room ${roomId} is full`);
+    });
+
+    socket.on('userLeft', (userId) => {
+      console.log(`User ${userId} left the room`);
+      Alert.alert('User Left', `User ${userId} left the room`);
+    });
+
+    return () => {
+      socket.off('connect');
+      socket.off('matchFound');
+      socket.off('roomFull');
+      socket.off('userLeft');
+    };
+  }, []);
+
+  const handleFindMatch = () => {
+    if (!userId) {
+      console.log('User ID not set');
+      return;
+    }
+    console.log('Finding match with User ID:', userId);
+    socket.emit('findMatch', userId);
+  };
+
+  const handleStartGame = () => {
+    Alert.alert(
+      'Start Game',
+      `User ID: ${userId}`,
+      [
+        {
+          text: 'OK',
+          onPress: () => {
+            console.log('Starting game with User ID:', userId);
+            navigation.navigate("Match");
+            handleFindMatch();
+          }
+        }
+      ],
+      { cancelable: false }
+    );
+  };
+
   return (
     <View className='flex-1 gap-10 mt-1'>
       <View className='p-2'>
@@ -36,7 +104,7 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
       </View>
       <View>
         <Text className='text-5xl font-semibold text-center'>Trivia Game Quiz</Text>
-        <Text className='text-base text-gray-500 text-center'>Perfect game to challange your</Text>
+        <Text className='text-base text-gray-500 text-center'>Perfect game to challenge your</Text>
         <Text className='text-base text-gray-500 text-center'>friends and have hours of fun!</Text>
       </View>
       <View className='flex flex-row items-center'>
@@ -69,10 +137,9 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
           containerStyle={{
             width: '100%',
           }}
-          onPress={() => navigation.navigate("Match")}
+          onPress={handleStartGame}
         />
       </View>
     </View>
   );
 }
-
