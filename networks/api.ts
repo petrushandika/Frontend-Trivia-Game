@@ -1,11 +1,10 @@
 import axios from "axios";
 import CONFIG from "../config/config";
-import { CreateInvoiceDto } from "@/dto/InvoiceDto";
 import LOCAL_STORAGE from "./storage";
 
 const API = {
   AVATAR: {
-    GET_ALL: async () => {
+    GET_ALL_AVATAR: async () => {
       try {
         const response = await axios.get(`${CONFIG.BASE_URL}/avatar`);
         return response.data;
@@ -15,9 +14,9 @@ const API = {
       }
     },
 
-    GET_ALL_BY_ID: async () => {
+    GET_ONE_AVATAR: async (id: number) => {
       try {
-        const response = await axios.get(`${CONFIG.BASE_URL}/avatar/id`);
+        const response = await axios.get(`${CONFIG.BASE_URL}/avatar/${id}`);
         return response.data;
       } catch (error) {
         console.error("Error fetching avatars:", error);
@@ -37,6 +36,30 @@ const API = {
         return response.data;
       } catch (error) {
         console.error("Error creating invoice:", error);
+        throw error;
+      }
+    },
+  },
+
+  DIAMOND_PACKAGE: {
+    GET_ALL_PACKAGE: async () => {
+      try {
+        const response = await axios.get(`${CONFIG.BASE_URL}/diamond-package`);
+        return response.data;
+      } catch (error) {
+        console.error("Error fetching avatars:", error);
+        throw error;
+      }
+    },
+
+    GET_ONE_PACKAGE: async (id: number) => {
+      try {
+        const response = await axios.get(
+          `${CONFIG.BASE_URL}/diamond-package/${id}`
+        );
+        return response.data;
+      } catch (error) {
+        console.error("Error fetching avatars:", error);
         throw error;
       }
     },

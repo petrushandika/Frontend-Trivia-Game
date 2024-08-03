@@ -12,7 +12,7 @@ const chunkArray = (arr: AvatarDto[], chunkSize: number): AvatarDto[][] => {
   return R;
 };
 
-const CardAvatar: React.FunctionComponent = () => {
+const ChooseAvatar: React.FunctionComponent = () => {
   const [avatars, setAvatars] = useState<AvatarDto[]>([]);
   const [selectedAvatarId, setSelectedAvatarId] = useState<number | null>(null);
 
@@ -24,7 +24,7 @@ const CardAvatar: React.FunctionComponent = () => {
   useEffect(() => {
     async function GET_AVATAR() {
       try {
-        const response = await API.AVATAR.GET_ALL();
+        const response = await API.AVATAR.GET_ALL_AVATAR();
         if (response && Array.isArray(response)) {
           setAvatars(response);
         } else {
@@ -37,7 +37,7 @@ const CardAvatar: React.FunctionComponent = () => {
     }
     GET_AVATAR();
   }, []);
-  
+
 
   return (
     <ScrollView style={styles.scrollView}>
@@ -106,4 +106,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CardAvatar;
+export default ChooseAvatar;
