@@ -5,11 +5,14 @@ import Modal from 'react-native-modal';
 
 // Dummy data with unique IDs and sorted by price
 const diamondPackages = [
-  { id: 1, amount: 100, price: "$1.99", image: "https://png.pngtree.com/png-clipart/20220822/ourmid/pngtree-game-gems-bag-ui-icon-png-png-image_6120206.png" },
-  { id: 2, amount: 500, price: "$4.99", image: "https://previews.123rf.com/images/emojiimage/emojiimage1802/emojiimage180200329/95468322-large-brown-bag-full-of-valuable-stones-diamonds-sapphires-and-rubies-cartoon-gemstones-flat-vector.jpg" },
-  { id: 3, amount: 1000, price: "$9.99", image: "https://media.istockphoto.com/id/1335316934/tr/vekt%C3%B6r/bag-with-crystal-stones-in-cartoon-style-isolated-on-white-background-ui-game-asset-sack.jpg?s=612x612&w=0&k=20&c=O3LUVMs04X7zMavrsqju8_bo6vmdXx-mixqrf_x6NKM=" },
-  { id: 4, amount: 2500, price: "$19.99", image: "https://img.freepik.com/premium-vector/vector_863384-155.jpg" },
-  { id: 5, amount: 5000, price: "$39.99", image: "https://st2.depositphotos.com/4155807/6227/v/950/depositphotos_62271937-stock-illustration-bag-with-gems.jpg" },
+  { id: 1, amount: 10, price: "$1.99", image: "https://png.pngtree.com/png-clipart/20220822/ourmid/pngtree-game-gems-bag-ui-icon-png-png-image_6120206.png" },
+  { id: 2, amount: 25, price: "$4.99", image: "https://previews.123rf.com/images/emojiimage/emojiimage1802/emojiimage180200329/95468322-large-brown-bag-full-of-valuable-stones-diamonds-sapphires-and-rubies-cartoon-gemstones-flat-vector.jpg" },
+  { id: 3, amount: 50, price: "$9.99", image: "https://st2.depositphotos.com/4155807/6227/v/950/depositphotos_62271937-stock-illustration-bag-with-gems.jpg" },
+  { id: 4, amount: 100, price: "$19.99", image: "https://img.freepik.com/premium-vector/vector_863384-155.jpg" },
+  { id: 5, amount: 500, price: "$39.99", image: "https://thumbs.dreamstime.com/b/cloth-fabric-money-bag-full-various-diamonds-sack-gems-game-interface-elements-donation-microtransacton-vector-107785049.jpg" },
+  { id: 6, amount: 1000, price: "$39.99", image: "https://previews.123rf.com/images/lilu330/lilu3301504/lilu330150400080/41680969-cartoon-wooden-chest-with-diamonds.jpg" },
+  { id: 7, amount: 5000, price: "$39.99", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS3myRHOf5gWmq26tAOxUNkhXwcrd67PkGJApKmvJjQkHrkRR4VU0jjb4YchvO5vX6BS8E&usqp=CAU" },
+  { id: 8, amount: 10000, price: "$39.99", image: "https://png.pngtree.com/png-vector/20231213/ourmid/pngtree-game-diamond-treasure-chest-free-buckle-element-decorative-material-png-image_11320214.png" },
 ];
 
 export default function DiamondShop() {
