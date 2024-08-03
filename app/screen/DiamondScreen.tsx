@@ -30,19 +30,13 @@ export default function DiamondScreen() {
 
   useEffect(() => {
     async function GET_PACKAGE() {
-      try {
-        const response = await API.DIAMOND_PACKAGE.GET_ALL_PACKAGE();
-        if (response && Array.isArray(response)) {
-          setDiamondPackages(response);
-        } else {
-          console.log('Data format error:', response);
-        }
-      } catch (error) {
-        console.error("Error fetching diamond packages:", error);
-      }
+      const response = await API.DIAMOND_PACKAGE.GET_ALL_PACKAGE();
+      setDiamondPackages(response);
     }
-    GET_PACKAGE();
+
+    GET_PACKAGE()
   }, []);
+
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -56,7 +50,7 @@ export default function DiamondScreen() {
             <Image source={{ uri: diamondPackage.image }} style={styles.packageImage} />
             <Text style={styles.packageQuantity}>{diamondPackage.quantity} 💎</Text>
             <Button
-              title={`$${diamondPackage.price}`}
+              title={`Rp. ${diamondPackage.price}`}
               buttonStyle={styles.buyButton}
               onPress={() => handlePurchase(diamondPackage.id)}
             />
@@ -74,7 +68,7 @@ export default function DiamondScreen() {
           <Text style={styles.modalTitle}>Purchase Confirmed</Text>
           <Text style={styles.modalMessage}>
             {modalContent.quantity > 0
-              ? `You have purchased ${modalContent.quantity} diamonds for $${modalContent.price}!`
+              ? `You have purchased ${modalContent.quantity} diamonds for Rp. ${modalContent.price}!`
               : "Package not found."}
           </Text>
           <Button

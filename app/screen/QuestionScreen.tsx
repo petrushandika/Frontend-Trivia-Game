@@ -10,14 +10,12 @@ export default function QuestionScreen({ navigation }: { navigation: any }) {
     const handlePress = (buttonName: string) => {
         setPress(buttonName);
     };
-
     const handleRelease = () => {
         setPress(null);
     };
 
-
     return (
-        <View className='mt-10 p-5 h-full bg-blue-400'>
+        <View className='mt-10 p-5 h-full bg-orange-400'>
             <View className='gap-y-10'>
                 <View className='flex flex-row justify-between p-5 rounded-full'>
                     <View className='flex flex-row items-center gap-x-3'>
