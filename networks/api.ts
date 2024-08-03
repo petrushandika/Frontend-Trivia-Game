@@ -15,9 +15,9 @@ const API = {
       }
     },
 
-    GET_ALL_BY_ID: async () => {
+    GET_ALL_BY_ID: async (id: number) => {
       try {
-        const response = await axios.get(`${CONFIG.BASE_URL}/avatar/id`);
+        const response = await axios.get(`${CONFIG.BASE_URL}/avatar/${id}`);
         return response.data;
       } catch (error) {
         console.error("Error fetching avatars:", error);
@@ -37,6 +37,30 @@ const API = {
         return response.data;
       } catch (error) {
         console.error("Error creating invoice:", error);
+        throw error;
+      }
+    },
+  },
+
+  DIAMOND_PACKAGE: {
+    GET_ALL_PACKAGE: async () => {
+      try {
+        const response = await axios.get(`${CONFIG.BASE_URL}/diamond-package`);
+        return response.data;
+      } catch (error) {
+        console.error("Error fetching avatars:", error);
+        throw error;
+      }
+    },
+
+    GET_ONE_PACKAGE: async (id: number) => {
+      try {
+        const response = await axios.get(
+          `${CONFIG.BASE_URL}/diamond-package/${id}`
+        );
+        return response.data;
+      } catch (error) {
+        console.error("Error fetching avatars:", error);
         throw error;
       }
     },

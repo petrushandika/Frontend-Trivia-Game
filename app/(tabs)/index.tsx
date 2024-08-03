@@ -9,7 +9,7 @@ import AvatarScreen from '../screen/AvatarScreen';
 import LooserScreen from '../screen/LooserScreen';
 import AvatarModal from '@/components/modal/AvatarModal';
 import DiamondModal from '@/components/modal/DiamondModal';
-import DiamondShop from '../screen/DiamondScreen';
+import DiamondScreen from '../screen/DiamondScreen';
 
 const Stack = createStackNavigator();
 
@@ -26,7 +26,7 @@ function App() {
         <Stack.Screen name="Looser" component={LooserScreen} options={{ headerShown: false }} />
         {/* <Stack.Screen name="AvatarModal" component={AvatarModal} options={{ headerShown: false }} /> */}
         <Stack.Screen name="Diamond" component={DiamondModal} options={{ headerShown: false }} />
-        <Stack.Screen name="DiamondShop" component={DiamondShop} options={{ headerShown: false }} />
+        <Stack.Screen name="DiamondShop" component={DiamondScreen} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

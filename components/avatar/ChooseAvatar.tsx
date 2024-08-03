@@ -12,7 +12,7 @@ const chunkArray = (arr: any[], chunkSize: number) => {
   return R;
 };
 
-const CardAvatar: React.FunctionComponent = () => {
+const ChooseAvatar: React.FunctionComponent = () => {
   const [selectedAvatarId, setSelectedAvatarId] = useState<number | null>(null);
 
   const handleAvatarPress = (item: any) => {
@@ -20,12 +20,11 @@ const CardAvatar: React.FunctionComponent = () => {
     console.log(`Avatar clicked: ${item.name}`);
   };
 
-  async function GET_AVATAR() {
-    const response = await API.AVATAR.GET_ALL()
-    console.log("ok", response.data);
-  }
-
   useEffect(() => {
+    async function GET_AVATAR() {
+      const response = await API.AVATAR.GET_ALL()
+      console.log("ok", response.data);
+    }
     GET_AVATAR()
   }, [])
 
@@ -82,4 +81,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CardAvatar;
+export default ChooseAvatar;
