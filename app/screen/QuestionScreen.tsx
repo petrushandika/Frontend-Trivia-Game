@@ -54,6 +54,7 @@ export default function QuestionScreen({ navigation }: { navigation: any }) {
                             borderRadius: 100,
                             borderColor: 'black',
                             paddingVertical: 15,
+                            marginVertical: 10
                         }}
                         titleStyle={{
                             color: press === 'Boom Ba Yah' ? 'white' : 'black',
@@ -69,6 +70,7 @@ export default function QuestionScreen({ navigation }: { navigation: any }) {
                             borderRadius: 100,
                             borderColor: 'black',
                             paddingVertical: 15,
+                            marginVertical: 10
                         }}
                         titleStyle={{
                             color: press === 'Bang Bang Bang' ? 'white' : 'black',
@@ -84,6 +86,7 @@ export default function QuestionScreen({ navigation }: { navigation: any }) {
                             borderRadius: 100,
                             borderColor: 'black',
                             paddingVertical: 15,
+                            marginVertical: 10
                         }}
                         titleStyle={{
                             color: 'black',
