@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { View, StyleSheet, Modal, Text, Image, TouchableOpacity } from "react-native";
 import { Button } from "@rneui/themed";
 import API from "@/networks/api";
