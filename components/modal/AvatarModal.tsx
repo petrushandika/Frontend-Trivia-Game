@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, StyleSheet, Modal, Text, Image, TouchableOpacity, ScrollView } from "react-native";
 import { Avatar, Button } from "@rneui/themed";
 import Data from "../../data/data.json";
-import { useNavigation } from '@react-navigation/native'; // import navigation hook
+import { useNavigation } from '@react-navigation/native';
 
 interface IAva {
   id: number;
