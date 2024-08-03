@@ -11,7 +11,7 @@ import LooserScreen from '../screen/LooserScreen';
 
 const Stack = createStackNavigator();
 
-function App() {
+function App() { 
   return (
     <NavigationContainer independent={true}>
       <Stack.Navigator>

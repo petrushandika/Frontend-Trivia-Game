@@ -22,7 +22,7 @@ export default function MatchScreen({ navigation }: { navigation: any }) {
         </View>
         <View className='flex flex-row items-center gap-x-3'>
           <Text className='text-white text-base'>00 : 18</Text>
-          <AntDesign name="forward" size={20} color="white" />
+          <AntDesign name="forward" size={20} color="white" onPress={() => navigation.navigate('Question')}/>
         </View>
       </View>
       <View className='gap-y-10 mt-1 mb-14'>
