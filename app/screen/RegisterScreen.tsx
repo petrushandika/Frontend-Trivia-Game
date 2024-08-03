@@ -17,7 +17,7 @@ import * as WebBrowser from "expo-web-browser";
 
 WebBrowser.maybeCompleteAuthSession();
 
-function RegisterScreen({navigation} : {navigation : any}) {
+function RegisterScreen({ navigation }: { navigation: any }) {
   const inputAccessoryViewID = "uniqueID";
   const initialText = "";
   const [email, setEmail] = useState(initialText);
@@ -149,7 +149,7 @@ function RegisterScreen({navigation} : {navigation : any}) {
 
           <View style={{ padding: 20 }}>
             <Button
-            onPress={() => handleLogin()}
+              onPress={() => handleLogin()}
               title="Continue with Google"
               buttonStyle={{
                 backgroundColor: "#a28bfc",
