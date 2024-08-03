@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import { View, StyleSheet, Modal, Text, Image, TouchableOpacity } from "react-native";
 import { Button } from "@rneui/themed";
+import API from "@/networks/api";
 
 export default function DiamondModal() {
   const [modalVisible, setModalVisible] = useState(false);
@@ -13,6 +14,14 @@ export default function DiamondModal() {
   const handleImageClick = (image: string) => {
     setSelectedImage(image);
   };
+
+  useEffect(() => {
+    async function GET_PAYMENT() {
+      const response = await API.PAYMENT.CREATE()
+      return response.data;
+    }
+    GET_PAYMENT()
+  }, [])
 
   return (
     <View style={styles.buttonContainer}>
@@ -120,32 +129,34 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    marginTop: 22,
   },
   modalView: {
-    width: '90%',
-    backgroundColor: "#fff",
-    padding: 20,
+    margin: 20,
+    backgroundColor: "rgba(255, 122, 0, 0.7)",
+    padding: 35,
     alignItems: "center",
     borderRadius: 20,
-    elevation: 10,
+    elevation: 5,
   },
   diamondGrid: {
     flexDirection: "row",
     flexWrap: "wrap",
-    justifyContent: "space-around",
-    width: "100%",
-    marginBottom: 20,
+    justifyContent: "center",
+    margin: 2,
+    padding: 0,
   },
   imageContainer: {
     alignItems: "center",
-    margin: 5,
+    marginVertical: 7,
+    padding: 1,
+    marginHorizontal: 2,
     borderRadius: 10,
-    borderWidth: 2,
-    borderColor: "transparent",
   },
   selectedImageContainer: {
-    borderColor: "#ffab00", // Bright yellow for selection
+    borderColor: "yellow",
+    borderWidth: 3,
+    borderRadius: 10,
   },
   image: {
     width: 80,
@@ -153,19 +164,19 @@ const styles = StyleSheet.create({
   },
   actionsContainer: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    width: "100%",
+    justifyContent: "center",
+    marginTop: 20,
   },
   cancelButton: {
     backgroundColor: "red",
     borderRadius: 10,
     paddingHorizontal: 20,
-    paddingVertical: 10,
+    marginRight: 10,
   },
   saveButton: {
     backgroundColor: "green",
     borderRadius: 10,
     paddingHorizontal: 20,
-    paddingVertical: 10,
+    marginLeft: 10,
   },
 });

@@ -36,7 +36,7 @@ export default function QuestionScreen({ navigation }: { navigation: any }) {
                         />
                     </View>
                 </View>
-                <View className='items-center'>
+                <View className='items-center gap-y-2'>
                     <Image
                         source={require('../../assets/images/book.png')}
                         style={{
