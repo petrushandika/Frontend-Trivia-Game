@@ -1,11 +1,10 @@
 import axios from "axios";
 import CONFIG from "../config/config";
-import { CreateInvoiceDto } from "@/dto/InvoiceDto";
 import LOCAL_STORAGE from "./storage";
 
 const API = {
   AVATAR: {
-    GET_ALL: async () => {
+    GET_ALL_AVATAR: async () => {
       try {
         const response = await axios.get(`${CONFIG.BASE_URL}/avatar`);
         return response.data;
@@ -15,7 +14,7 @@ const API = {
       }
     },
 
-    GET_ALL_BY_ID: async (id: number) => {
+    GET_ONE_AVATAR: async (id: number) => {
       try {
         const response = await axios.get(`${CONFIG.BASE_URL}/avatar/${id}`);
         return response.data;

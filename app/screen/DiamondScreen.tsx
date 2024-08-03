@@ -32,8 +32,11 @@ export default function DiamondScreen() {
     async function GET_PACKAGE() {
       try {
         const response = await API.DIAMOND_PACKAGE.GET_ALL_PACKAGE();
-        console.log("package", response.data);
-        setDiamondPackages(response.data);
+        if (response && Array.isArray(response)) {
+          setDiamondPackages(response);
+        } else {
+          console.log('Data format error:', response);
+        }
       } catch (error) {
         console.error("Error fetching diamond packages:", error);
       }
