@@ -12,10 +12,9 @@ WebBrowser.maybeCompleteAuthSession();
 export default function LoginScreen({ navigation }: { navigation: any }) {
   const handleLogin = () => {
     WebBrowser.openAuthSessionAsync(
-      "https://871d-2404-8000-1005-37ac-d060-5fa8-3ba0-ae50.ngrok-free.app/google/redirect"
-
+      "https://36a6-2404-8000-1005-37ac-ac32-14ca-ba59-699a.ngrok-free.app/google/redirect"
     );
-    WebBrowser.dismissBrowser()
+    // WebBrowser.dismissBrowser()
     navigation.navigate('Avatar')
   };
 

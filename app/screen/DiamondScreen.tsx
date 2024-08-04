@@ -31,6 +31,7 @@ export default function DiamondScreen() {
   useEffect(() => {
     async function GET_PACKAGE() {
       const response = await API.DIAMOND_PACKAGE.GET_ALL_PACKAGE();
+      console.log('response', response);
       setDiamondPackages(response);
     }
 
