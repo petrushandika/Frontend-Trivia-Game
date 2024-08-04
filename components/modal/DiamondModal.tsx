@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import { View, StyleSheet, Modal, Text, Image, TouchableOpacity } from "react-native";
 import { Button } from "@rneui/themed";
 import API from "@/networks/api";
+import { DiamondPackageDto } from "@/dto/DiamondPackageDto";
 
 export default function DiamondModal() {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [diamondPackages, setDiamondPackages] = useState<DiamondPackageDto[]>([]);
 
   const toggleModal = () => {
     setModalVisible(!modalVisible);
@@ -15,13 +17,22 @@ export default function DiamondModal() {
     setSelectedImage(image);
   };
 
+  const handlePurchase = (id: number) => {
+    console.log(`Purchased package with id: ${id}`);
+  };
+
   useEffect(() => {
-    async function GET_PAYMENT() {
-      const response = await API.PAYMENT.CREATE()
-      return response.data;
+    async function GET_PACKAGE() {
+      try {
+        const response = await API.DIAMOND_PACKAGE.GET_ALL_PACKAGE();
+        setDiamondPackages(response);
+      } catch (error) {
+        console.error("Error fetching diamond packages:", error);
+      }
     }
-    GET_PAYMENT()
-  }, [])
+
+    GET_PACKAGE();
+  }, []);
 
   return (
     <View style={styles.buttonContainer}>
@@ -40,60 +51,24 @@ export default function DiamondModal() {
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <View style={styles.diamondGrid}>
-              <TouchableOpacity
-                style={[
-                  styles.imageContainer,
-                  selectedImage === "100d" && styles.selectedImageContainer
-                ]}
-                onPress={() => handleImageClick("100d")}
-              >
-                <Image source={require("../../assets/images/100d.png")} style={styles.image} />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[
-                  styles.imageContainer,
-                  selectedImage === "250d" && styles.selectedImageContainer
-                ]}
-                onPress={() => handleImageClick("250d")}
-              >
-                <Image source={require("../../assets/images/250d.png")} style={styles.image} />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[
-                  styles.imageContainer,
-                  selectedImage === "500d" && styles.selectedImageContainer
-                ]}
-                onPress={() => handleImageClick("500d")}
-              >
-                <Image source={require("../../assets/images/500d.png")} style={styles.image} />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[
-                  styles.imageContainer,
-                  selectedImage === "1000d" && styles.selectedImageContainer
-                ]}
-                onPress={() => handleImageClick("1000d")}
-              >
-                <Image source={require("../../assets/images/1000d.png")} style={styles.image} />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[
-                  styles.imageContainer,
-                  selectedImage === "5000d" && styles.selectedImageContainer
-                ]}
-                onPress={() => handleImageClick("5000d")}
-              >
-                <Image source={require("../../assets/images/5000d.png")} style={styles.image} />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[
-                  styles.imageContainer,
-                  selectedImage === "10000d" && styles.selectedImageContainer
-                ]}
-                onPress={() => handleImageClick("10000d")}
-              >
-                <Image source={require("../../assets/images/10000d.png")} style={styles.image} />
-              </TouchableOpacity>
+              {diamondPackages.map((diamondPackage) => (
+                <TouchableOpacity
+                  key={diamondPackage.id}
+                  style={[
+                    styles.packageCard,
+                    selectedImage === diamondPackage.image && styles.selectedImageContainer
+                  ]}
+                  onPress={() => handleImageClick(diamondPackage.image)}
+                >
+                  <Image source={{ uri: diamondPackage.image }} style={styles.packageImage} />
+                  <Text style={styles.packageQuantity}>{diamondPackage.quantity} 💎</Text>
+                  <Button
+                    title={`Rp. ${diamondPackage.price}`}
+                    buttonStyle={styles.buyButton}
+                    onPress={() => handlePurchase(diamondPackage.id)}
+                  />
+                </TouchableOpacity>
+              ))}
             </View>
             <View style={styles.actionsContainer}>
               <Button
@@ -146,7 +121,7 @@ const styles = StyleSheet.create({
     margin: 2,
     padding: 0,
   },
-  imageContainer: {
+  packageCard: {
     alignItems: "center",
     marginVertical: 7,
     padding: 1,
@@ -158,9 +133,15 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     borderRadius: 10,
   },
-  image: {
+  packageImage: {
     width: 80,
     height: 80,
+  },
+  packageQuantity: {
+    marginTop: 5,
+  },
+  buyButton: {
+    marginTop: 10,
   },
   actionsContainer: {
     flexDirection: "row",
@@ -180,3 +161,4 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
 });
+

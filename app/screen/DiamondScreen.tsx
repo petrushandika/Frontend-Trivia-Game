@@ -40,10 +40,6 @@ export default function DiamondScreen() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Image
-        source={require("../../assets/images/triviagame.png")}
-        style={styles.logo}
-      />
       <View style={styles.packagesContainer}>
         {diamondPackages.map((diamondPackage) => (
           <View key={diamondPackage.id} style={styles.packageCard}>
