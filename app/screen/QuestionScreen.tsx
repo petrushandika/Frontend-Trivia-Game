@@ -10,14 +10,12 @@ export default function QuestionScreen({ navigation }: { navigation: any }) {
     const handlePress = (buttonName: string) => {
         setPress(buttonName);
     };
-
     const handleRelease = () => {
         setPress(null);
     };
 
-
     return (
-        <View className='mt-10 p-5 h-full bg-blue-400'>
+        <View className='mt-10 p-5 h-full bg-orange-400'>
             <View className='gap-y-10'>
                 <View className='flex flex-row justify-between p-5 rounded-full'>
                     <View className='flex flex-row items-center gap-x-3'>
@@ -36,7 +34,7 @@ export default function QuestionScreen({ navigation }: { navigation: any }) {
                         />
                     </View>
                 </View>
-                <View className='items-center'>
+                <View className='items-center gap-y-2'>
                     <Image
                         source={require('../../assets/images/book.png')}
                         style={{
@@ -54,7 +52,6 @@ export default function QuestionScreen({ navigation }: { navigation: any }) {
                             borderRadius: 100,
                             borderColor: 'black',
                             paddingVertical: 15,
-                            marginVertical: 10
                         }}
                         titleStyle={{
                             color: press === 'Boom Ba Yah' ? 'white' : 'black',
@@ -70,7 +67,6 @@ export default function QuestionScreen({ navigation }: { navigation: any }) {
                             borderRadius: 100,
                             borderColor: 'black',
                             paddingVertical: 15,
-                            marginVertical: 10
                         }}
                         titleStyle={{
                             color: press === 'Bang Bang Bang' ? 'white' : 'black',
@@ -86,7 +82,6 @@ export default function QuestionScreen({ navigation }: { navigation: any }) {
                             borderRadius: 100,
                             borderColor: 'black',
                             paddingVertical: 15,
-                            marginVertical: 10
                         }}
                         titleStyle={{
                             color: 'black',

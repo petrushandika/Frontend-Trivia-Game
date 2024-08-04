@@ -1,160 +1,46 @@
-import { useState } from "react";
 import {
-  ScrollView,
-  TextInput,
   View,
   Image,
-  TouchableOpacity,
   ImageBackground,
 } from "react-native";
-import Fontisto from "@expo/vector-icons/Fontisto";
-import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
-import { Text } from "@rneui/themed";
 import { Button } from "react-native-elements";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import * as Google from "expo-auth-session/providers/google";
+import * as WebBrowser from "expo-web-browser";
 
+WebBrowser.maybeCompleteAuthSession();
 
-function LoginScreen() {
-  const inputAccessoryViewID = "uniqueID";
-  const initialText = "";
-  const [email, setEmail] = useState(initialText);
-  const [password, setPassword] = useState(initialText);
+export default function LoginScreen({ navigation }: { navigation: any }) {
+  const handleLogin = () => {
+    WebBrowser.openAuthSessionAsync(
+      "https://871d-2404-8000-1005-37ac-d060-5fa8-3ba0-ae50.ngrok-free.app/google/redirect"
 
-  const handleClearText = () => {
-    setEmail(initialText);
-    setPassword(initialText);
+    );
+    WebBrowser.dismissBrowser()
+    navigation.navigate('Avatar')
   };
 
-  // Width for buttons and input fields
-  const buttonWidth = 320;
-
   return (
-    <>
-      {/* <ImageBackground
+    <View className="bg-white h-full">
+      <ImageBackground
         className="flex-1"
-        style={{ padding: 20 }} // Add padding to avoid content touching the edges
-      > */}
-      <View className="m-auto items-center bg-white" style={{ marginTop: 100 }}>
-        <Image
-          source={require("../../assets/images/triviagame.png")}
-          className="w-38 h-38"
-        />
-
-        {/* <Text
-            
-            style={{
-              color: "black",
-              fontFamily: "sans-serif",
-              fontSize: 70, // Increase font size for better visibility
-              fontWeight: "bold", // Add font weight for emphasis
-              marginBottom: 10, // Add margin bottom for spacing
-              alignSelf: 'flex-start', // Align text to the left
-              marginLeft: 10, 
-            }}
-          >
-            SIGN IN
-          </Text>
-          <Text
-            style={{
-              fontSize: 16, // Adjust font size for consistency
-              color: "gray", // Use a gray color for a subtle look
-              marginBottom: 30, // Add margin bottom to separate from input fields
-              alignSelf: 'flex-start', // Align text to the left
-              marginLeft: 10,
-            }}
-          >
-            Sign in with email
-          </Text> */}
-          <ScrollView
-            keyboardDismissMode="interactive"
-            className="flex"
-          >
-            <View style={{ position: "relative", marginBottom: 20 }}>
-              <TextInput
-                style={{ width: buttonWidth, }}
-                className="p-4 pl-12 border border-black rounded-full h-[60px]"
-                inputAccessoryViewID={inputAccessoryViewID}
-                onChangeText={setEmail}
-                value={email}
-                placeholder={"Email"}
-                placeholderTextColor={"black"}
-
-              />
-              <Fontisto
-                name="email"
-                size={24}
-                color="black"
-                style={{ position: "absolute", left: 10, top: 18 }}
-              />
-            </View>
-
-            <View style={{ position: "relative", marginBottom: 30 }}>
-              <TextInput
-                style={{ width: buttonWidth }}
-                className="p-4 pl-12 border border-black rounded-full h-[60px]"
-                inputAccessoryViewID={inputAccessoryViewID}
-                onChangeText={setPassword}
-                value={password}
-                placeholder={"Password"}
-                placeholderTextColor={"black"}
-                secureTextEntry={true}
-              />
-              <FontAwesome5
-                name="key"
-                size={24}
-                color="black"
-                style={{ position: "absolute", left: 10, top: 18 }}
-              />
-            </View>
-          </ScrollView>
-
-          <View style={{ padding: 20 }}>
-            <Button
-              title="Sign In"
-              buttonStyle={{
-                backgroundColor: "#ff7a00",
-                borderRadius: 100,
-                paddingVertical: 15,
-                width: buttonWidth,
-              }}
-              titleStyle={{
-                color: "white",
-                fontSize: 20,
-              }}
+      >
+        <View className="m-auto items-center">
+          <View>
+            <Image
+              source={require("../../assets/images/triviagame.png")}
+              className="w-38 h-38"
             />
           </View>
 
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            marginVertical: 10,
-          }}
-        >
-          <Text>Don't have an account? </Text>
-          <TouchableOpacity
-            onPress={() => {
-              /* Handle sign in navigation */
-            }}
-          >
-            <Text
-              style={{ fontSize: 16, fontWeight: "bold", color: "#ff7a00" }}
-            >
-              Sign Up
-            </Text>
-          </TouchableOpacity>
-        </View>
-
-
-          <View style={{ padding: 20 }}>
+          <View>
             <Button
+              onPress={() => handleLogin()}
               title="Continue with Google"
               buttonStyle={{
-                backgroundColor: "#a28bfc",
+                backgroundColor: "darkorange",
                 borderRadius: 100,
                 paddingVertical: 15,
-                width: buttonWidth,
+                width: 320,
               }}
               titleStyle={{
                 color: "white",
@@ -171,10 +57,8 @@ function LoginScreen() {
               iconPosition="left"
             />
           </View>
-      </View>
-      {/* </ImageBackground> */}
-    </>
+        </View>
+      </ImageBackground>
+    </View>
   );
 }
-
-export default LoginScreen;

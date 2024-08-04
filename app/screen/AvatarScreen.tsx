@@ -10,11 +10,10 @@ function AvatarScreen({ navigation }: { navigation: any }) {
   const [name, setName] = useState("");
 
   return (
-    <View style={styles.viewContent}>
-      <View style={styles.container}>
+    <View className="m-auto justify-center">
+      <View className="items-center">
         <Image
           source={require("../../assets/images/triviagame.png")}
-          style={styles.image}
         />
         <Text h4 style={styles.title}>
           Create Your Avatar
@@ -22,10 +21,9 @@ function AvatarScreen({ navigation }: { navigation: any }) {
         <ErrorBoundary>
           <ChooseAvatar />
         </ErrorBoundary>
-
-        <View style={styles.inputContainer}>
+        <View className="relative" style={styles.inputContainer}>
           <TextInput
-            style={styles.input}
+            className="w-80 p-4 pl-12 bg-white border-black border rounded-full "
             inputAccessoryViewID={inputAccessoryViewID}
             onChangeText={setName}
             value={name}
@@ -34,11 +32,20 @@ function AvatarScreen({ navigation }: { navigation: any }) {
           />
           <Feather name="edit" size={24} color="black" style={styles.icon} />
         </View>
-        <View style={styles.buttonContainer}>
+        <View>
           <Button
             title="Save"
-            buttonStyle={styles.button}
-            titleStyle={styles.buttonTitle}
+            buttonStyle={{
+              backgroundColor: "#ff7a00",
+              borderRadius: 100,
+              paddingVertical: 13,
+              width: 320,
+              marginTop: 1
+            }}
+            titleStyle={{
+              color: "white",
+              fontSize: 20,
+            }}
             onPress={() => navigation.navigate('Home')}
           />
         </View>
@@ -48,14 +55,6 @@ function AvatarScreen({ navigation }: { navigation: any }) {
 }
 
 const styles = StyleSheet.create({
-  viewContent: {
-    margin: 'auto',
-    justifyContent: 'center',
-  },
-  container: {
-    alignItems: "center",
-  },
-  image: {},
   title: {
     marginVertical: 20,
     fontFamily: "sans-serif",
@@ -65,35 +64,12 @@ const styles = StyleSheet.create({
     position: "relative",
     marginBottom: 20,
   },
-  input: {
-    width: 320,
-    padding: 16,
-    paddingLeft: 50,
-    borderColor: "black",
-    borderWidth: 1,
-    borderRadius: 100,
-    backgroundColor: "white",
-    color: "black",
-  },
   icon: {
     position: "absolute",
     left: 10,
     top: 13,
   },
-  buttonContainer: {
-    marginTop: 2,
-  },
-  button: {
-    backgroundColor: "#ff7a00",
-    borderRadius: 100,
-    paddingVertical: 13,
-    width: 320,
-    marginTop: 1,
-  },
-  buttonTitle: {
-    color: "white",
-    fontSize: 20,
-  },
+
 });
 
 export default AvatarScreen;

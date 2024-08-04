@@ -1,38 +1,42 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import { View, StyleSheet, Text, Image, ScrollView } from "react-native";
 import { Button } from "@rneui/themed";
 import Modal from 'react-native-modal';
+import API from "@/networks/api";
+import { DiamondPackageDto } from "@/dto/DiamondPackageDto";
 
-// Dummy data with unique IDs and sorted by price
-const diamondPackages = [
-  { id: 1, amount: 100, price: "$1.99", image: "https://png.pngtree.com/png-clipart/20220822/ourmid/pngtree-game-gems-bag-ui-icon-png-png-image_6120206.png" },
-  { id: 2, amount: 500, price: "$4.99", image: "https://previews.123rf.com/images/emojiimage/emojiimage1802/emojiimage180200329/95468322-large-brown-bag-full-of-valuable-stones-diamonds-sapphires-and-rubies-cartoon-gemstones-flat-vector.jpg" },
-  { id: 3, amount: 1000, price: "$9.99", image: "https://media.istockphoto.com/id/1335316934/tr/vekt%C3%B6r/bag-with-crystal-stones-in-cartoon-style-isolated-on-white-background-ui-game-asset-sack.jpg?s=612x612&w=0&k=20&c=O3LUVMs04X7zMavrsqju8_bo6vmdXx-mixqrf_x6NKM=" },
-  { id: 4, amount: 2500, price: "$19.99", image: "https://img.freepik.com/premium-vector/vector_863384-155.jpg" },
-  { id: 5, amount: 5000, price: "$39.99", image: "https://st2.depositphotos.com/4155807/6227/v/950/depositphotos_62271937-stock-illustration-bag-with-gems.jpg" },
-];
-
-export default function DiamondShop() {
+export default function DiamondScreen() {
   const [isModalVisible, setModalVisible] = useState(false);
-  const [modalContent, setModalContent] = useState({ amount: 0, price: "" });
+  const [modalContent, setModalContent] = useState({ quantity: 0, price: "" });
+  const [diamondPackages, setDiamondPackages] = useState<DiamondPackageDto[]>([]);
 
   const handlePurchase = (packageId: number) => {
-    const purchasedPackage = diamondPackages.find(pkg => pkg.id === packageId);
+    const purchasedPackage = diamondPackages.find(diamondPackage => diamondPackage.id === packageId);
 
     if (purchasedPackage) {
       setModalContent({
-        amount: purchasedPackage.amount,
-        price: purchasedPackage.price,
+        quantity: purchasedPackage.quantity,
+        price: purchasedPackage.price.toString(),
       });
       setModalVisible(true);
     } else {
       setModalContent({
-        amount: 0,
+        quantity: 0,
         price: "Error",
       });
       setModalVisible(true);
     }
   };
+
+  useEffect(() => {
+    async function GET_PACKAGE() {
+      const response = await API.DIAMOND_PACKAGE.GET_ALL_PACKAGE();
+      setDiamondPackages(response);
+    }
+
+    GET_PACKAGE()
+  }, []);
+
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -41,14 +45,14 @@ export default function DiamondShop() {
         style={styles.logo}
       />
       <View style={styles.packagesContainer}>
-        {diamondPackages.map((pkg) => (
-          <View key={pkg.id} style={styles.packageCard}>
-            <Image source={{ uri: pkg.image }} style={styles.packageImage} />
-            <Text style={styles.packageAmount}>{pkg.amount} 💎</Text>
+        {diamondPackages.map((diamondPackage) => (
+          <View key={diamondPackage.id} style={styles.packageCard}>
+            <Image source={{ uri: diamondPackage.image }} style={styles.packageImage} />
+            <Text style={styles.packageQuantity}>{diamondPackage.quantity} 💎</Text>
             <Button
-              title={`${pkg.price}`}
+              title={`Rp. ${diamondPackage.price}`}
               buttonStyle={styles.buyButton}
-              onPress={() => handlePurchase(pkg.id)}
+              onPress={() => handlePurchase(diamondPackage.id)}
             />
           </View>
         ))}
@@ -63,8 +67,8 @@ export default function DiamondShop() {
         <View style={styles.modalContent}>
           <Text style={styles.modalTitle}>Purchase Confirmed</Text>
           <Text style={styles.modalMessage}>
-            {modalContent.amount > 0
-              ? `You have purchased ${modalContent.amount} diamonds for ${modalContent.price}!`
+            {modalContent.quantity > 0
+              ? `You have purchased ${modalContent.quantity} diamonds for Rp. ${modalContent.price}!`
               : "Package not found."}
           </Text>
           <Button
@@ -83,20 +87,13 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#FF7A00", // Light orange background
+    backgroundColor: "#FF7A00",
     padding: 20,
   },
   logo: {
     width: 180,
     height: 120,
     marginBottom: 20,
-  },
-  title: {
-    fontSize: 30,
-    fontWeight: "bold",
-    marginBottom: 20,
-    color: "#00796b", // Teal color for contrast
-    textAlign: 'center',
   },
   packagesContainer: {
     flexDirection: "row",
@@ -121,15 +118,11 @@ const styles = StyleSheet.create({
     height: 120,
     borderRadius: 15,
   },
-  packageAmount: {
+  packageQuantity: {
     fontSize: 20,
     fontWeight: "bold",
     marginVertical: 10,
-    color: "#00796b", // Teal color for contrast
-  },
-  packagePrice: {
-    fontSize: 18,
-    color: "#00796b", // Teal color for contrast
+    color: "#00796b",
   },
   buyButton: {
     backgroundColor: "#008001",

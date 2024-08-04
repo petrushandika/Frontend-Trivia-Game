@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { View, Image, Text, TouchableOpacity } from 'react-native';
 import { Avatar, Button } from "react-native-elements";
-import { Icon } from 'react-native-elements';
 import AvatarModal from '../../components/modal/AvatarModal';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 export default function HomeScreen({ navigation }: { navigation: any }) {
   const [modalVisible, setModalVisible] = useState(false);
@@ -14,6 +14,25 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
 
   return (
     <View className='flex-1 gap-10 mt-1'>
+      <View>
+        <TouchableOpacity
+          style={{
+            position: 'absolute',
+            top: 0,
+            right: 20,
+          }}
+          onPress={() => navigation.navigate("DiamondShop")}
+        >
+          <View className='flex flex-row gap-x-5 items-center'>
+            <Image
+              source={require("../../assets/images/diamond.png")}
+              className="w-4 h-4 ml-1"
+            />
+            <Text>21</Text>
+            <FontAwesome name="plus-square" size={20} color="green" />
+          </View>
+        </TouchableOpacity>
+      </View>
       <View className='p-2'>
         <View className='flex flex-row justify-between mb-2'>
           <View className='flex-1 mr-2 bg-pink-200 rounded-lg'>
@@ -83,21 +102,6 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
           onPress={() => navigation.navigate("Match")}
         />
       </View>
-      <TouchableOpacity
-        style={{
-          position: 'absolute',
-          top: 40,
-          right: 20,
-        }}
-        onPress={() => navigation.navigate("DiamondShop")}
-      >
-        <Icon
-          name="diamond"
-          type="font-awesome"
-          size={30}
-          color="black"
-        />
-      </TouchableOpacity>
       <AvatarModal
         modalVisible={modalVisible}
         toggleModal={toggleModal}
