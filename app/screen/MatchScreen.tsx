@@ -4,8 +4,9 @@ import Data from "../../data/data.json";
 
 interface ItemData {
   id: number;
-  name: string;
   image: string;
+  isPremium: boolean;
+  price: string;
 }
 
 export default function MatchScreen({ navigation }: { navigation: any }) {
@@ -22,7 +23,7 @@ export default function MatchScreen({ navigation }: { navigation: any }) {
         </View>
         <View className='flex flex-row items-center gap-x-3'>
           <Text className='text-white text-base'>00 : 18</Text>
-          <AntDesign name="forward" size={20} color="white" onPress={() => navigation.navigate('Question')}/>
+          <AntDesign name="forward" onPress={() => navigation.navigate("Question")} size={20} color="white" />
         </View>
       </View>
       <View className='gap-y-10 mt-1 mb-14'>
