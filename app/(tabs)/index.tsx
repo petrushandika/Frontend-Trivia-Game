@@ -11,10 +11,13 @@ import AvatarModal from '@/components/modal/AvatarModal';
 import DiamondModal from '@/components/modal/DiamondModal';
 import DiamondScreen from '../screen/DiamondScreen';
 
+
 const Stack = createStackNavigator();
 
 function App() {
   return (
+    
+      
     <NavigationContainer independent={true}>
       <Stack.Navigator initialRouteName=''>
         <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
