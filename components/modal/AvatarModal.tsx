@@ -1,15 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { View, Modal, Text, Image, TouchableOpacity, ScrollView } from "react-native";
 import { Avatar, Button } from "@rneui/themed";
-import Data from "../../data/data.json";
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { RootStackParamList } from '../navigation/types';
-
-interface IAva {
-  id: number;
-  image: string;
-  price: number | string;
-}
+import API from "@/networks/api";
+import { AvatarDto } from "@/dto/AvatarDto";
 
 interface AvatarModalProps {
   modalVisible: boolean;
@@ -22,6 +17,7 @@ export default function AvatarModal({ modalVisible, toggleModal, setSelectedAvat
   const [alertVisible, setAlertVisible] = useState<boolean>(false);
   const userDiamonds = 0;
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const [avatars, setAvatars] = useState<AvatarDto[]>([]);
 
   const handleAvatarClick = (avatarId: number, price: number | string, image: string) => {
     if (typeof price === "number" && price > userDiamonds) {
@@ -31,9 +27,9 @@ export default function AvatarModal({ modalVisible, toggleModal, setSelectedAvat
     }
   };
 
-  const sortedAvatars: IAva[] = [...Data].sort((a: IAva, b: IAva) => {
-    const priceA = typeof a.price === "string" ? 0 : a.price;
-    const priceB = typeof b.price === "string" ? 0 : b.price;
+  const sortedAvatars: AvatarDto[] = [...avatars].sort((a: AvatarDto, b: AvatarDto) => {
+    const priceA = typeof a.price === "string" ? 0 : Number(a.price);
+    const priceB = typeof b.price === "string" ? 0 : Number(b.price);
     return priceA - priceB;
   });
 
@@ -57,6 +53,18 @@ export default function AvatarModal({ modalVisible, toggleModal, setSelectedAvat
     setAlertVisible(false);
   };
 
+  useEffect(() => {
+    async function GET_AVATAR() {
+      try {
+        const response = await API.AVATAR.GET_ALL_AVATAR();
+        setAvatars(response);
+      } catch (error) {
+        console.error("Error fetching avatars:", error);
+      }
+    }
+    GET_AVATAR();
+  }, []);
+
   return (
     <>
       <Modal
@@ -69,12 +77,11 @@ export default function AvatarModal({ modalVisible, toggleModal, setSelectedAvat
           <View className="m-5 bg-white p-5 items-center rounded-2xl shadow h-1/2 w-11/12">
             <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: "center", alignItems: "center" }}>
               <View className="w-full flex-row flex-wrap justify-between">
-                {sortedAvatars.map((avatar: IAva) => (
+                {sortedAvatars.map((avatar) => (
                   <TouchableOpacity
                     key={avatar.id}
-                    className={`w-1/3 aspect-square items-center m-1 p-1 border ${localSelectedAvatar === avatar.id ? 'border-orange-500 border-2' : 'border-transparent'
-                      } rounded-lg bg-gray-100`}
-                    onPress={() => handleAvatarClick(avatar.id, avatar.price, avatar.image)}
+                    className={`w-1/3 aspect-square items-center m-1 p-1 border ${localSelectedAvatar === avatar.id ? 'border-orange-500 border-2' : 'border-transparent'} rounded-lg bg-gray-100`}
+                    onPress={() => handleAvatarClick(avatar.id, avatar.price || "Free", avatar.image)}
                   >
                     <Avatar
                       size="large"
