@@ -1,21 +1,22 @@
 import { useEffect, useState } from "react";
-import { View, StyleSheet, Modal, Text, Image, TouchableOpacity, ActivityIndicator } from "react-native";
+import { View, StyleSheet, Modal, Text, Image, TouchableOpacity, ActivityIndicator, ScrollView } from "react-native";
 import { Button } from "@rneui/themed";
 import API from "@/networks/api";
 import { DiamondPackageDto } from "@/dto/DiamondPackageDto";
 import { WebView } from "react-native-webview";
 
-export default function DiamondModal() {
-  const [modalVisible, setModalVisible] = useState(false);
+interface DiamondModalProps {
+  modalVisible: boolean;
+  toggleModal: () => void;
+  setSelectedDiamond: (diamond: string) => void;
+}
+
+export default function DiamondModal({ modalVisible, toggleModal, setSelectedDiamond }: DiamondModalProps) {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [diamondPackages, setDiamondPackages] = useState<DiamondPackageDto[]>([]);
   const [selectedPackageId, setSelectedPackageId] = useState<number | null>(null);
   const [paymentUrl, setPaymentUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-
-  const toggleModal = () => {
-    setModalVisible(!modalVisible);
-  };
 
   const handleImageClick = (image: string) => {
     setSelectedImage(image);
@@ -39,9 +40,9 @@ export default function DiamondModal() {
     }
 
     const paymentData = {
-      userId: "",
+      userId: "123",
       price: selectedPackage.price,
-      quantity: 1,
+      quantity: selectedPackage.quantity
     };
 
     setLoading(true);
@@ -49,9 +50,7 @@ export default function DiamondModal() {
     try {
       const response = await API.PAYMENT.CREATE(paymentData);
       if (response.token) {
-        const snapUrl = `https://app.sandbox.midtrans.com/snap/v3/redirection/${response.token}`;
-        console.log("Payment response:", response);
-        console.log("Snap URL:", snapUrl);
+        const snapUrl = `https://app.sandbox.midtrans.com/snap/v4/redirection/${response.token}`;
         setPaymentUrl(snapUrl);
       }
     } catch (error) {
@@ -74,6 +73,12 @@ export default function DiamondModal() {
     GET_PACKAGE();
   }, []);
 
+  useEffect(() => {
+    if (paymentUrl) {
+      console.log(`WebView should load URL: ${paymentUrl}`);
+    }
+  }, [paymentUrl]);
+
   return (
     <View style={styles.buttonContainer}>
       <Button
@@ -91,33 +96,45 @@ export default function DiamondModal() {
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             {paymentUrl ? (
-              <WebView
-                source={{ uri: paymentUrl }}
-                style={styles.webview}
-                onLoadEnd={() => setLoading(false)}
-              />
+              <View style={styles.webview}>
+                <WebView
+                  source={{ uri: paymentUrl }}
+                  style={styles.webview}
+                  onError={(syntheticEvent) => {
+                    const { nativeEvent } = syntheticEvent;
+                    console.warn('WebView error: ', nativeEvent);
+                  }}
+                  onLoadEnd={() => setLoading(false)}
+                  onHttpError={(syntheticEvent) => {
+                    const { nativeEvent } = syntheticEvent;
+                    console.warn('WebView received HTTP error: ', nativeEvent.statusCode);
+                  }}
+                />
+              </View>
             ) : (
               <>
-                <View style={styles.diamondGrid}>
-                  {diamondPackages.map((diamondPackage) => (
-                    <TouchableOpacity
-                      key={diamondPackage.id}
-                      style={[
-                        styles.packageCard,
-                        selectedImage === diamondPackage.image && styles.selectedImageContainer
-                      ]}
-                      onPress={() => handleImageClick(diamondPackage.image)}
-                    >
-                      <Image source={{ uri: diamondPackage.image }} style={styles.packageImage} />
-                      <Text style={styles.packageQuantity}>{diamondPackage.quantity} 💎</Text>
-                      <Button
-                        title={`Rp. ${diamondPackage.price}`}
-                        buttonStyle={styles.buyButton}
-                        onPress={() => handlePurchase(diamondPackage.id)}
-                      />
-                    </TouchableOpacity>
-                  ))}
-                </View>
+                <ScrollView contentContainerStyle={styles.scrollViewContent}>
+                  <View style={styles.diamondGrid}>
+                    {diamondPackages.map((diamondPackage) => (
+                      <TouchableOpacity
+                        key={diamondPackage.id}
+                        style={[
+                          styles.packageCard,
+                          selectedImage === diamondPackage.image && styles.selectedImageContainer
+                        ]}
+                        onPress={() => handleImageClick(diamondPackage.image)}
+                      >
+                        <Image source={{ uri: diamondPackage.image }} style={styles.packageImage} />
+                        <Text style={styles.packageQuantity}>{diamondPackage.quantity} 💎</Text>
+                        <Button
+                          title={`Rp. ${diamondPackage.price}`}
+                          buttonStyle={styles.buyButton}
+                          onPress={() => handlePurchase(diamondPackage.id)}
+                        />
+                      </TouchableOpacity>
+                    ))}
+                  </View>
+                </ScrollView>
                 <View style={styles.actionsContainer}>
                   <Button
                     title="Cancel"
@@ -128,8 +145,7 @@ export default function DiamondModal() {
                     title="Buy"
                     buttonStyle={styles.saveButton}
                     onPress={() => {
-                      toggleModal(); // Close the modal
-                      handlePayment(); // Trigger the payment process
+                      handlePayment();
                     }}
                   />
                 </View>
@@ -164,20 +180,20 @@ const styles = StyleSheet.create({
   },
   modalView: {
     margin: 20,
-    backgroundColor: "rgba(255, 122, 0, 0.7)",
-    padding: 35,
+    backgroundColor: "rgba(255, 255, 255, 1)",
     alignItems: "center",
     borderRadius: 20,
     elevation: 5,
     width: '90%',
-    height: '80%',
+    height: '50%',
   },
   diamondGrid: {
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "center",
     margin: 2,
-    padding: 0,
+    paddingHorizontal: 25,
+    paddingVertical: 0,
   },
   packageCard: {
     alignItems: "center",
@@ -202,9 +218,16 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   actionsContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
     flexDirection: "row",
     justifyContent: "center",
-    marginTop: 20,
+    backgroundColor: 'white',
+    paddingVertical: 20,
+    paddingHorizontal: 20,
+    borderRadius: 20,
   },
   cancelButton: {
     backgroundColor: "red",
@@ -222,8 +245,15 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     height: '100%',
+    borderRadius: 20,
   },
   loader: {
     marginTop: 20,
+  },
+  scrollViewContent: {
+    flexGrow: 1,
+    paddingBottom: 80,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

@@ -1,6 +1,6 @@
 import axios from "axios";
 import CONFIG from "../config/config";
-import LOCAL_STORAGE from "./storage";
+import ASYNC_STORAGE from "./storage";
 
 const API = {
   USER: {
@@ -42,12 +42,12 @@ const API = {
       try {
         const response = await axios.post(
           `${CONFIG.BASE_URL}/payment/create`,
-          paymentData,
-          {
-            headers: {
-              Authorization: `Bearer ${LOCAL_STORAGE.GET()}`,
-            },
-          }
+          paymentData
+          // {
+          //   headers: {
+          //     Authorization: `Bearer ${ASYNC_STORAGE.GET()}`,
+          //   },
+          // }
         );
         return response.data;
       } catch (error) {
