@@ -17,6 +17,7 @@
   "dependencies": {
     "@expo-google-fonts/dev": "^0.2.3",
     "@expo-google-fonts/luckiest-guy": "^0.2.3",
+    "@expo/metro-runtime": "^3.2.1",
     "@expo/vector-icons": "^14.0.2",
     "@expo/webpack-config": "~19.0.1",
     "@react-navigation/bottom-tabs": "^6.6.1",

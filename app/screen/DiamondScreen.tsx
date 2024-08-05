@@ -1,7 +1,6 @@
-import React, { useState } from "react";
-import { View, StyleSheet, Text, Image, ScrollView } from "react-native";
+import { useState } from "react";
+import { View, StyleSheet, Text, Image, ScrollView, Modal as RNModal, TouchableOpacity } from "react-native";
 import { Button } from "@rneui/themed";
-import Modal from 'react-native-modal';
 
 // Dummy data with unique IDs and sorted by price
 const diamondPackages = [
@@ -57,26 +56,30 @@ export default function DiamondShop() {
         ))}
       </View>
 
-      {/* Modal Component */}
-      <Modal
-        isVisible={isModalVisible}
-        onBackdropPress={() => setModalVisible(false)}
-        style={styles.modal}
+      {/* Native Modal Component */}
+      <RNModal
+        visible={isModalVisible}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={() => setModalVisible(false)}
       >
-        <View style={styles.modalContent}>
-          <Text style={styles.modalTitle}>Purchase Confirmed</Text>
-          <Text style={styles.modalMessage}>
-            {modalContent.amount > 0
-              ? `You have purchased ${modalContent.amount} diamonds for ${modalContent.price}!`
-              : "Package not found."}
-          </Text>
-          <Button
-            title="Continue"
-            buttonStyle={styles.modalButton}
-            onPress={() => setModalVisible(false)}
-          />
+        <View style={styles.modalBackdrop}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Purchase Confirmed</Text>
+            <Text style={styles.modalMessage}>
+              {modalContent.amount > 0
+                ? `You have purchased ${modalContent.amount} diamonds for ${modalContent.price}!`
+                : "Package not found."}
+            </Text>
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={() => setModalVisible(false)}
+            >
+              <Text style={styles.modalButtonText}>Continue</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </Modal>
+      </RNModal>
     </ScrollView>
   );
 }
@@ -93,13 +96,6 @@ const styles = StyleSheet.create({
     width: 180,
     height: 120,
     marginBottom: 20,
-  },
-  title: {
-    fontSize: 30,
-    fontWeight: "bold",
-    marginBottom: 20,
-    color: "#00796b", // Teal color for contrast
-    textAlign: 'center',
   },
   packagesContainer: {
     flexDirection: "row",
@@ -130,10 +126,6 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     color: "#00796b", // Teal color for contrast
   },
-  packagePrice: {
-    fontSize: 18,
-    color: "#00796b", // Teal color for contrast
-  },
   buyButton: {
     backgroundColor: "#008001",
     borderRadius: 10,
@@ -141,9 +133,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 10,
   },
-  modal: {
+  modalBackdrop: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalContent: {
     backgroundColor: '#fff',
@@ -169,5 +163,9 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingHorizontal: 20,
     paddingVertical: 10,
+  },
+  modalButtonText: {
+    color: '#fff',
+    fontSize: 16,
   },
 });
