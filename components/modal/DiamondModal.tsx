@@ -117,6 +117,7 @@ export default function DiamondModal({ modalVisible, toggleModal, setSelectedDia
                   <View style={styles.diamondGrid}>
                     {diamondPackages.map((diamondPackage) => (
                       <TouchableOpacity
+                        className="bg-gray-100"
                         key={diamondPackage.id}
                         style={[
                           styles.packageCard,
@@ -197,14 +198,14 @@ const styles = StyleSheet.create({
   },
   packageCard: {
     alignItems: "center",
-    marginVertical: 7,
-    padding: 1,
-    marginHorizontal: 2,
+    width: 120,
+    marginVertical: 10,
+    marginHorizontal: 10,
     borderRadius: 10,
   },
   selectedImageContainer: {
     borderColor: "yellow",
-    borderWidth: 3,
+    // borderWidth: 3,
     borderRadius: 10,
   },
   packageImage: {
@@ -215,7 +216,10 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   buyButton: {
+    width: 120,
     marginTop: 10,
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10
   },
   actionsContainer: {
     position: 'absolute',
@@ -228,18 +232,17 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     paddingHorizontal: 20,
     borderRadius: 20,
+    gap: 20
   },
   cancelButton: {
     backgroundColor: "red",
     borderRadius: 10,
-    paddingHorizontal: 20,
-    marginRight: 10,
+    width: 125,
   },
   saveButton: {
     backgroundColor: "green",
     borderRadius: 10,
-    paddingHorizontal: 20,
-    marginLeft: 10,
+    width: 125
   },
   webview: {
     flex: 1,
@@ -252,6 +255,7 @@ const styles = StyleSheet.create({
   },
   scrollViewContent: {
     flexGrow: 1,
+    paddingTop: 10,
     paddingBottom: 80,
     justifyContent: "center",
     alignItems: "center",

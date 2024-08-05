@@ -9,10 +9,8 @@ import AvatarScreen from '../screen/AvatarScreen';
 import LooserScreen from '../screen/LooserScreen';
 import AvatarModal from '@/components/modal/AvatarModal';
 import DiamondModal from '@/components/modal/DiamondModal';
-import DiamondScreen from '../screen/DiamondScreen';
 import MatchMaking from '@/components/MatchMaking';
 import WebView from 'react-native-webview';
-
 
 const Stack = createStackNavigator();
 
@@ -31,7 +29,6 @@ function App() {
         <Stack.Screen name="Looser" component={LooserScreen} options={{ headerShown: false }} />
         {/* <Stack.Screen name="AvatarModal" component={AvatarModal} options={{ headerShown: false }} /> */}
         {/* <Stack.Screen name="DiamondModal" component={DiamondModal} options={{ headerShown: false }} /> */}
-        <Stack.Screen name="DiamondShop" component={DiamondScreen} options={{ headerShown: false }} />
         {/* <Stack.Screen name="MatchMaking" component={MatchMaking} options={{ headerShown: false }} /> */}
         <Stack.Screen name="WebView" component={WebView} options={{ headerShown: false }} />
       </Stack.Navigator>

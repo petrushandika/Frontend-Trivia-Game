@@ -29,7 +29,6 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
   useEffect(() => {
     async function fetchUser() {
       try {
-        // Replace `1` with the actual user ID if needed
         const response = await API.USER.GET_ONE_USER(1);
         setUser(response);
         if (response.avatar) {
@@ -44,17 +43,20 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
   }, []);
 
   return (
-    <View className='flex-1 gap-10 mt-1'>
+    <View className='flex-1 gap-y-10 mt-1'>
       <View>
         <TouchableOpacity
+          className='w-full flex flex-row justify-between items-center'
           style={{
             position: 'absolute',
             top: 0,
-            right: 20,
           }}
-          onPress={toggleDiamondModal}  // Toggle DiamondModal
+          onPress={toggleDiamondModal}
         >
-          <View className='flex flex-row gap-x-5 items-center'>
+          <View className='ml-3'>
+            <Text className='text-base font-medium'>Hi, Petrus</Text>
+          </View>
+          <View className='mr-3 flex flex-row gap-x-5 items-center'>
             <Image
               source={require("../../assets/images/diamond.png")}
               className="w-4 h-4 ml-1"
@@ -109,10 +111,9 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
           containerStyle={{
             borderColor: 'black',
             borderWidth: 1,
-            marginLeft: 10,
-            marginRight: 10
+            marginHorizontal: 10
           }}
-          onPress={toggleAvatarModal}  // Toggle AvatarModal
+          onPress={toggleAvatarModal}
         />
         <Button
           title="Start Game"
