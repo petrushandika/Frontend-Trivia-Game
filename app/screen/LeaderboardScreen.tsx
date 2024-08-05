@@ -4,8 +4,8 @@ import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import Entypo from "@expo/vector-icons/Entypo";
 import { Tab, TabView } from "@rneui/themed";
 import { useState } from "react";
-export default function LeaderboardScreen({navigation} : {navigation : any}) {
-    const [index, setIndex] = useState<number>(0);
+export default function LeaderboardScreen({ navigation }: { navigation: any }) {
+  const [index, setIndex] = useState<number>(0);
   return (
     <SafeAreaView className="w-full h-full bg-slate-200 p-4">
       <View className="flex flex-row items-center justify-between mt-3">
@@ -36,7 +36,7 @@ export default function LeaderboardScreen({navigation} : {navigation : any}) {
         <View className="ml-3">
           <Text className="text-white text-2xl">
             {" "}
-            You are doing better than 60% of other players!
+            You are doing better than 50% of other players!
           </Text>
         </View>
       </View>

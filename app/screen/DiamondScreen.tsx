@@ -1,79 +1,85 @@
-import { useEffect, useState } from "react";
-import { View, StyleSheet, Text, Image, ScrollView } from "react-native";
+import { useState } from "react";
+import { View, StyleSheet, Text, Image, ScrollView, Modal as RNModal, TouchableOpacity } from "react-native";
 import { Button } from "@rneui/themed";
-import Modal from 'react-native-modal';
-import API from "@/networks/api";
-import { DiamondPackageDto } from "@/dto/DiamondPackageDto";
 
-export default function DiamondScreen() {
+// Dummy data with unique IDs and sorted by price
+const diamondPackages = [
+  { id: 1, amount: 10, price: "$1.99", image: "https://png.pngtree.com/png-clipart/20220822/ourmid/pngtree-game-gems-bag-ui-icon-png-png-image_6120206.png" },
+  { id: 2, amount: 25, price: "$4.99", image: "https://previews.123rf.com/images/emojiimage/emojiimage1802/emojiimage180200329/95468322-large-brown-bag-full-of-valuable-stones-diamonds-sapphires-and-rubies-cartoon-gemstones-flat-vector.jpg" },
+  { id: 3, amount: 50, price: "$9.99", image: "https://st2.depositphotos.com/4155807/6227/v/950/depositphotos_62271937-stock-illustration-bag-with-gems.jpg" },
+  { id: 4, amount: 100, price: "$19.99", image: "https://img.freepik.com/premium-vector/vector_863384-155.jpg" },
+  { id: 5, amount: 500, price: "$39.99", image: "https://thumbs.dreamstime.com/b/cloth-fabric-money-bag-full-various-diamonds-sack-gems-game-interface-elements-donation-microtransacton-vector-107785049.jpg" },
+  { id: 6, amount: 1000, price: "$39.99", image: "https://previews.123rf.com/images/lilu330/lilu3301504/lilu330150400080/41680969-cartoon-wooden-chest-with-diamonds.jpg" },
+  { id: 7, amount: 5000, price: "$39.99", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS3myRHOf5gWmq26tAOxUNkhXwcrd67PkGJApKmvJjQkHrkRR4VU0jjb4YchvO5vX6BS8E&usqp=CAU" },
+  { id: 8, amount: 10000, price: "$39.99", image: "https://png.pngtree.com/png-vector/20231213/ourmid/pngtree-game-diamond-treasure-chest-free-buckle-element-decorative-material-png-image_11320214.png" },
+];
+
+export default function DiamondShop() {
   const [isModalVisible, setModalVisible] = useState(false);
-  const [modalContent, setModalContent] = useState({ quantity: 0, price: "" });
-  const [diamondPackages, setDiamondPackages] = useState<DiamondPackageDto[]>([]);
+  const [modalContent, setModalContent] = useState({ amount: 0, price: "" });
 
   const handlePurchase = (packageId: number) => {
-    const purchasedPackage = diamondPackages.find(diamondPackage => diamondPackage.id === packageId);
+    const purchasedPackage = diamondPackages.find(pkg => pkg.id === packageId);
 
     if (purchasedPackage) {
       setModalContent({
-        quantity: purchasedPackage.quantity,
-        price: purchasedPackage.price.toString(),
+        amount: purchasedPackage.amount,
+        price: purchasedPackage.price,
       });
       setModalVisible(true);
     } else {
       setModalContent({
-        quantity: 0,
+        amount: 0,
         price: "Error",
       });
       setModalVisible(true);
     }
   };
 
-  useEffect(() => {
-    async function GET_PACKAGE() {
-      const response = await API.DIAMOND_PACKAGE.GET_ALL_PACKAGE();
-      setDiamondPackages(response);
-    }
-
-    GET_PACKAGE()
-  }, []);
-
-
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      <Image
+        source={require("../../assets/images/triviagame.png")}
+        style={styles.logo}
+      />
       <View style={styles.packagesContainer}>
-        {diamondPackages.map((diamondPackage) => (
-          <View key={diamondPackage.id} style={styles.packageCard}>
-            <Image source={{ uri: diamondPackage.image }} style={styles.packageImage} />
-            <Text style={styles.packageQuantity}>{diamondPackage.quantity} 💎</Text>
+        {diamondPackages.map((pkg) => (
+          <View key={pkg.id} style={styles.packageCard}>
+            <Image source={{ uri: pkg.image }} style={styles.packageImage} />
+            <Text style={styles.packageAmount}>{pkg.amount} 💎</Text>
             <Button
-              title={`Rp. ${diamondPackage.price}`}
+              title={`${pkg.price}`}
               buttonStyle={styles.buyButton}
-              onPress={() => handlePurchase(diamondPackage.id)}
+              onPress={() => handlePurchase(pkg.id)}
             />
           </View>
         ))}
       </View>
 
-      {/* Modal Component */}
-      <Modal
-        isVisible={isModalVisible}
-        onBackdropPress={() => setModalVisible(false)}
-        style={styles.modal}
+      {/* Native Modal Component */}
+      <RNModal
+        visible={isModalVisible}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={() => setModalVisible(false)}
       >
-        <View style={styles.modalContent}>
-          <Text style={styles.modalTitle}>Purchase Confirmed</Text>
-          <Text style={styles.modalMessage}>
-            {modalContent.quantity > 0
-              ? `You have purchased ${modalContent.quantity} diamonds for Rp. ${modalContent.price}!`
-              : "Package not found."}
-          </Text>
-          <Button
-            title="Continue"
-            buttonStyle={styles.modalButton}
-            onPress={() => setModalVisible(false)}
-          />
+        <View style={styles.modalBackdrop}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Purchase Confirmed</Text>
+            <Text style={styles.modalMessage}>
+              {modalContent.amount > 0
+                ? `You have purchased ${modalContent.amount} diamonds for ${modalContent.price}!`
+                : "Package not found."}
+            </Text>
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={() => setModalVisible(false)}
+            >
+              <Text style={styles.modalButtonText}>Continue</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </Modal>
+      </RNModal>
     </ScrollView>
   );
 }
@@ -83,7 +89,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#FF7A00",
+    backgroundColor: "#FF7A00", // Light orange background
     padding: 20,
   },
   logo: {
@@ -114,11 +120,11 @@ const styles = StyleSheet.create({
     height: 120,
     borderRadius: 15,
   },
-  packageQuantity: {
+  packageAmount: {
     fontSize: 20,
     fontWeight: "bold",
     marginVertical: 10,
-    color: "#00796b",
+    color: "#00796b", // Teal color for contrast
   },
   buyButton: {
     backgroundColor: "#008001",
@@ -127,9 +133,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 10,
   },
-  modal: {
+  modalBackdrop: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalContent: {
     backgroundColor: '#fff',
@@ -155,5 +163,9 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingHorizontal: 20,
     paddingVertical: 10,
+  },
+  modalButtonText: {
+    color: '#fff',
+    fontSize: 16,
   },
 });

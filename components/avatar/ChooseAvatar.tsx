@@ -50,7 +50,7 @@ const ChooseAvatar: React.FunctionComponent = () => {
               activeOpacity={0.6}
               style={styles.avatarWrapper}
             >
-              <View>
+              <View className='bg-white rounded-full'>
                 <Avatar
                   size={72}
                   rounded
