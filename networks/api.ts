@@ -3,6 +3,18 @@ import CONFIG from "../config/config";
 import LOCAL_STORAGE from "./storage";
 
 const API = {
+  USER: {
+    GET_ONE_USER: async (id: number) => {
+      try {
+        const response = await axios.get(`${CONFIG.BASE_URL}/user/${id}`);
+        return response.data;
+      } catch (error) {
+        console.error("Error fetching user:", error);
+        throw error;
+      }
+    },
+  },
+
   AVATAR: {
     GET_ALL_AVATAR: async () => {
       try {
@@ -19,23 +31,27 @@ const API = {
         const response = await axios.get(`${CONFIG.BASE_URL}/avatar/${id}`);
         return response.data;
       } catch (error) {
-        console.error("Error fetching avatars:", error);
+        console.error("Error fetching avatar:", error);
         throw error;
       }
     },
   },
 
   PAYMENT: {
-    CREATE: async () => {
+    CREATE: async (paymentData: any) => {
       try {
-        const response = await axios.post(`${CONFIG.BASE_URL}/midtrans`, {
-          headers: {
-            Authorization: `Bearer ${LOCAL_STORAGE.GET()}`,
-          },
-        });
+        const response = await axios.post(
+          `${CONFIG.BASE_URL}/payment/create`,
+          paymentData,
+          {
+            headers: {
+              Authorization: `Bearer ${LOCAL_STORAGE.GET()}`,
+            },
+          }
+        );
         return response.data;
       } catch (error) {
-        console.error("Error creating invoice:", error);
+        console.error("Error creating payment:", error);
         throw error;
       }
     },
@@ -47,7 +63,7 @@ const API = {
         const response = await axios.get(`${CONFIG.BASE_URL}/diamond-package`);
         return response.data;
       } catch (error) {
-        console.error("Error fetching avatars:", error);
+        console.error("Error fetching diamond packages:", error);
         throw error;
       }
     },
@@ -59,7 +75,7 @@ const API = {
         );
         return response.data;
       } catch (error) {
-        console.error("Error fetching avatars:", error);
+        console.error("Error fetching diamond package:", error);
         throw error;
       }
     },

@@ -1,16 +1,37 @@
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { View, Image, Text, TouchableOpacity } from 'react-native';
 import { Avatar, Button } from "react-native-elements";
 import AvatarModal from '../../components/modal/AvatarModal';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import API from '@/networks/api';
+import { UserDto } from '@/dto/UserDto';
 
 export default function HomeScreen({ navigation }: { navigation: any }) {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedAvatar, setSelectedAvatar] = useState("https://cdn3d.iconscout.com/3d/premium/thumb/boy-avatar-8686451-7944083.png?f=webp");
+  const [user, setUser] = useState<UserDto | null>(null);
 
   const toggleModal = () => {
     setModalVisible(!modalVisible);
   };
+
+  useEffect(() => {
+    async function fetchUser() {
+      try {
+        // Replace `1` with the actual user ID if needed
+        const response = await API.USER.GET_ONE_USER(1);
+        setUser(response);
+        // Update the selected avatar if the user has one
+        if (response.avatar) {
+          setSelectedAvatar(response.avatar);
+        }
+      } catch (error) {
+        console.error("Failed to fetch user:", error);
+      }
+    }
+
+    fetchUser();
+  }, []);
 
   return (
     <View className='flex-1 gap-10 mt-1'>
@@ -21,14 +42,15 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
             top: 0,
             right: 20,
           }}
-          onPress={() => navigation.navigate("DiamondShop")}
+          onPress={() => navigation.navigate("DiamondModal")}
         >
           <View className='flex flex-row gap-x-5 items-center'>
             <Image
               source={require("../../assets/images/diamond.png")}
               className="w-4 h-4 ml-1"
             />
-            <Text>21</Text>
+            {/* Display user diamond count or any other user-related information */}
+            <Text>{user?.diamond || 0}</Text>
             <FontAwesome name="plus-square" size={20} color="green" />
           </View>
         </TouchableOpacity>

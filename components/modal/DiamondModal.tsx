@@ -1,13 +1,17 @@
 import { useEffect, useState } from "react";
-import { View, StyleSheet, Modal, Text, Image, TouchableOpacity } from "react-native";
+import { View, StyleSheet, Modal, Text, Image, TouchableOpacity, ActivityIndicator } from "react-native";
 import { Button } from "@rneui/themed";
 import API from "@/networks/api";
 import { DiamondPackageDto } from "@/dto/DiamondPackageDto";
+import { WebView } from "react-native-webview";
 
 export default function DiamondModal() {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [diamondPackages, setDiamondPackages] = useState<DiamondPackageDto[]>([]);
+  const [selectedPackageId, setSelectedPackageId] = useState<number | null>(null);
+  const [paymentUrl, setPaymentUrl] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const toggleModal = () => {
     setModalVisible(!modalVisible);
@@ -18,7 +22,43 @@ export default function DiamondModal() {
   };
 
   const handlePurchase = (id: number) => {
-    console.log(`Purchased package with id: ${id}`);
+    setSelectedPackageId(id);
+  };
+
+  const handlePayment = async () => {
+    if (!selectedPackageId) {
+      console.error("No package selected");
+      return;
+    }
+
+    const selectedPackage = diamondPackages.find(pkg => pkg.id === selectedPackageId);
+
+    if (!selectedPackage) {
+      console.error("Selected package not found");
+      return;
+    }
+
+    const paymentData = {
+      userId: "",
+      price: selectedPackage.price,
+      quantity: 1,
+    };
+
+    setLoading(true);
+
+    try {
+      const response = await API.PAYMENT.CREATE(paymentData);
+      if (response.token) {
+        const snapUrl = `https://app.sandbox.midtrans.com/snap/v3/redirection/${response.token}`;
+        console.log("Payment response:", response);
+        console.log("Snap URL:", snapUrl);
+        setPaymentUrl(snapUrl);
+      }
+    } catch (error) {
+      console.error("Payment error:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -50,38 +90,54 @@ export default function DiamondModal() {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <View style={styles.diamondGrid}>
-              {diamondPackages.map((diamondPackage) => (
-                <TouchableOpacity
-                  key={diamondPackage.id}
-                  style={[
-                    styles.packageCard,
-                    selectedImage === diamondPackage.image && styles.selectedImageContainer
-                  ]}
-                  onPress={() => handleImageClick(diamondPackage.image)}
-                >
-                  <Image source={{ uri: diamondPackage.image }} style={styles.packageImage} />
-                  <Text style={styles.packageQuantity}>{diamondPackage.quantity} 💎</Text>
+            {paymentUrl ? (
+              <WebView
+                source={{ uri: paymentUrl }}
+                style={styles.webview}
+                onLoadEnd={() => setLoading(false)}
+              />
+            ) : (
+              <>
+                <View style={styles.diamondGrid}>
+                  {diamondPackages.map((diamondPackage) => (
+                    <TouchableOpacity
+                      key={diamondPackage.id}
+                      style={[
+                        styles.packageCard,
+                        selectedImage === diamondPackage.image && styles.selectedImageContainer
+                      ]}
+                      onPress={() => handleImageClick(diamondPackage.image)}
+                    >
+                      <Image source={{ uri: diamondPackage.image }} style={styles.packageImage} />
+                      <Text style={styles.packageQuantity}>{diamondPackage.quantity} 💎</Text>
+                      <Button
+                        title={`Rp. ${diamondPackage.price}`}
+                        buttonStyle={styles.buyButton}
+                        onPress={() => handlePurchase(diamondPackage.id)}
+                      />
+                    </TouchableOpacity>
+                  ))}
+                </View>
+                <View style={styles.actionsContainer}>
                   <Button
-                    title={`Rp. ${diamondPackage.price}`}
-                    buttonStyle={styles.buyButton}
-                    onPress={() => handlePurchase(diamondPackage.id)}
+                    title="Cancel"
+                    buttonStyle={styles.cancelButton}
+                    onPress={toggleModal}
                   />
-                </TouchableOpacity>
-              ))}
-            </View>
-            <View style={styles.actionsContainer}>
-              <Button
-                title="Cancel"
-                buttonStyle={styles.cancelButton}
-                onPress={toggleModal}
-              />
-              <Button
-                title="Save"
-                buttonStyle={styles.saveButton}
-                onPress={toggleModal}
-              />
-            </View>
+                  <Button
+                    title="Buy"
+                    buttonStyle={styles.saveButton}
+                    onPress={() => {
+                      toggleModal(); // Close the modal
+                      handlePayment(); // Trigger the payment process
+                    }}
+                  />
+                </View>
+              </>
+            )}
+            {loading && (
+              <ActivityIndicator size="large" color="#0000ff" style={styles.loader} />
+            )}
           </View>
         </View>
       </Modal>
@@ -113,6 +169,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 20,
     elevation: 5,
+    width: '90%',
+    height: '80%',
   },
   diamondGrid: {
     flexDirection: "row",
@@ -160,5 +218,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     marginLeft: 10,
   },
+  webview: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+  },
+  loader: {
+    marginTop: 20,
+  },
 });
-
