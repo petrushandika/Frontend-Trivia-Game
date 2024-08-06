@@ -1,6 +1,6 @@
 export interface AvatarDto {
   id: number;
   image: string;
-  price?: number | string;
+  diamond?: number | null;
   isPremium: boolean;
 }

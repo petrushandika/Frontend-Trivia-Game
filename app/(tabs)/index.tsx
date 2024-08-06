@@ -43,11 +43,11 @@ function App() {
             component={MatchScreen}
             options={{ headerShown: false }}
           />
-          {/* <Stack.Screen
+          <Stack.Screen
             name="Question"
             component={QuestionScreen}
             options={{ headerShown: false }}
-          /> */}
+          />
           <Stack.Screen
             name="Winner"
             component={WinnerScreen}

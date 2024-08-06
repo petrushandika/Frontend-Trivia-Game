@@ -5,6 +5,7 @@ import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { RootStackParamList } from '../navigation/types';
 import API from "@/networks/api";
 import { AvatarDto } from "@/dto/AvatarDto";
+import usePurchaseAvatar from "@/hooks/usePurchaseAvatar";
 
 interface AvatarModalProps {
   modalVisible: boolean;
@@ -27,9 +28,11 @@ export default function AvatarModal({ modalVisible, toggleModal, setSelectedAvat
     }
   };
 
+  const {mutateAsync} = usePurchaseAvatar()
+
   const sortedAvatars: AvatarDto[] = [...avatars].sort((a: AvatarDto, b: AvatarDto) => {
-    const priceA = typeof a.price === "string" ? 0 : Number(a.price);
-    const priceB = typeof b.price === "string" ? 0 : Number(b.price);
+    const priceA = typeof a.diamond === null ? 0 : Number(a.diamond);
+    const priceB = typeof b.diamond ===  null ? 0 : Number(b.diamond);
     return priceA - priceB;
   });
 
@@ -58,6 +61,7 @@ export default function AvatarModal({ modalVisible, toggleModal, setSelectedAvat
       try {
         const response = await API.AVATAR.GET_ALL_AVATAR();
         setAvatars(response);
+        console.log('Avatars fetched:', avatars)
       } catch (error) {
         console.error("Error fetching avatars:", error);
       }
@@ -81,7 +85,7 @@ export default function AvatarModal({ modalVisible, toggleModal, setSelectedAvat
                   <TouchableOpacity
                     key={avatar.id}
                     className={`w-1/3 aspect-square items-center m-1 p-1 border ${localSelectedAvatar === avatar.id ? 'border-orange-500 border-2' : 'border-transparent'} rounded-lg bg-gray-100`}
-                    onPress={() => handleAvatarClick(avatar.id, avatar.price || "Free", avatar.image)}
+                    onPress={() => handleAvatarClick(avatar.id, avatar.diamond || "Free", avatar.image)}
                   >
                     <Avatar
                       size="large"
@@ -90,8 +94,8 @@ export default function AvatarModal({ modalVisible, toggleModal, setSelectedAvat
                       containerStyle={{ width: "100%", aspectRatio: 1 }}
                     />
                     <View className="flex-row items-center mt-1">
-                      <Text className="text-gray-800 text-center">{avatar.price === "Free" ? 'Free' : avatar.price}</Text>
-                      {avatar.price !== "Free" && (
+                      <Text className="text-gray-800 text-center">{avatar.diamond == null ? 'Free' : avatar.diamond}</Text>
+                      {avatar.diamond != null && (
                         <Image
                           source={require("../../assets/images/diamond.png")}
                           className="w-4 h-4 ml-1"

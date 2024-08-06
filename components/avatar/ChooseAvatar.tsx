@@ -13,7 +13,7 @@ const chunkArray = (arr: AvatarDto[], chunkSize: number): AvatarDto[][] => {
   return R;
 };
 
-const ChooseAvatar = ({field} : {field: FieldApi<any,any>}) => {
+const ChooseAvatar = ({field, navigation} : {field: FieldApi<any,any>, navigation: any}) => {
   const [avatars, setAvatars] = useState<AvatarDto[]>([]);
   const [selectedAvatarId, setSelectedAvatarId] = useState<number | null>(null);
 
@@ -24,6 +24,12 @@ const ChooseAvatar = ({field} : {field: FieldApi<any,any>}) => {
   };
 
   useEffect(() => {
+    // const isUserHaveUsername  = true
+
+    // if(isUserHaveUsername) {
+    //   navigation.navigate("Home")
+    // }
+
     async function GET_AVATAR() {
       try {
         const response = await API.AVATAR.GET_ALL_AVATAR();
