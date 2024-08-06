@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
   },
   avatarWrapper: {
     paddingHorizontal: 5,
-    position: 'relative', // Positioning context for premium label
+    position: 'relative',
   },
   avatarContainer: {
     borderWidth: 0,
