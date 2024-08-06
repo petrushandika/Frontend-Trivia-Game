@@ -60,6 +60,15 @@ export default function DiamondModal({ modalVisible, toggleModal, setSelectedDia
     }
   };
 
+  const handlePaymentStatus = async (status: string) => {
+    try {
+      await API.PAYMENT.FINISH({ status });
+      console.log('Payment status sent to backend');
+    } catch (error) {
+      console.error("Error sending payment status:", error);
+    }
+  };
+
   useEffect(() => {
     async function GET_PACKAGE() {
       try {
@@ -109,6 +118,13 @@ export default function DiamondModal({ modalVisible, toggleModal, setSelectedDia
                     const { nativeEvent } = syntheticEvent;
                     console.warn('WebView received HTTP error: ', nativeEvent.statusCode);
                   }}
+                  onNavigationStateChange={(navState) => {
+                    if (navState.url.includes('your-backend-success-url')) {
+                      handlePaymentStatus('success');
+                    } else if (navState.url.includes('your-backend-fail-url')) {
+                      handlePaymentStatus('failure');
+                    }
+                  }}
                 />
               </View>
             ) : (
@@ -117,7 +133,6 @@ export default function DiamondModal({ modalVisible, toggleModal, setSelectedDia
                   <View style={styles.diamondGrid}>
                     {diamondPackages.map((diamondPackage) => (
                       <TouchableOpacity
-                        className="bg-gray-100"
                         key={diamondPackage.id}
                         style={[
                           styles.packageCard,
@@ -205,7 +220,7 @@ const styles = StyleSheet.create({
   },
   selectedImageContainer: {
     borderColor: "yellow",
-    // borderWidth: 3,
+    borderWidth: 3,
     borderRadius: 10,
   },
   packageImage: {
