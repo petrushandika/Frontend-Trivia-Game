@@ -56,7 +56,7 @@ const API = {
         throw error;
       }
     },
-    GET_BY_ID: async () => {
+    GET_BY_ID: async (id: number) => {
       try {
         const response = await axios.post(`${CONFIG.BASE_URL}/questions/${id}`, {
           headers: {

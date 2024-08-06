@@ -1,15 +1,17 @@
-const LOCAL_STORAGE = {
+import AsyncStorage from "@react-native-async-storage/async-storage"
+
+const ASYNC_STORAGE = {
   SET: (token: string) => {
-    return localStorage.setItem("token", token);
+    return AsyncStorage.setItem("token", token);
   },
 
   GET: () => {
-    return localStorage.getItem("token");
+    return AsyncStorage.getItem("token");
   },
 
   REMOVE: () => {
-    return localStorage.removeItem("token");
+    return AsyncStorage.removeItem("token");
   },
 };
 
-export default LOCAL_STORAGE;
+export default ASYNC_STORAGE;

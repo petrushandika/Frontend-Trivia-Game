@@ -25,7 +25,7 @@ function App() {
         <Stack.Screen name="Question" component={QuestionScreen} options={{ headerShown: false }} />
         <Stack.Screen name="Winner" component={WinnerScreen} options={{ headerShown: false }} />
         <Stack.Screen name="Looser" component={LooserScreen} options={{ headerShown: false }} />
-        {/* <Stack.Screen name="AvatarModal" component={AvatarModal} options={{ headerShown: false }} /> */}
+        <Stack.Screen name="AvatarModal" component={AvatarModal} options={{ headerShown: false }} />
         <Stack.Screen name="Diamond" component={DiamondModal} options={{ headerShown: false }} />
         <Stack.Screen name="DiamondScreen" component={DiamondScreen} options={{ headerShown: false }} />
       </Stack.Navigator>

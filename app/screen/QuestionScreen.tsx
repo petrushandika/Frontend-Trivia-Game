@@ -1,62 +1,94 @@
+import { useEffect, useState } from "react";
 import { View, Text } from "react-native";
 import { Button, Image } from "react-native-elements";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import { useEffect, useState } from "react";
 import API from "../../networks/api";
 
 interface IQuestions {
   question: string;
   answers: string[];
   correctAnswerIndex: number;
-  currentQuestionNumber: number;
-  totalQuestions: number;
   onAnswerSelected?: (isCorrect: boolean) => void;
 }
 
-export default function QuestionScreen({
-  navigation,
-  question,
-  answers,
-  correctAnswerIndex,
-  currentQuestionNumber,
-  totalQuestions,
-  onAnswerSelected
-}: {
-  navigation: any;
-  question: string;
-  answers: string[];
-  correctAnswerIndex: number;
-  currentQuestionNumber: number;
-  totalQuestions: number;
-  onAnswerSelected?: (isCorrect: boolean) => void;
-}) {
+export default function QuestionScreen({ navigation }: { navigation: any }) {
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [questionData, setQuestionData] = useState<IQuestions | null>(null);
   const [press, setPress] = useState<string | null>(null);
   const [timeLeft, setTimeLeft] = useState(30);
+
+  useEffect(() => {
+    const fetchQuestion = async () => {
+      try {
+        const question = await API.QUESTION.GET_BY_ID(16);
+        console.log(question)
+        setQuestionData(question);
+      } catch (error) {
+        console.error("Error fetching question:", error);
+      }
+    };
+
+    fetchQuestion();
+
+  }, [currentQuestionIndex]);
 
   useEffect(() => {
     const timer = setInterval(() => {
       setTimeLeft(prevTime => {
         if (prevTime <= 1) {
           clearInterval(timer);
+          handleTimeUp(); // Panggil fungsi ketika waktu habis
           return 0;
         }
         return prevTime - 1;
       });
     }, 1000);
 
-    return () => clearInterval(timer); 
+    return () => clearInterval(timer);
   }, []);
 
   const handlePress = (buttonName: string, index: number) => {
     setPress(buttonName);
-    if (onAnswerSelected) {
-      onAnswerSelected(index === correctAnswerIndex);
+    if (questionData && questionData.onAnswerSelected) {
+      questionData.onAnswerSelected(index === questionData.correctAnswerIndex);
     }
+    
+    setCurrentQuestionIndex(prevIndex => {
+      const nextIndex = prevIndex + 1;
+      // Inisialisasi untuk menghindari error saat pertanyaan berikutnya tidak ada
+      if (nextIndex < 0) {
+        return prevIndex; // Menghindari index negatif
+      }
+
+      setTimeLeft(30); // Reset timer untuk pertanyaan berikutnya
+      setPress(null); // Reset status tombol tekan
+
+      // Anda mungkin perlu menambahkan pengecekan untuk memastikan bahwa 
+      // Anda tidak melebihi jumlah total pertanyaan jika ada lebih dari satu pertanyaan
+      return nextIndex; 
+    });
   };
 
   const handleRelease = () => {
     setPress(null);
+  };
+
+  const handleTimeUp = () => {
+    setCurrentQuestionIndex(prevIndex => {
+      const nextIndex = prevIndex + 1;
+      // Inisialisasi untuk menghindari error saat pertanyaan berikutnya tidak ada
+      if (nextIndex < 0) {
+        return prevIndex; // Menghindari index negatif
+      }
+
+      setTimeLeft(30); // Reset timer untuk pertanyaan berikutnya
+      setPress(null); // Reset status tombol tekan
+
+      // Anda mungkin perlu menambahkan pengecekan untuk memastikan bahwa 
+      // Anda tidak melebihi jumlah total pertanyaan jika ada lebih dari satu pertanyaan
+      return nextIndex;
+    });
   };
 
   const minutes = Math.floor(timeLeft / 60);
@@ -93,17 +125,17 @@ export default function QuestionScreen({
             }}
           />
           <Text className="text-white text-xl">
-            Question {currentQuestionNumber} of {totalQuestions}
+            Question {currentQuestionIndex + 1}
           </Text>
-          <Text className="text-white text-3xl font-medium">{question}</Text>
+          <Text className="text-white text-3xl font-medium">{questionData?.question}</Text>
         </View>
         <View className="flex gap-y-5">
-          {answers.map((answer, index) => (
+          {questionData?.answers.map((answer, index) => (
             <Button
               key={index}
               title={answer}
               buttonStyle={{
-                backgroundColor: press === answer ? (index === correctAnswerIndex ? "green" : "red") : "white",
+                backgroundColor: press === answer ? (index === questionData.correctAnswerIndex ? "green" : "red") : "white",
                 borderRadius: 100,
                 borderColor: "black",
                 paddingVertical: 15,
