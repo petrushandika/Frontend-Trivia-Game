@@ -38,7 +38,6 @@ const ChooseAvatar: React.FunctionComponent = () => {
     GET_AVATAR();
   }, []);
 
-
   return (
     <ScrollView style={styles.scrollView}>
       {chunkArray(avatars, 4).map((chunk, chunkIndex) => (
