@@ -1,33 +1,40 @@
 import { useEffect, useState } from "react";
 import { View, Image, Text, TouchableOpacity } from "react-native";
 import { Avatar, Button } from "react-native-elements";
-import AvatarModal from "../../components/modal/AvatarModal";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-import API from "@/networks/api";
-import { UserDto } from "@/dto/UserDto";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import AvatarModal from '../../components/modal/AvatarModal';
+import DiamondModal from '../../components/modal/DiamondModal';  // Import DiamondModal
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+import API from '@/networks/api';
+import { UserDto } from '@/dto/UserDto';
 import useFetchProfile from "@/hooks/useFetchProfile";
 
 export default function HomeScreen({ navigation }: { navigation: any }) {
-  const [modalVisible, setModalVisible] = useState(false);
-  const [selectedAvatar, setSelectedAvatar] = useState(
-    "https://cdn3d.iconscout.com/3d/premium/thumb/boy-avatar-8686451-7944083.png?f=webp"
-  );
+  const [avatarModalVisible, setAvatarModalVisible] = useState(false);
+  const [diamondModalVisible, setDiamondModalVisible] = useState(false);
+  const [selectedAvatar, setSelectedAvatar] = useState("https://cdn3d.iconscout.com/3d/premium/thumb/boy-avatar-8686451-7944083.png?f=webp");
   const [user, setUser] = useState<UserDto | null>(null);
 
-  const { profile } = useFetchProfile();
-  const toggleModal = () => {
-    setModalVisible(!modalVisible);
+  const toggleAvatarModal = () => {
+    setAvatarModalVisible(!avatarModalVisible);
   };
+
+  const toggleDiamondModal = () => {
+    setDiamondModalVisible(!diamondModalVisible);
+  };
+
+  const setSelectedDiamond = (diamond: string) => {
+    // Placeholder function to handle the selected diamond
+    console.log("Selected diamond:", diamond);
+  };
+
+    const { profile } = useFetchProfile();
 
   const lastAvatar = profile?.userAvatar[profile?.userAvatar.length-1];
   useEffect(() => {
     async function fetchUser() {
       try {
-        // Replace `1` with the actual user ID if needed
         const response = await API.USER.GET_ONE_USER(1);
         setUser(response);
-        // Update the selected avatar if the user has one
         if (response.avatar) {
           setSelectedAvatar(response.avatar);
         }
@@ -40,17 +47,20 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
   }, []);
 
   return (
-    <View className="flex-1 gap-10 mt-1">
+    <View className='flex-1 gap-y-10 mt-1'>
       <View>
         <TouchableOpacity
+          className='w-full flex flex-row justify-between items-center'
           style={{
             position: "absolute",
             top: 0,
-            right: 20,
           }}
-          onPress={() => navigation.navigate("DiamondModal")}
+          onPress={toggleDiamondModal}
         >
-          <View className="flex flex-row gap-x-5 items-center">
+          <View className='ml-3'>
+            <Text className='text-base font-medium'>Hi, Petrus</Text>
+          </View>
+          <View className='mr-3 flex flex-row gap-x-5 items-center'>
             <Image
               source={require("../../assets/images/diamond.png")}
               className="w-4 h-4 ml-1"
@@ -112,10 +122,9 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
           containerStyle={{
             borderColor: "black",
             borderWidth: 1,
-            marginLeft: 10,
-            marginRight: 10,
+            marginHorizontal: 10
           }}
-          onPress={toggleModal}
+          onPress={toggleAvatarModal}
         />
         <Button
           title="Start Game"
@@ -137,9 +146,14 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
         />
       </View>
       <AvatarModal
-        modalVisible={modalVisible}
-        toggleModal={toggleModal}
+        modalVisible={avatarModalVisible}
+        toggleModal={toggleAvatarModal}
         setSelectedAvatar={setSelectedAvatar}
+      />
+      <DiamondModal
+        modalVisible={diamondModalVisible}
+        toggleModal={toggleDiamondModal}
+        setSelectedDiamond={setSelectedDiamond}
       />
     </View>
   );

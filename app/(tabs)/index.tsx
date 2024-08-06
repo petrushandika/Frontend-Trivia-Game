@@ -43,11 +43,11 @@ function App() {
             component={MatchScreen}
             options={{ headerShown: false }}
           />
-          <Stack.Screen
+          {/* <Stack.Screen
             name="Question"
             component={QuestionScreen}
             options={{ headerShown: false }}
-          />
+          /> */}
           <Stack.Screen
             name="Winner"
             component={WinnerScreen}
@@ -59,11 +59,11 @@ function App() {
             options={{ headerShown: false }}
           />
           {/* <Stack.Screen name="AvatarModal" component={AvatarModal} options={{ headerShown: false }} /> */}
-          <Stack.Screen
+          {/* <Stack.Screen
             name="DiamondModal"
             component={DiamondModal}
             options={{ headerShown: false }}
-          />
+          /> */}
           <Stack.Screen
             name="DiamondShop"
             component={DiamondScreen}
