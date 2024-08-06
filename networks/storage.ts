@@ -1,16 +1,16 @@
-import AsyncStorage from "@react-native-async-storage/async-storage"
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const ASYNC_STORAGE = {
-  SET: (token: string) => {
-    return AsyncStorage.setItem("token", token);
+  SET: async (token: string) => {
+    return await AsyncStorage.setItem("token", token);
   },
 
-  GET: () => {
-    return AsyncStorage.getItem("token");
+  GET: async () => {
+    return await AsyncStorage.getItem("token");
   },
 
-  REMOVE: () => {
-    return AsyncStorage.removeItem("token");
+  REMOVE: async () => {
+    return await AsyncStorage.removeItem("token");
   },
 };
 

@@ -1,27 +1,83 @@
 import { useEffect, useState } from "react";
-import { View, StyleSheet, Modal, Text, Image, TouchableOpacity } from "react-native";
+import { View, StyleSheet, Modal, Text, Image, TouchableOpacity, ActivityIndicator, ScrollView } from "react-native";
 import { Button } from "@rneui/themed";
 import API from "@/networks/api";
+import { DiamondPackageDto } from "@/dto/DiamondPackageDto";
+import { WebView } from "react-native-webview";
 
-export default function DiamondModal() {
-  const [modalVisible, setModalVisible] = useState(false);
+interface DiamondModalProps {
+  modalVisible: boolean;
+  toggleModal: () => void;
+  setSelectedDiamond: (diamond: string) => void;
+}
+
+export default function DiamondModal({ modalVisible, toggleModal, setSelectedDiamond }: DiamondModalProps) {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-
-  const toggleModal = () => {
-    setModalVisible(!modalVisible);
-  };
+  const [diamondPackages, setDiamondPackages] = useState<DiamondPackageDto[]>([]);
+  const [selectedPackageId, setSelectedPackageId] = useState<number | null>(null);
+  const [paymentUrl, setPaymentUrl] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleImageClick = (image: string) => {
     setSelectedImage(image);
   };
 
-  useEffect(() => {
-    async function GET_PAYMENT() {
-      const response = await API.PAYMENT.CREATE()
-      return response.data;
+  const handlePurchase = (id: number) => {
+    setSelectedPackageId(id);
+  };
+
+  const handlePayment = async () => {
+    if (!selectedPackageId) {
+      console.error("No package selected");
+      return;
     }
-    GET_PAYMENT()
-  }, [])
+
+    const selectedPackage = diamondPackages.find(pkg => pkg.id === selectedPackageId);
+
+    if (!selectedPackage) {
+      console.error("Selected package not found");
+      return;
+    }
+
+    const paymentData = {
+      userId: "123",
+      price: selectedPackage.price,
+      quantity: selectedPackage.quantity
+    };
+
+    setLoading(true);
+
+    try {
+      const response = await API.PAYMENT.CREATE(paymentData);
+      if (response.token) {
+        const snapUrl = `https://app.sandbox.midtrans.com/snap/v4/redirection/${response.token}`;
+        setPaymentUrl(snapUrl);
+      }
+    } catch (error) {
+      console.error("Payment error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    async function GET_PACKAGE() {
+      try {
+        const response = await API.DIAMOND_PACKAGE.GET_ALL_PACKAGE();
+        setDiamondPackages(response);
+      } catch (error) {
+        console.error("Error fetching diamond packages:", error);
+      }
+    }
+
+    GET_PACKAGE();
+  }, []);
+
+  useEffect(() => {
+    if (paymentUrl) {
+      console.log(`WebView should load URL: ${paymentUrl}`);
+    }
+  }, [paymentUrl]);
 
   return (
     <View style={styles.buttonContainer}>
@@ -39,74 +95,66 @@ export default function DiamondModal() {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <View style={styles.diamondGrid}>
-              <TouchableOpacity
-                style={[
-                  styles.imageContainer,
-                  selectedImage === "100d" && styles.selectedImageContainer
-                ]}
-                onPress={() => handleImageClick("100d")}
-              >
-                <Image source={require("../../assets/images/100d.png")} style={styles.image} />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[
-                  styles.imageContainer,
-                  selectedImage === "250d" && styles.selectedImageContainer
-                ]}
-                onPress={() => handleImageClick("250d")}
-              >
-                <Image source={require("../../assets/images/250d.png")} style={styles.image} />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[
-                  styles.imageContainer,
-                  selectedImage === "500d" && styles.selectedImageContainer
-                ]}
-                onPress={() => handleImageClick("500d")}
-              >
-                <Image source={require("../../assets/images/500d.png")} style={styles.image} />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[
-                  styles.imageContainer,
-                  selectedImage === "1000d" && styles.selectedImageContainer
-                ]}
-                onPress={() => handleImageClick("1000d")}
-              >
-                <Image source={require("../../assets/images/1000d.png")} style={styles.image} />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[
-                  styles.imageContainer,
-                  selectedImage === "5000d" && styles.selectedImageContainer
-                ]}
-                onPress={() => handleImageClick("5000d")}
-              >
-                <Image source={require("../../assets/images/5000d.png")} style={styles.image} />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[
-                  styles.imageContainer,
-                  selectedImage === "10000d" && styles.selectedImageContainer
-                ]}
-                onPress={() => handleImageClick("10000d")}
-              >
-                <Image source={require("../../assets/images/10000d.png")} style={styles.image} />
-              </TouchableOpacity>
-            </View>
-            <View style={styles.actionsContainer}>
-              <Button
-                title="Cancel"
-                buttonStyle={styles.cancelButton}
-                onPress={toggleModal}
-              />
-              <Button
-                title="Save"
-                buttonStyle={styles.saveButton}
-                onPress={toggleModal}
-              />
-            </View>
+            {paymentUrl ? (
+              <View style={styles.webview}>
+                <WebView
+                  source={{ uri: paymentUrl }}
+                  style={styles.webview}
+                  onError={(syntheticEvent) => {
+                    const { nativeEvent } = syntheticEvent;
+                    console.warn('WebView error: ', nativeEvent);
+                  }}
+                  onLoadEnd={() => setLoading(false)}
+                  onHttpError={(syntheticEvent) => {
+                    const { nativeEvent } = syntheticEvent;
+                    console.warn('WebView received HTTP error: ', nativeEvent.statusCode);
+                  }}
+                />
+              </View>
+            ) : (
+              <>
+                <ScrollView contentContainerStyle={styles.scrollViewContent}>
+                  <View style={styles.diamondGrid}>
+                    {diamondPackages.map((diamondPackage) => (
+                      <TouchableOpacity
+                        className="bg-gray-100"
+                        key={diamondPackage.id}
+                        style={[
+                          styles.packageCard,
+                          selectedImage === diamondPackage.image && styles.selectedImageContainer
+                        ]}
+                        onPress={() => handleImageClick(diamondPackage.image)}
+                      >
+                        <Image source={{ uri: diamondPackage.image }} style={styles.packageImage} />
+                        <Text style={styles.packageQuantity}>{diamondPackage.quantity} 💎</Text>
+                        <Button
+                          title={`Rp. ${diamondPackage.price}`}
+                          buttonStyle={styles.buyButton}
+                          onPress={() => handlePurchase(diamondPackage.id)}
+                        />
+                      </TouchableOpacity>
+                    ))}
+                  </View>
+                </ScrollView>
+                <View style={styles.actionsContainer}>
+                  <Button
+                    title="Cancel"
+                    buttonStyle={styles.cancelButton}
+                    onPress={toggleModal}
+                  />
+                  <Button
+                    title="Buy"
+                    buttonStyle={styles.saveButton}
+                    onPress={() => {
+                      handlePayment();
+                    }}
+                  />
+                </View>
+              </>
+            )}
+            {loading && (
+              <ActivityIndicator size="large" color="#0000ff" style={styles.loader} />
+            )}
           </View>
         </View>
       </Modal>
@@ -133,50 +181,83 @@ const styles = StyleSheet.create({
   },
   modalView: {
     margin: 20,
-    backgroundColor: "rgba(255, 122, 0, 0.7)",
-    padding: 35,
+    backgroundColor: "rgba(255, 255, 255, 1)",
     alignItems: "center",
     borderRadius: 20,
     elevation: 5,
+    width: '90%',
+    height: '50%',
   },
   diamondGrid: {
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "center",
     margin: 2,
-    padding: 0,
+    paddingHorizontal: 25,
+    paddingVertical: 0,
   },
-  imageContainer: {
+  packageCard: {
     alignItems: "center",
-    marginVertical: 7,
-    padding: 1,
-    marginHorizontal: 2,
+    width: 120,
+    marginVertical: 10,
+    marginHorizontal: 10,
     borderRadius: 10,
   },
   selectedImageContainer: {
     borderColor: "yellow",
-    borderWidth: 3,
+    // borderWidth: 3,
     borderRadius: 10,
   },
-  image: {
+  packageImage: {
     width: 80,
     height: 80,
   },
+  packageQuantity: {
+    marginTop: 5,
+  },
+  buyButton: {
+    width: 120,
+    marginTop: 10,
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10
+  },
   actionsContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
     flexDirection: "row",
     justifyContent: "center",
-    marginTop: 20,
+    backgroundColor: 'white',
+    paddingVertical: 20,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    gap: 20
   },
   cancelButton: {
     backgroundColor: "red",
     borderRadius: 10,
-    paddingHorizontal: 20,
-    marginRight: 10,
+    width: 125,
   },
   saveButton: {
     backgroundColor: "green",
     borderRadius: 10,
-    paddingHorizontal: 20,
-    marginLeft: 10,
+    width: 125
+  },
+  webview: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+    borderRadius: 20,
+  },
+  loader: {
+    marginTop: 20,
+  },
+  scrollViewContent: {
+    flexGrow: 1,
+    paddingTop: 10,
+    paddingBottom: 80,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

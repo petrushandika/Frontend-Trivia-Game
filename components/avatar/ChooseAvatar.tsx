@@ -3,6 +3,7 @@ import { View, ScrollView, StyleSheet, TouchableOpacity, Text } from 'react-nati
 import { Avatar } from '@rneui/themed';
 import API from '@/networks/api';
 import { AvatarDto } from '@/dto/AvatarDto';
+import { FieldApi } from '@tanstack/react-form';
 
 const chunkArray = (arr: AvatarDto[], chunkSize: number): AvatarDto[][] => {
   if (chunkSize <= 0) throw "Invalid chunk size";
@@ -12,19 +13,20 @@ const chunkArray = (arr: AvatarDto[], chunkSize: number): AvatarDto[][] => {
   return R;
 };
 
-const CardAvatar: React.FunctionComponent = () => {
+const ChooseAvatar = ({field} : {field: FieldApi<any,any>}) => {
   const [avatars, setAvatars] = useState<AvatarDto[]>([]);
   const [selectedAvatarId, setSelectedAvatarId] = useState<number | null>(null);
 
   const handleAvatarPress = (item: AvatarDto) => {
     setSelectedAvatarId(item.id);
+    field.handleChange(item.id)
     console.log(`Avatar clicked: ${item.id}`);
   };
 
   useEffect(() => {
     async function GET_AVATAR() {
       try {
-        const response = await API.AVATAR.GET_ALL();
+        const response = await API.AVATAR.GET_ALL_AVATAR();
         if (response && Array.isArray(response)) {
           setAvatars(response);
         } else {
@@ -37,7 +39,6 @@ const CardAvatar: React.FunctionComponent = () => {
     }
     GET_AVATAR();
   }, []);
-  
 
   return (
     <ScrollView style={styles.scrollView}>
@@ -50,7 +51,7 @@ const CardAvatar: React.FunctionComponent = () => {
               activeOpacity={0.6}
               style={styles.avatarWrapper}
             >
-              <View>
+              <View className='bg-white rounded-full'>
                 <Avatar
                   size={72}
                   rounded
@@ -83,7 +84,7 @@ const styles = StyleSheet.create({
   },
   avatarWrapper: {
     paddingHorizontal: 5,
-    position: 'relative', // Positioning context for premium label
+    position: 'relative',
   },
   avatarContainer: {
     borderWidth: 0,
@@ -106,4 +107,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CardAvatar;
+export default ChooseAvatar;
