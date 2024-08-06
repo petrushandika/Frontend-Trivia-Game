@@ -40,7 +40,6 @@ const ChooseAvatar = ({field} : {field: FieldApi<any,any>}) => {
     GET_AVATAR();
   }, []);
 
-
   return (
     <ScrollView style={styles.scrollView}>
       {chunkArray(avatars, 4).map((chunk, chunkIndex) => (
@@ -85,7 +84,7 @@ const styles = StyleSheet.create({
   },
   avatarWrapper: {
     paddingHorizontal: 5,
-    position: 'relative', // Positioning context for premium label
+    position: 'relative',
   },
   avatarContainer: {
     borderWidth: 0,

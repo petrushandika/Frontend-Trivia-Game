@@ -95,7 +95,7 @@ const API = {
         throw error;
       }
     },
-    GET_BY_ID: async (id:number) => {
+    GET_BY_ID: async (id: number) => {
       try {
         const response = await axios.post(
           `${CONFIG.BASE_URL}/questions/${id}`,
@@ -110,8 +110,8 @@ const API = {
         console.error("Error creating invoice:", error);
         throw error;
       }
-    }
-  }
+    },
+  },
 };
 
 export default API;
