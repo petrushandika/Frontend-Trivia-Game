@@ -3,6 +3,7 @@ import { View, ScrollView, StyleSheet, TouchableOpacity, Text } from 'react-nati
 import { Avatar } from '@rneui/themed';
 import API from '@/networks/api';
 import { AvatarDto } from '@/dto/AvatarDto';
+import { FieldApi } from '@tanstack/react-form';
 
 const chunkArray = (arr: AvatarDto[], chunkSize: number): AvatarDto[][] => {
   if (chunkSize <= 0) throw "Invalid chunk size";
@@ -12,12 +13,13 @@ const chunkArray = (arr: AvatarDto[], chunkSize: number): AvatarDto[][] => {
   return R;
 };
 
-const ChooseAvatar: React.FunctionComponent = () => {
+const ChooseAvatar = ({field} : {field: FieldApi<any,any>}) => {
   const [avatars, setAvatars] = useState<AvatarDto[]>([]);
   const [selectedAvatarId, setSelectedAvatarId] = useState<number | null>(null);
 
   const handleAvatarPress = (item: AvatarDto) => {
     setSelectedAvatarId(item.id);
+    field.handleChange(item.id)
     console.log(`Avatar clicked: ${item.id}`);
   };
 

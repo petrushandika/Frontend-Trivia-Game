@@ -6,17 +6,29 @@ import {
 import { Button } from "react-native-elements";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import * as WebBrowser from "expo-web-browser";
+import * as Linking from 'expo-linking';
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
-WebBrowser.maybeCompleteAuthSession();
 
 export default function LoginScreen({ navigation }: { navigation: any }) {
-  const handleLogin = () => {
-    WebBrowser.openAuthSessionAsync(
-      "https://871d-2404-8000-1005-37ac-d060-5fa8-3ba0-ae50.ngrok-free.app/google/redirect"
+  const handleLogin = async () => {
+   const redirectUrl = Linking.createURL("/");
+   const response = await WebBrowser.openAuthSessionAsync(
+     `https://789b-2404-8000-1005-37ac-89f4-7b8-b968-f52f.ngrok-free.app/google/redirect?redirectTo=${redirectUrl}`,
+     redirectUrl
+   );
+  const token = response.url.split("=")[1].split("&")[0];
+   console.log(token)
 
-    );
-    WebBrowser.dismissBrowser()
-    navigation.navigate('Avatar')
+   try {
+    await AsyncStorage.setItem('token', token);
+    console.log('Token berhasil disimpan');
+   } catch (error) {
+    console.log('Gagal menyimpan token:', error);
+   }
+
+   navigation.navigate('Avatar');
+
   };
 
   return (

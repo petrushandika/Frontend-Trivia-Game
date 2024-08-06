@@ -86,22 +86,25 @@ const API = {
       try {
         const response = await axios.post(`${CONFIG.BASE_URL}/questions`, {
           headers: {
-            Authorization: `Bearer ${LOCAL_STORAGE.GET()}`,
+            Authorization: `Bearer ${ASYNC_STORAGE.GET()}`,
           },
-        })
+        });
         return response.data;
       } catch (error) {
         console.error("Error creating invoice:", error);
         throw error;
       }
     },
-    GET_BY_ID: async () => {
+    GET_BY_ID: async (id:number) => {
       try {
-        const response = await axios.post(`${CONFIG.BASE_URL}/questions/${id}`, {
-          headers: {
-            Authorization: `Bearer ${LOCAL_STORAGE.GET()}`,
-          },
-        })
+        const response = await axios.post(
+          `${CONFIG.BASE_URL}/questions/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${ASYNC_STORAGE.GET()}`,
+            },
+          }
+        );
         return response.data;
       } catch (error) {
         console.error("Error creating invoice:", error);
