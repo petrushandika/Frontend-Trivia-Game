@@ -1,11 +1,12 @@
-import { useEffect, useState } from 'react';
-import { View, Image, Text, TouchableOpacity } from 'react-native';
+import { useEffect, useState } from "react";
+import { View, Image, Text, TouchableOpacity } from "react-native";
 import { Avatar, Button } from "react-native-elements";
 import AvatarModal from '../../components/modal/AvatarModal';
 import DiamondModal from '../../components/modal/DiamondModal';  // Import DiamondModal
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import API from '@/networks/api';
 import { UserDto } from '@/dto/UserDto';
+import useFetchProfile from "@/hooks/useFetchProfile";
 
 export default function HomeScreen({ navigation }: { navigation: any }) {
   const [avatarModalVisible, setAvatarModalVisible] = useState(false);
@@ -26,6 +27,9 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
     console.log("Selected diamond:", diamond);
   };
 
+    const { profile } = useFetchProfile();
+
+  const lastAvatar = profile?.userAvatar[profile?.userAvatar.length-1];
   useEffect(() => {
     async function fetchUser() {
       try {
@@ -48,7 +52,7 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
         <TouchableOpacity
           className='w-full flex flex-row justify-between items-center'
           style={{
-            position: 'absolute',
+            position: "absolute",
             top: 0,
           }}
           onPress={toggleDiamondModal}
@@ -61,55 +65,62 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
               source={require("../../assets/images/diamond.png")}
               className="w-4 h-4 ml-1"
             />
-            <Text>{user?.diamond || 0}</Text>
+            {/* Display user diamond count or any other user-related information */}
+            <Text>{profile?.diamond}</Text>
             <FontAwesome name="plus-square" size={20} color="green" />
           </View>
         </TouchableOpacity>
       </View>
-      <View className='p-2'>
-        <View className='flex flex-row justify-between mb-2'>
-          <View className='flex-1 mr-2 bg-pink-200 rounded-lg'>
+      <View className="p-2">
+        <View className="flex flex-row justify-between mb-2">
+          <View className="flex-1 mr-2 bg-pink-200 rounded-lg">
             <Image
               source={require("../../assets/images/person1.jpg")}
-              className='w-full h-48'
+              className="w-full h-48"
             />
           </View>
-          <View className='flex-1 bg-lime-200 rounded-lg'>
+          <View className="flex-1 bg-lime-200 rounded-lg">
             <Image
               source={require("../../assets/images/person2.jpg")}
-              className='w-full h-48'
+              className="w-full h-48"
             />
           </View>
         </View>
-        <View className='flex flex-row justify-between'>
-          <View className='flex-1 mr-2 bg-amber-200 rounded-lg'>
+        <View className="flex flex-row justify-between">
+          <View className="flex-1 mr-2 bg-amber-200 rounded-lg">
             <Image
               source={require("../../assets/images/person3.jpg")}
-              className='w-full h-48'
+              className="w-full h-48"
             />
           </View>
-          <View className='flex-1 bg-blue-200 rounded-lg'>
+          <View className="flex-1 bg-blue-200 rounded-lg">
             <Image
               source={require("../../assets/images/person4.jpg")}
-              className='w-full h-48'
+              className="w-full h-48"
             />
           </View>
         </View>
       </View>
       <View>
-        <Text className='text-5xl font-semibold text-center'>Trivia Game Quiz</Text>
-        <Text className='text-base text-gray-500 text-center'>Perfect game to challenge your</Text>
-        <Text className='text-base text-gray-500 text-center'>friends and have hours of fun!</Text>
+        <Text className="text-5xl font-semibold text-center">
+          Trivia Game Quiz
+        </Text>
+        <Text className="text-base text-gray-500 text-center">
+          Perfect game to challenge your
+        </Text>
+        <Text className="text-base text-gray-500 text-center">
+          friends and have hours of fun!
+        </Text>
       </View>
-      <View className='flex flex-row items-center'>
+      <View className="flex flex-row items-center">
         <Avatar
           rounded
           source={{
-            uri: selectedAvatar,
+            uri: lastAvatar?.avatar?.image
           }}
           size={80}
           containerStyle={{
-            borderColor: 'black',
+            borderColor: "black",
             borderWidth: 1,
             marginHorizontal: 10
           }}
@@ -118,18 +129,18 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
         <Button
           title="Start Game"
           buttonStyle={{
-            backgroundColor: 'darkorange',
+            backgroundColor: "darkorange",
             borderRadius: 50,
-            borderColor: 'black',
+            borderColor: "black",
             paddingVertical: 15,
-            width: '70%',
+            width: "70%",
           }}
           titleStyle={{
-            color: 'white',
+            color: "white",
             fontSize: 20,
           }}
           containerStyle={{
-            width: '100%',
+            width: "100%",
           }}
           onPress={() => navigation.navigate("Match")}
         />
