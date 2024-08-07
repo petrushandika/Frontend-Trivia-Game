@@ -14,6 +14,7 @@ import ErrorBoundary from "../../components/avatar/ErrorBoudary";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useForm, Field } from "@tanstack/react-form";
 import useChooseAvatar from "@/hooks/useChooseAvatar";
+import useFetchProfile from "@/hooks/useFetchProfile";
 
 function AvatarScreen({ navigation }: { navigation: any }) {
   const inputAccessoryViewID = "uniqueID";
@@ -48,6 +49,8 @@ function AvatarScreen({ navigation }: { navigation: any }) {
   //   getData()
   // }, [])
 
+  const {profile} = useFetchProfile()
+
   return (
     <View className="m-auto justify-center">
       <View className="items-center">
@@ -59,7 +62,7 @@ function AvatarScreen({ navigation }: { navigation: any }) {
             name="id"
             children={(field) => (
               <ErrorBoundary>
-                <ChooseAvatar field={field} />
+                <ChooseAvatar field={field} navigation={navigation} />
               </ErrorBoundary>
             )}
           />
@@ -73,7 +76,7 @@ function AvatarScreen({ navigation }: { navigation: any }) {
                   onChangeText={setName}
                   onChange={(e) => field.handleChange(e.nativeEvent.text)}
                   value={name}
-                  placeholder={"Name"}
+                  placeholder={profile?.username}
                   placeholderTextColor={"black"}
                 />
               )}

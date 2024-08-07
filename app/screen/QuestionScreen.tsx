@@ -28,7 +28,7 @@ export default function QuestionScreen({ navigation }: { navigation: any }) {
     const fetchQuestion = async () => {
       try {
         const question = await API.QUESTION.GET_BY_ID(currentQuestionIndex + 1);
-        console.log('Fetched question:', question);
+        console.table('Fetched question:', question);
         setQuestionData(question);
       } catch (error) {
         console.error("Error fetching question:", error);

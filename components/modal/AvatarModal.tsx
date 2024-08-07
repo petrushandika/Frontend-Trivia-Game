@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { View, Modal, Text, Image, TouchableOpacity, ScrollView } from "react-native";
-import { Avatar, Button } from "@rneui/themed";
+import { View, StyleSheet, Modal, Text, Image, TouchableOpacity, ScrollView } from "react-native";
+import { Button } from "@rneui/themed";
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { RootStackParamList } from '../navigation/types';
 import API from "@/networks/api";
 import { AvatarDto } from "@/dto/AvatarDto";
+import usePurchaseAvatar from "@/hooks/usePurchaseAvatar";
 
 interface AvatarModalProps {
   modalVisible: boolean;
@@ -27,9 +28,11 @@ export default function AvatarModal({ modalVisible, toggleModal, setSelectedAvat
     }
   };
 
+  const {mutateAsync} = usePurchaseAvatar();
+
   const sortedAvatars: AvatarDto[] = [...avatars].sort((a: AvatarDto, b: AvatarDto) => {
-    const priceA = typeof a.price === "string" ? 0 : Number(a.price);
-    const priceB = typeof b.price === "string" ? 0 : Number(b.price);
+    const priceA = a.diamond == null ? 0 : Number(a.diamond);
+    const priceB = b.diamond == null ? 0 : Number(b.diamond);
     return priceA - priceB;
   });
 
@@ -73,28 +76,29 @@ export default function AvatarModal({ modalVisible, toggleModal, setSelectedAvat
         visible={modalVisible}
         onRequestClose={toggleModal}
       >
-        <View className="flex-1 justify-center items-center bg-transparent">
-          <View className="m-5 bg-white p-5 items-center rounded-2xl shadow h-1/2 w-11/12">
-            <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: "center", alignItems: "center" }}>
-              <View className="w-full flex-row flex-wrap justify-between">
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <ScrollView contentContainerStyle={styles.scrollViewContent}>
+              <View style={styles.avatarGrid}>
                 {sortedAvatars.map((avatar) => (
                   <TouchableOpacity
                     key={avatar.id}
-                    className={`w-1/3 aspect-square items-center m-1 p-1 border ${localSelectedAvatar === avatar.id ? 'border-orange-500 border-2' : 'border-transparent'} rounded-lg bg-gray-100`}
-                    onPress={() => handleAvatarClick(avatar.id, avatar.price || "Free", avatar.image)}
+                    style={[
+                      styles.avatarCard,
+                      localSelectedAvatar === avatar.id && styles.selectedImageContainer,
+                    ]}
+                    onPress={() => handleAvatarClick(avatar.id, avatar.diamond || "Free", avatar.image)}
                   >
-                    <Avatar
-                      size="large"
-                      rounded
+                    <Image
                       source={{ uri: avatar.image }}
-                      containerStyle={{ width: "100%", aspectRatio: 1 }}
+                      style={styles.avatarImage}
                     />
-                    <View className="flex-row items-center mt-1">
-                      <Text className="text-gray-800 text-center">{avatar.price === "Free" ? 'Free' : avatar.price}</Text>
-                      {avatar.price !== "Free" && (
+                    <View style={styles.avatarInfo}>
+                      <Text style={styles.avatarPrice}>{avatar.diamond == null ? 'Free' : avatar.diamond}</Text>
+                      {avatar.diamond != null && (
                         <Image
                           source={require("../../assets/images/diamond.png")}
-                          className="w-4 h-4 ml-1"
+                          style={styles.diamondIcon}
                         />
                       )}
                     </View>
@@ -102,15 +106,15 @@ export default function AvatarModal({ modalVisible, toggleModal, setSelectedAvat
                 ))}
               </View>
             </ScrollView>
-            <View className="flex-row justify-center mt-5 w-full">
+            <View style={styles.actionsContainer}>
               <Button
                 title="Cancel"
-                buttonStyle={{ backgroundColor: "red", borderRadius: 10, paddingHorizontal: 20, paddingVertical: 10, marginRight: 10 }}
+                buttonStyle={styles.cancelButton}
                 onPress={toggleModal}
               />
               <Button
                 title="Save"
-                buttonStyle={{ backgroundColor: "green", borderRadius: 10, paddingHorizontal: 20, paddingVertical: 10, marginLeft: 10 }}
+                buttonStyle={styles.saveButton}
                 onPress={handleSave}
               />
             </View>
@@ -125,23 +129,23 @@ export default function AvatarModal({ modalVisible, toggleModal, setSelectedAvat
         visible={alertVisible}
         onRequestClose={() => setAlertVisible(false)}
       >
-        <View className="flex-1 justify-center items-center bg-black bg-opacity-50">
-          <View className="m-5 bg-white p-5 items-center rounded-2xl shadow w-4/5">
+        <View style={styles.centeredView}>
+          <View style={styles.alertView}>
             <Image
               source={{ uri: 'https://cdn-icons-png.flaticon.com/512/9587/9587077.png' }}
-              className="w-12 h-12 mb-2"
+              style={styles.alertImage}
             />
-            <Text className="text-xl font-bold mb-2">Oops!</Text>
-            <Text className="text-center text-base mb-5">You don't have enough diamonds. Please visit the shop to buy more!</Text>
-            <View className="flex-row justify-between w-full">
+            <Text style={styles.alertTitle}>Oops!</Text>
+            <Text style={styles.alertMessage}>You don't have enough diamonds. Please visit the shop to buy more!</Text>
+            <View style={styles.alertActions}>
               <Button
                 title="Go to Shop"
-                buttonStyle={{ backgroundColor: "green", borderRadius: 10, paddingHorizontal: 20, paddingVertical: 10, marginRight: 10 }}
+                buttonStyle={styles.alertButton}
                 onPress={handleYes}
               />
               <Button
                 title="No"
-                buttonStyle={{ backgroundColor: "red", borderRadius: 10, paddingHorizontal: 20, paddingVertical: 10, marginLeft: 10 }}
+                buttonStyle={styles.alertButton}
                 onPress={handleNo}
               />
             </View>
@@ -151,3 +155,130 @@ export default function AvatarModal({ modalVisible, toggleModal, setSelectedAvat
     </>
   );
 }
+
+const styles = StyleSheet.create({
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+    width: "90%",
+    height: "60%",
+  },
+  scrollViewContent: {
+    flexGrow: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  avatarGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between", // Adjusts spacing between items
+    paddingHorizontal: 10,
+  },
+  avatarCard: {
+    alignItems: "center",
+    width: '45%', // Adjust width for two items per row
+    marginVertical: 10,
+    borderRadius: 10,
+    padding: 10,
+    backgroundColor: '#f9f9f9',
+  },
+  selectedImageContainer: {
+    borderColor: "orange",
+    borderWidth: 3,
+    borderRadius: 10,
+  },
+  avatarImage: {
+    width: 80,
+    height: 80,
+    borderRadius: 10,
+  },
+  avatarInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 5,
+  },
+  avatarPrice: {
+    color: '#333',
+  },
+  diamondIcon: {
+    width: 16,
+    height: 16,
+    marginLeft: 5,
+  },
+  actionsContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: '100%',
+    paddingHorizontal: 20,
+    paddingVertical: 20,
+    borderTopWidth: 1,
+    borderTopColor: '#e9e9e9',
+  },
+  cancelButton: {
+    backgroundColor: "red",
+    borderRadius: 10,
+    width: 120,
+  },
+  saveButton: {
+    backgroundColor: "green",
+    borderRadius: 10,
+    width: 120,
+  },
+  alertView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+    width: "80%",
+  },
+  alertImage: {
+    width: 50,
+    height: 50,
+    marginBottom: 15,
+  },
+  alertTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 15,
+  },
+  alertMessage: {
+    fontSize: 16,
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  alertActions: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: '100%',
+  },
+  alertButton: {
+    borderRadius: 10,
+    width: 120,
+  },
+});

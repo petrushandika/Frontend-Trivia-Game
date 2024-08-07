@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { View, Image, Text, TouchableOpacity } from "react-native";
 import { Avatar, Button } from "react-native-elements";
 import AvatarModal from '../../components/modal/AvatarModal';
-import DiamondModal from '../../components/modal/DiamondModal';  // Import DiamondModal
+import DiamondModal from '../../components/modal/DiamondModal';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import API from '@/networks/api';
 import { UserDto } from '@/dto/UserDto';
@@ -92,7 +92,7 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
           onPress={toggleDiamondModal}
         >
           <View className='ml-3'>
-            <Text className='text-base font-medium'>Hi, Petrus</Text>
+            <Text className='text-base font-medium'>Hi, {profile?.username}</Text>
           </View>
           <View className='mr-3 flex flex-row gap-x-5 items-center'>
             <Image
