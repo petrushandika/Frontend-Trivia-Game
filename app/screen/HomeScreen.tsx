@@ -84,6 +84,7 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
     onMatchFound(handleMatchFound);
     onRoomFull(handleRoomFull);
     onUserLeft(handleUserLeft);
+    socket.on("waiting", (data) => console.log(data))
     socket.on("error", handleError);
 
     return () => {
@@ -98,7 +99,10 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
   const handleJoinQueue = () => {
     if (profile?.id) {
       console.log(`User ${profile.id} is joining the queue.`);
-      joinQueue();
+      socket.emit("ping")
+      socket.emit("joinQueue", {
+        id: profile.id
+      })
     } else {
       console.log("User ID is not available.");
     }

@@ -8,11 +8,10 @@ import socket from '../../services/socketService';
 export default function MatchScreen({ navigation }: { navigation: any }) {
   const [matches, setMatches] = useState<MatchDto[]>([]);
   const [isFindingOpponent, setIsFindingOpponent] = useState(true);
-
+  const [listPlayers, setListPlayers] = useState<any[]>([])
   const limitedData = Data.slice(0, 5);
 
   useEffect(() => {
-    // Event listener untuk menerima data pencocokan dari server
     socket.on('matchFound', (matchData: MatchDto[]) => {
       setMatches(matchData);
       setIsFindingOpponent(false);
@@ -21,6 +20,10 @@ export default function MatchScreen({ navigation }: { navigation: any }) {
     socket.on('error', (error: Error) => {
       console.error('Socket error:', error);
       setIsFindingOpponent(false);
+    });
+    socket.on('waiting', (room: any) => {
+      console.log("list players", room.players);
+      setListPlayers(room.players)
     });
 
     // Cleanup listener saat komponen di-unmount
@@ -59,18 +62,18 @@ export default function MatchScreen({ navigation }: { navigation: any }) {
       </View>
       <View className='gap-y-10 mt-1 mb-14'>
         <FlatList
-          data={matches.length > 0 ? matches : limitedData}
+          data={listPlayers}
           keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }: { item: MatchDto }) => (
+          renderItem={({ item }) => (
             <View className="flex-row items-center py-4 bg-gray-800 rounded-full my-4" style={{ maxWidth: '100%' }}>
               <View className="absolute">
                 <Image
-                  source={{ uri: item.image }}
+                  source={{ uri: item.userAvatar[item.userAvatar.length - 1].image }}
                   className="w-20 h-20 rounded-full bg-amber-400"
                 />
               </View>
               <View className="ml-24 flex-1">
-                <Text className="text-white text-base">{item.name}</Text>
+                <Text className="text-white text-base">{item.username}</Text>
               </View>
             </View>
           )}
