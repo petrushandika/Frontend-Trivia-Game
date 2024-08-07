@@ -1,20 +1,30 @@
 import { useEffect, useState } from "react";
 import { View, Image, Text, TouchableOpacity } from "react-native";
 import { Avatar, Button } from "react-native-elements";
-import AvatarModal from '../../components/modal/AvatarModal';
-import DiamondModal from '../../components/modal/DiamondModal';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import API from '@/networks/api';
-import { UserDto } from '@/dto/UserDto';
+import AvatarModal from "../../components/modal/AvatarModal";
+import DiamondModal from "../../components/modal/DiamondModal";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+import API from "@/networks/api";
+import { UserDto } from "@/dto/UserDto";
 import useFetchProfile from "@/hooks/useFetchProfile";
-import { joinQueue, leaveRoom, onMatchFound, onRoomFull, onUserLeft } from '../../services/socketService';
+import {
+  joinQueue,
+  leaveRoom,
+  onMatchFound,
+  onRoomFull,
+  onUserLeft,
+} from "../../services/socketService";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function HomeScreen({ navigation }: { navigation: any }) {
   const [avatarModalVisible, setAvatarModalVisible] = useState(false);
   const [diamondModalVisible, setDiamondModalVisible] = useState(false);
-  const [selectedAvatar, setSelectedAvatar] = useState("https://cdn3d.iconscout.com/3d/premium/thumb/boy-avatar-8686451-7944083.png?f=webp");
+  const [selectedAvatar, setSelectedAvatar] = useState(
+    "https://cdn3d.iconscout.com/3d/premium/thumb/boy-avatar-8686451-7944083.png?f=webp"
+  );
   const [user, setUser] = useState<UserDto | null>(null);
   const [roomId, setRoomId] = useState<string | null>(null);
+  const [count, setCount] = useState<number>(0);
 
   const toggleAvatarModal = () => {
     setAvatarModalVisible(!avatarModalVisible);
@@ -30,22 +40,26 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
 
   const { profile } = useFetchProfile();
 
+  const queryClient = useQueryClient();
   const lastAvatar = profile?.userAvatar[profile?.userAvatar.length - 1];
   useEffect(() => {
-    async function fetchUser() {
-      try {
-        const response = await API.USER.GET_ONE_USER(1);
-        setUser(response);
-        if (response.avatar) {
-          setSelectedAvatar(response.avatar);
-        }
-      } catch (error) {
-        console.error("Failed to fetch user:", error);
-      }
-    }
+    console.log(count)
+    queryClient.invalidateQueries({ queryKey: ["profile"] });
+    // async function fetchUser() {
+    //   try {
+    //     const response = await API.USER.GET_ONE_USER(1);
+    //     setUser(response);
+    //     if (response.avatar) {
+    //       setSelectedAvatar(response.avatar);
+    //     }
+    //   } catch (error) {
+    //     console.error("Failed to fetch user:", error);
+    //   }
+    // }
 
-    fetchUser();
-  }, []);
+    // fetchUser();
+    // profile;
+  }, [profile, count]);
 
   useEffect(() => {
     onMatchFound(({ roomId, userId }) => {
@@ -81,20 +95,22 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
   };
 
   return (
-    <View className='flex-1 gap-y-10 mt-1'>
+    <View className="flex-1 gap-y-10 mt-1">
       <View>
         <TouchableOpacity
-          className='w-full flex flex-row justify-between items-center'
+          className="w-full flex flex-row justify-between items-center"
           style={{
             position: "absolute",
             top: 0,
           }}
           onPress={toggleDiamondModal}
         >
-          <View className='ml-3'>
-            <Text className='text-base font-medium'>Hi, {profile?.username}</Text>
+          <View className="ml-3">
+            <Text className="text-base font-medium">
+              Hi, {profile?.username}
+            </Text>
           </View>
-          <View className='mr-3 flex flex-row gap-x-5 items-center'>
+          <View className="mr-3 flex flex-row gap-x-5 items-center">
             <Image
               source={require("../../assets/images/diamond.png")}
               className="w-4 h-4 ml-1"
@@ -139,6 +155,7 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
         <Text className="text-5xl font-semibold text-center">
           Trivia Game Quiz
         </Text>
+        {/* <Button onPress={() => setCount(count + 1)}>Click</Button> */}
         <Text className="text-base text-gray-500 text-center">
           Perfect game to challenge your
         </Text>
@@ -150,13 +167,13 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
         <Avatar
           rounded
           source={{
-            uri: lastAvatar?.avatar?.image
+            uri: lastAvatar?.avatar?.image,
           }}
           size={80}
           containerStyle={{
             borderColor: "black",
             borderWidth: 1,
-            marginHorizontal: 10
+            marginHorizontal: 10,
           }}
           onPress={toggleAvatarModal}
         />

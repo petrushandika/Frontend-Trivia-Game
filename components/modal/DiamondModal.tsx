@@ -13,6 +13,8 @@ import { Button } from "@rneui/themed";
 import API from "@/networks/api";
 import { DiamondPackageDto } from "@/dto/DiamondPackageDto";
 import { WebView } from "react-native-webview";
+import { useQueryClient } from "@tanstack/react-query";
+import useFetchProfile from "@/hooks/useFetchProfile";
 
 interface DiamondModalProps {
   modalVisible: boolean;
@@ -23,7 +25,7 @@ interface DiamondModalProps {
 export default function DiamondModal({
   modalVisible,
   toggleModal,
-  setSelectedDiamond,
+  setSelectedDiamond
 }: DiamondModalProps) {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [diamondPackages, setDiamondPackages] = useState<DiamondPackageDto[]>(
@@ -38,7 +40,35 @@ export default function DiamondModal({
   const handleImageClick = (image: string) => {
     setSelectedImage(image);
   };
+  
+  const [count, setCount] = useState<number>(0);
+  const {profile} = useFetchProfile();
 
+  const queryClient = useQueryClient();
+
+ const handleNavigationStateChange = (navState: any) => {
+   if (navState.url.includes("success")) {
+     console.log("Payment success");
+     updateDataUser();
+   }
+ };
+
+ const updateDataUser = () => {
+   if (!profile) {
+     console.error("Profile data is not available");
+     return;
+   }
+
+   queryClient.setQueryData(["profile"], {
+     ...profile,
+     name: "updated",
+   });
+
+   setCount(count + 1);
+   console.log(count);
+ };
+
+ 
   const handlePurchase = (id: number) => {
     setSelectedPackageId(id);
   };
@@ -80,14 +110,6 @@ export default function DiamondModal({
     }
   };
 
-  const handlePaymentStatus = async (status: string) => {
-    try {
-      await API.PAYMENT.FINISH({ status });
-      console.log("Payment status sent to backend");
-    } catch (error) {
-      console.error("Error sending payment status:", error);
-    }
-  };
 
   useEffect(() => {
     async function GET_PACKAGE() {
@@ -106,7 +128,8 @@ export default function DiamondModal({
     if (paymentUrl) {
       console.log(`WebView should load URL: ${paymentUrl}`);
     }
-  }, [paymentUrl]);
+    handleNavigationStateChange;
+  }, [paymentUrl, profile]);
 
   return (
     <View style={styles.buttonContainer}>
@@ -122,13 +145,13 @@ export default function DiamondModal({
         visible={modalVisible}
         onRequestClose={toggleModal}
       >
-        <View style={styles.centeredView}>
+        <View style={styles.centeredView} className="h-screen">
           <View style={styles.modalView}>
             {paymentUrl ? (
-              <View style={styles.webview}>
+              <View style={styles.webviewContainer}>
                 <WebView
                   source={{ uri: paymentUrl }}
-                  style={styles.webview}
+                  style={styles.webView}
                   onError={(syntheticEvent) => {
                     const { nativeEvent } = syntheticEvent;
                     console.warn("WebView error: ", nativeEvent);
@@ -141,12 +164,12 @@ export default function DiamondModal({
                       nativeEvent.statusCode
                     );
                   }}
-                  onNavigationStateChange={(navState) => {
-                    if (navState.url.includes("your-backend-success-url")) {
-                      handlePaymentStatus("success");
-                    } else if (navState.url.includes("your-backend-fail-url")) {
-                      handlePaymentStatus("failure");
-                    }
+                  onNavigationStateChange={(navState : any) => {
+                     if (navState.url.includes("success")) {
+                        console.log("Payment success");
+                        updateDataUser();
+                        toggleModal();
+                     }
                   }}
                 />
               </View>
@@ -292,12 +315,16 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: 125,
   },
-  webview: {
+  webviewContainer: {
     flex: 1,
     width: "100%",
-    height: "100%",
+    
     borderRadius: 20,
   },
+  webView : {
+  flex : 1,
+  height: "100%",
+},
   loader: {
     marginTop: 20,
   },

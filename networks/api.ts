@@ -59,14 +59,14 @@ const API = {
     },
     FINISH: async (paymentData: any) => {
       try {
-        const response = await axios.post(
-          `${CONFIG.BASE_URL}/payment/finish`,
-          paymentData,
-          {
-            headers: {
-              Authorization: `Bearer ${ASYNC_STORAGE.GET()}`,
-            },
-          }
+        const response = await axios.get(
+          `${CONFIG.BASE_URL}/payment/finish`
+          // paymentData,
+          // {
+          //   headers: {
+          //     Authorization: `Bearer ${ASYNC_STORAGE.GET()}`,
+          //   },
+          // }
         );
         return response.data;
       } catch (error) {
