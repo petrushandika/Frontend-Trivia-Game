@@ -1,44 +1,49 @@
+import { useEffect, useState } from "react";
 import { View, Text } from "react-native";
 import { Button, Image } from "react-native-elements";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import { useEffect, useState } from "react";
 import API from "../../networks/api";
 
+interface Answer {
+  content: string;
+  isCorrect: boolean;
+}
+
 interface IQuestions {
-  question: string;
-  answers: string[];
-  correctAnswerIndex: number;
-  currentQuestionNumber: number;
-  totalQuestions: number;
+  content: string;
+  answer: Answer[];
   onAnswerSelected?: (isCorrect: boolean) => void;
 }
 
-export default function QuestionScreen({
-  navigation,
-  question,
-  answers,
-  correctAnswerIndex,
-  currentQuestionNumber,
-  totalQuestions,
-  onAnswerSelected
-}: {
-  navigation: any;
-  question: string;
-  answers: string[];
-  correctAnswerIndex: number;
-  currentQuestionNumber: number;
-  totalQuestions: number;
-  onAnswerSelected?: (isCorrect: boolean) => void;
-}) {
-  const [press, setPress] = useState<string | null>(null);
+export default function QuestionScreen({ navigation }: { navigation: any }) {
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [questionData, setQuestionData] = useState<IQuestions | null>(null);
+  const [selectedAnswerIndex, setSelectedAnswerIndex] = useState<number | null>(null);
+  const [isAnswerCorrect, setIsAnswerCorrect] = useState<boolean | null>(null);
   const [timeLeft, setTimeLeft] = useState(30);
+  const [points, setPoints] = useState(0);
+
+  useEffect(() => {
+    const fetchQuestion = async () => {
+      try {
+        const question = await API.QUESTION.GET_BY_ID(currentQuestionIndex + 1);
+        console.table('Fetched question:', question);
+        setQuestionData(question);
+      } catch (error) {
+        console.error("Error fetching question:", error);
+      }
+    };
+
+    fetchQuestion();
+  }, [currentQuestionIndex]);
 
   useEffect(() => {
     const timer = setInterval(() => {
       setTimeLeft(prevTime => {
         if (prevTime <= 1) {
           clearInterval(timer);
+          handleTimeUp();
           return 0;
         }
         return prevTime - 1;
@@ -48,15 +53,47 @@ export default function QuestionScreen({
     return () => clearInterval(timer);
   }, []);
 
-  const handlePress = (buttonName: string, index: number) => {
-    setPress(buttonName);
-    if (onAnswerSelected) {
-      onAnswerSelected(index === correctAnswerIndex);
+  const handlePress = (index: number) => {
+    if (selectedAnswerIndex !== null) return; 
+
+    setSelectedAnswerIndex(index);
+    const selectedAnswer = questionData?.answer[index];
+    const isCorrect = selectedAnswer?.isCorrect ?? false;
+    
+    console.log('Selected Answer Index:', index);
+    console.log('Selected Answer IsCorrect:', isCorrect);
+
+    setIsAnswerCorrect(isCorrect);
+    if (questionData && questionData.onAnswerSelected) {
+      questionData.onAnswerSelected(isCorrect);
     }
+
+    if (isCorrect) {
+      const earnedPoints = Math.floor(timeLeft * 3.3);
+      setPoints(prevPoints => {
+        const newPoints = prevPoints + earnedPoints;
+        console.log('Updated points:', newPoints);
+        return newPoints;
+      });
+    }
+
+    setTimeout(() => {
+      if (currentQuestionIndex >= 9) {
+        navigation.navigate('Ranking', { points });
+      } else {
+        setCurrentQuestionIndex(prevIndex => prevIndex + 1);
+        setTimeLeft(30);
+        setSelectedAnswerIndex(null);
+        setIsAnswerCorrect(null);
+      }
+    }, 1000);
   };
 
-  const handleRelease = () => {
-    setPress(null);
+  const handleTimeUp = () => {
+    setCurrentQuestionIndex(prevIndex => prevIndex + 1);
+    setTimeLeft(30);
+    setSelectedAnswerIndex(null);
+    setIsAnswerCorrect(null);
   };
 
   const minutes = Math.floor(timeLeft / 60);
@@ -68,7 +105,7 @@ export default function QuestionScreen({
         <View className="flex flex-row justify-between p-5 rounded-full">
           <View className="flex flex-row items-center gap-x-3">
             <FontAwesome6 name="crown" size={20} color="yellow" />
-            <Text className="text-white text-xl">2481</Text>
+            <Text className="text-white text-xl">{points}</Text>
           </View>
           <View className="items-center">
             <Text className="text-white text-xl">
@@ -93,27 +130,40 @@ export default function QuestionScreen({
             }}
           />
           <Text className="text-white text-xl">
-            Question {currentQuestionNumber} of {totalQuestions}
+            Question {currentQuestionIndex + 1}
           </Text>
-          <Text className="text-white text-3xl font-medium">{question}</Text>
+          <Text className="text-white text-3xl font-medium">{questionData?.content}</Text>
         </View>
         <View className="flex gap-y-5">
-          {answers.map((answer, index) => (
+          {questionData?.answer?.map((answer, index) => (
             <Button
               key={index}
-              title={answer}
+              title={answer.content}
               buttonStyle={{
-                backgroundColor: press === answer ? (index === correctAnswerIndex ? "green" : "red") : "white",
+                backgroundColor: selectedAnswerIndex !== null
+                  ? answer.isCorrect
+                    ? "green"
+                    : index === selectedAnswerIndex
+                      ? "red"
+                      : "white"
+                  : "white",
                 borderRadius: 100,
                 borderColor: "black",
                 paddingVertical: 15,
+                marginBottom: 10
               }}
               titleStyle={{
-                color: press === answer ? "white" : "black",
+                color: selectedAnswerIndex !== null
+                  ? answer.isCorrect
+                    ? "white"
+                    : index === selectedAnswerIndex
+                      ? "white"
+                      : "black"
+                  : "black",
                 fontSize: 20,
               }}
-              onPressIn={() => handlePress(answer, index)}
-              onPressOut={handleRelease}
+              onPressIn={() => handlePress(index)}
+              disabled={selectedAnswerIndex !== null}
             />
           ))}
         </View>

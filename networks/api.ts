@@ -115,8 +115,9 @@ const API = {
       }
     },
     GET_BY_ID: async (id: number) => {
+      console.log("test", id)
       try {
-        const response = await axios.post(
+        const response = await axios.get(
           `${CONFIG.BASE_URL}/questions/${id}`,
           {
             headers: {
