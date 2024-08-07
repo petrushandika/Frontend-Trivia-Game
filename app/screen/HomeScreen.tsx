@@ -2,17 +2,19 @@ import { useEffect, useState } from "react";
 import { View, Image, Text, TouchableOpacity } from "react-native";
 import { Avatar, Button } from "react-native-elements";
 import AvatarModal from '../../components/modal/AvatarModal';
-import DiamondModal from '../../components/modal/DiamondModal';  // Import DiamondModal
+import DiamondModal from '../../components/modal/DiamondModal';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import API from '@/networks/api';
 import { UserDto } from '@/dto/UserDto';
 import useFetchProfile from "@/hooks/useFetchProfile";
+import { joinQueue, leaveRoom, onMatchFound, onRoomFull, onUserLeft } from '../../services/socketService';
 
 export default function HomeScreen({ navigation }: { navigation: any }) {
   const [avatarModalVisible, setAvatarModalVisible] = useState(false);
   const [diamondModalVisible, setDiamondModalVisible] = useState(false);
   const [selectedAvatar, setSelectedAvatar] = useState("https://cdn3d.iconscout.com/3d/premium/thumb/boy-avatar-8686451-7944083.png?f=webp");
   const [user, setUser] = useState<UserDto | null>(null);
+  const [roomId, setRoomId] = useState<string | null>(null);
 
   const toggleAvatarModal = () => {
     setAvatarModalVisible(!avatarModalVisible);
@@ -23,13 +25,12 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
   };
 
   const setSelectedDiamond = (diamond: string) => {
-    // Placeholder function to handle the selected diamond
     console.log("Selected diamond:", diamond);
   };
 
-    const { profile } = useFetchProfile();
+  const { profile } = useFetchProfile();
 
-  const lastAvatar = profile?.userAvatar[profile?.userAvatar.length-1];
+  const lastAvatar = profile?.userAvatar[profile?.userAvatar.length - 1];
   useEffect(() => {
     async function fetchUser() {
       try {
@@ -45,6 +46,39 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
 
     fetchUser();
   }, []);
+
+  useEffect(() => {
+    onMatchFound(({ roomId, userId }) => {
+      console.log(`Match found! Room ID: ${roomId}, User ID: ${userId}`);
+      setRoomId(roomId);
+    });
+
+    onRoomFull((roomId) => {
+      console.log(`Room ${roomId} is full.`);
+    });
+
+    onUserLeft((userId) => {
+      console.log(`User ${userId} left the room.`);
+    });
+
+    return () => {
+      leaveRoom();
+    };
+  }, []);
+
+  const handleJoinQueue = () => {
+    joinQueue();
+  };
+
+  const handleLeaveRoom = () => {
+    leaveRoom();
+    setRoomId(null);
+  };
+
+  const handleStartGame = () => {
+    navigation.navigate("Match");
+    handleJoinQueue();
+  };
 
   return (
     <View className='flex-1 gap-y-10 mt-1'>
@@ -142,7 +176,7 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
           containerStyle={{
             width: "100%",
           }}
-          onPress={() => navigation.navigate("Match")}
+          onPress={handleStartGame}
         />
       </View>
       <AvatarModal

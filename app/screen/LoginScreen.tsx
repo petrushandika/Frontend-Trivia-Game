@@ -8,6 +8,7 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import * as WebBrowser from "expo-web-browser";
 import * as Linking from 'expo-linking';
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import ASYNC_STORAGE from "@/networks/storage";
 
 
 export default function LoginScreen({ navigation }: { navigation: any }) {
@@ -19,13 +20,13 @@ export default function LoginScreen({ navigation }: { navigation: any }) {
    );
   const token = response.url.split("=")[1].split("&")[0];
    console.log(token)
-
-   try {
-    await AsyncStorage.setItem('token', token);
-    console.log('Token berhasil disimpan');
-   } catch (error) {
-    console.log('Gagal menyimpan token:', error);
-   }
+   ASYNC_STORAGE.SET(token);
+  //  try {
+  //   await AsyncStorage.setItem('token', token);
+  //   console.log('Token berhasil disimpan');
+  //  } catch (error) {
+  //   console.log('Gagal menyimpan token:', error);
+  //  }
 
    navigation.navigate('Avatar');
 

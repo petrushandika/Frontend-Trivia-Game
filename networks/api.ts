@@ -1,6 +1,7 @@
 import axios from "axios";
 import CONFIG from "../config/config";
 import ASYNC_STORAGE from "./storage";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const API = {
   USER: {
@@ -40,18 +41,36 @@ const API = {
   PAYMENT: {
     CREATE: async (paymentData: any) => {
       try {
+        const token = await AsyncStorage.getItem("token");
         const response = await axios.post(
           `${CONFIG.BASE_URL}/payment/create`,
-          paymentData
-          // {
-          //   headers: {
-          //     Authorization: `Bearer ${ASYNC_STORAGE.GET()}`,
-          //   },
-          // }
+          paymentData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
         return response.data;
       } catch (error) {
         console.error("Error creating payment:", error);
+        throw error;
+      }
+    },
+    FINISH: async (paymentData: any) => {
+      try {
+        const response = await axios.post(
+          `${CONFIG.BASE_URL}/payment/finish`,
+          paymentData,
+          {
+            headers: {
+              Authorization: `Bearer ${ASYNC_STORAGE.GET()}`,
+            },
+          }
+        );
+        return response.data;
+      } catch (error) {
+        console.error("Error finishing payment:", error);
         throw error;
       }
     },
@@ -95,7 +114,7 @@ const API = {
         throw error;
       }
     },
-    GET_BY_ID: async (id:number) => {
+    GET_BY_ID: async (id: number) => {
       try {
         const response = await axios.post(
           `${CONFIG.BASE_URL}/questions/${id}`,
@@ -110,8 +129,8 @@ const API = {
         console.error("Error creating invoice:", error);
         throw error;
       }
-    }
-  }
+    },
+  },
 };
 
 export default API;

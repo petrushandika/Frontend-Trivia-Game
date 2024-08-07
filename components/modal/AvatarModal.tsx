@@ -61,7 +61,6 @@ export default function AvatarModal({ modalVisible, toggleModal, setSelectedAvat
       try {
         const response = await API.AVATAR.GET_ALL_AVATAR();
         setAvatars(response);
-        console.log('Avatars fetched:', avatars)
       } catch (error) {
         console.error("Error fetching avatars:", error);
       }
