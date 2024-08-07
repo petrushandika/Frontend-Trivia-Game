@@ -1,5 +1,14 @@
 import { useEffect, useState } from "react";
-import { View, StyleSheet, Modal, Text, Image, TouchableOpacity, ActivityIndicator, ScrollView } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Modal,
+  Text,
+  Image,
+  TouchableOpacity,
+  ActivityIndicator,
+  ScrollView,
+} from "react-native";
 import { Button } from "@rneui/themed";
 import API from "@/networks/api";
 import { DiamondPackageDto } from "@/dto/DiamondPackageDto";
@@ -11,10 +20,18 @@ interface DiamondModalProps {
   setSelectedDiamond: (diamond: string) => void;
 }
 
-export default function DiamondModal({ modalVisible, toggleModal, setSelectedDiamond }: DiamondModalProps) {
+export default function DiamondModal({
+  modalVisible,
+  toggleModal,
+  setSelectedDiamond,
+}: DiamondModalProps) {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const [diamondPackages, setDiamondPackages] = useState<DiamondPackageDto[]>([]);
-  const [selectedPackageId, setSelectedPackageId] = useState<number | null>(null);
+  const [diamondPackages, setDiamondPackages] = useState<DiamondPackageDto[]>(
+    []
+  );
+  const [selectedPackageId, setSelectedPackageId] = useState<number | null>(
+    null
+  );
   const [paymentUrl, setPaymentUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -32,7 +49,12 @@ export default function DiamondModal({ modalVisible, toggleModal, setSelectedDia
       return;
     }
 
-    const selectedPackage = diamondPackages.find(pkg => pkg.id === selectedPackageId);
+    console.log("ini selected id diamond", selectedPackageId);
+
+    const selectedPackage = diamondPackages.find(
+      (pkg) => pkg.id === selectedPackageId
+    );
+    console.log("ini selected diamond", selectedPackage);
 
     if (!selectedPackage) {
       console.error("Selected package not found");
@@ -40,9 +62,7 @@ export default function DiamondModal({ modalVisible, toggleModal, setSelectedDia
     }
 
     const paymentData = {
-      userId: "123",
-      price: selectedPackage.price,
-      quantity: selectedPackage.quantity
+      packageId: selectedPackageId
     };
 
     setLoading(true);
@@ -63,7 +83,7 @@ export default function DiamondModal({ modalVisible, toggleModal, setSelectedDia
   const handlePaymentStatus = async (status: string) => {
     try {
       await API.PAYMENT.FINISH({ status });
-      console.log('Payment status sent to backend');
+      console.log("Payment status sent to backend");
     } catch (error) {
       console.error("Error sending payment status:", error);
     }
@@ -111,18 +131,21 @@ export default function DiamondModal({ modalVisible, toggleModal, setSelectedDia
                   style={styles.webview}
                   onError={(syntheticEvent) => {
                     const { nativeEvent } = syntheticEvent;
-                    console.warn('WebView error: ', nativeEvent);
+                    console.warn("WebView error: ", nativeEvent);
                   }}
                   onLoadEnd={() => setLoading(false)}
                   onHttpError={(syntheticEvent) => {
                     const { nativeEvent } = syntheticEvent;
-                    console.warn('WebView received HTTP error: ', nativeEvent.statusCode);
+                    console.warn(
+                      "WebView received HTTP error: ",
+                      nativeEvent.statusCode
+                    );
                   }}
                   onNavigationStateChange={(navState) => {
-                    if (navState.url.includes('your-backend-success-url')) {
-                      handlePaymentStatus('success');
-                    } else if (navState.url.includes('your-backend-fail-url')) {
-                      handlePaymentStatus('failure');
+                    if (navState.url.includes("your-backend-success-url")) {
+                      handlePaymentStatus("success");
+                    } else if (navState.url.includes("your-backend-fail-url")) {
+                      handlePaymentStatus("failure");
                     }
                   }}
                 />
@@ -136,12 +159,18 @@ export default function DiamondModal({ modalVisible, toggleModal, setSelectedDia
                         key={diamondPackage.id}
                         style={[
                           styles.packageCard,
-                          selectedImage === diamondPackage.image && styles.selectedImageContainer
+                          selectedImage === diamondPackage.image &&
+                            styles.selectedImageContainer,
                         ]}
                         onPress={() => handleImageClick(diamondPackage.image)}
                       >
-                        <Image source={{ uri: diamondPackage.image }} style={styles.packageImage} />
-                        <Text style={styles.packageQuantity}>{diamondPackage.quantity} 💎</Text>
+                        <Image
+                          source={{ uri: diamondPackage.image }}
+                          style={styles.packageImage}
+                        />
+                        <Text style={styles.packageQuantity}>
+                          {diamondPackage.quantity} 💎
+                        </Text>
                         <Button
                           title={`Rp. ${diamondPackage.price}`}
                           buttonStyle={styles.buyButton}
@@ -168,7 +197,11 @@ export default function DiamondModal({ modalVisible, toggleModal, setSelectedDia
               </>
             )}
             {loading && (
-              <ActivityIndicator size="large" color="#0000ff" style={styles.loader} />
+              <ActivityIndicator
+                size="large"
+                color="#0000ff"
+                style={styles.loader}
+              />
             )}
           </View>
         </View>
@@ -200,8 +233,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 20,
     elevation: 5,
-    width: '90%',
-    height: '50%',
+    width: "90%",
+    height: "50%",
   },
   diamondGrid: {
     flexDirection: "row",
@@ -234,20 +267,20 @@ const styles = StyleSheet.create({
     width: 120,
     marginTop: 10,
     borderBottomLeftRadius: 10,
-    borderBottomRightRadius: 10
+    borderBottomRightRadius: 10,
   },
   actionsContainer: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 0,
     left: 0,
     right: 0,
     flexDirection: "row",
     justifyContent: "center",
-    backgroundColor: 'white',
+    backgroundColor: "white",
     paddingVertical: 20,
     paddingHorizontal: 20,
     borderRadius: 20,
-    gap: 20
+    gap: 20,
   },
   cancelButton: {
     backgroundColor: "red",
@@ -257,12 +290,12 @@ const styles = StyleSheet.create({
   saveButton: {
     backgroundColor: "green",
     borderRadius: 10,
-    width: 125
+    width: 125,
   },
   webview: {
     flex: 1,
-    width: '100%',
-    height: '100%',
+    width: "100%",
+    height: "100%",
     borderRadius: 20,
   },
   loader: {

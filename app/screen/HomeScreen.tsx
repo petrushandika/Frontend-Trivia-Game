@@ -92,7 +92,7 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
           onPress={toggleDiamondModal}
         >
           <View className='ml-3'>
-            <Text className='text-base font-medium'>Hi, Petrus</Text>
+            <Text className='text-base font-medium'>Hi, {profile?.username}</Text>
           </View>
           <View className='mr-3 flex flex-row gap-x-5 items-center'>
             <Image

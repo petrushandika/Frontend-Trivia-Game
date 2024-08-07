@@ -1,6 +1,7 @@
 import axios from "axios";
 import CONFIG from "../config/config";
 import ASYNC_STORAGE from "./storage";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const API = {
   USER: {
@@ -40,14 +41,15 @@ const API = {
   PAYMENT: {
     CREATE: async (paymentData: any) => {
       try {
+        const token = await AsyncStorage.getItem("token");
         const response = await axios.post(
           `${CONFIG.BASE_URL}/payment/create`,
-          paymentData
-          // {
-          //   headers: {
-          //     Authorization: `Bearer ${ASYNC_STORAGE.GET()}`,
-          //   },
-          // }
+          paymentData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
         return response.data;
       } catch (error) {
@@ -59,12 +61,12 @@ const API = {
       try {
         const response = await axios.post(
           `${CONFIG.BASE_URL}/payment/finish`,
-          paymentData
-          // {
-          //   headers: {
-          //     Authorization: `Bearer ${ASYNC_STORAGE.GET()}`,
-          //   },
-          // }
+          paymentData,
+          {
+            headers: {
+              Authorization: `Bearer ${ASYNC_STORAGE.GET()}`,
+            },
+          }
         );
         return response.data;
       } catch (error) {
