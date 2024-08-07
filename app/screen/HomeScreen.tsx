@@ -7,14 +7,8 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import API from "@/networks/api";
 import { UserDto } from "@/dto/UserDto";
 import useFetchProfile from "@/hooks/useFetchProfile";
-import {
-  joinQueue,
-  leaveRoom,
-  onMatchFound,
-  onRoomFull,
-  onUserLeft,
-} from "../../services/socketService";
 import { useQueryClient } from "@tanstack/react-query";
+import socket, { joinQueue, leaveRoom, onMatchFound, onRoomFull, onUserLeft } from '../../services/socketService';
 
 export default function HomeScreen({ navigation }: { navigation: any }) {
   const [avatarModalVisible, setAvatarModalVisible] = useState(false);
@@ -42,51 +36,82 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
 
   const queryClient = useQueryClient();
   const lastAvatar = profile?.userAvatar[profile?.userAvatar.length - 1];
+
   useEffect(() => {
-    console.log(count)
+    const fetchUser = async () => {
+      try {
+        if (profile?.id) {
+          const response = await API.USER.GET_ONE_USER(profile.id);
+          setUser(response);
+          if (response.avatar) {
+            setSelectedAvatar(response.avatar);
+          }
+          console.log("User data fetched:", response);
+        } else {
+          console.error("Profile ID is not available.");
+        }
+      } catch (error) {
+        console.error("Failed to fetch user:", error);
+      }
+    };
+
+    fetchUser();
     queryClient.invalidateQueries({ queryKey: ["profile"] });
-    // async function fetchUser() {
-    //   try {
-    //     const response = await API.USER.GET_ONE_USER(1);
-    //     setUser(response);
-    //     if (response.avatar) {
-    //       setSelectedAvatar(response.avatar);
-    //     }
-    //   } catch (error) {
-    //     console.error("Failed to fetch user:", error);
-    //   }
-    // }
 
-    // fetchUser();
-    // profile;
-  }, [profile, count]);
+    const intervalId = setInterval(fetchUser, 60000);
+
+    return () => clearInterval(intervalId);
+  }, [profile]);
 
   useEffect(() => {
-    onMatchFound(({ roomId, userId }) => {
-      console.log(`Match found! Room ID: ${roomId}, User ID: ${userId}`);
+    const handleError = (error: Error) => {
+      console.error("Socket error:", error);
+    };
+
+    const handleMatchFound = ({ roomId, userId }: { roomId: string; userId: string }) => {
+      console.log(`Match found! Room ID: ${roomId}, User ID: ${profile.id}`);
       setRoomId(roomId);
-    });
+    };
 
-    onRoomFull((roomId) => {
+    const handleRoomFull = (roomId: string) => {
       console.log(`Room ${roomId} is full.`);
-    });
+    };
 
-    onUserLeft((userId) => {
-      console.log(`User ${userId} left the room.`);
-    });
+    const handleUserLeft = (userId: string) => {
+      console.log(`User ${profile?.id} left the room.`);
+    };
+
+    onMatchFound(handleMatchFound);
+    onRoomFull(handleRoomFull);
+    onUserLeft(handleUserLeft);
+    socket.on("error", handleError);
 
     return () => {
       leaveRoom();
+      socket.off("matchFound", handleMatchFound);
+      socket.off("roomFull", handleRoomFull);
+      socket.off("userLeft", handleUserLeft);
+      socket.off("error", handleError);
     };
-  }, []);
+  }, [profile]);
 
   const handleJoinQueue = () => {
-    joinQueue();
+    if (profile?.id) {
+      console.log(`User ${profile.id} is joining the queue.`);
+      joinQueue();
+    } else {
+      console.log("User ID is not available.");
+    }
   };
 
   const handleLeaveRoom = () => {
-    leaveRoom();
-    setRoomId(null);
+    if (profile?.id && roomId) {
+      console.log(`User ${profile.id} has left the room ${roomId}.`);
+      leaveRoom();
+      setRoomId(null);
+    } else {
+      console.log("User ID or room ID is not available.");
+    }
   };
 
   const handleStartGame = () => {
@@ -115,7 +140,6 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
               source={require("../../assets/images/diamond.png")}
               className="w-4 h-4 ml-1"
             />
-            {/* Display user diamond count or any other user-related information */}
             <Text>{profile?.diamond}</Text>
             <FontAwesome name="plus-square" size={20} color="green" />
           </View>
