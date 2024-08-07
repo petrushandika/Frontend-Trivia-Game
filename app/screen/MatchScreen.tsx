@@ -1,35 +1,67 @@
+import { useEffect, useState } from 'react';
 import { View, Text, Image, FlatList } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Data from "../../data/data.json";
-
-interface ItemData {
-  id: number;
-  name: string;
-  image: string;
-}
+import { MatchDto } from '@/dto/MatchDto';
+import socket from '../../services/socketService';
 
 export default function MatchScreen({ navigation }: { navigation: any }) {
+  const [matches, setMatches] = useState<MatchDto[]>([]);
+  const [isFindingOpponent, setIsFindingOpponent] = useState(true);
+
   const limitedData = Data.slice(0, 5);
+
+  useEffect(() => {
+    // Event listener untuk menerima data pencocokan dari server
+    socket.on('matchFound', (matchData: MatchDto[]) => {
+      setMatches(matchData);
+      setIsFindingOpponent(false);
+    });
+
+    socket.on('error', (error: Error) => {
+      console.error('Socket error:', error);
+      setIsFindingOpponent(false);
+    });
+
+    // Cleanup listener saat komponen di-unmount
+    return () => {
+      socket.off('matchFound');
+      socket.off('error');
+    };
+  }, []);
+
+  const handleFindOpponent = () => {
+    socket.emit('findOpponent');
+  };
+
+  const handleCancelFinding = () => {
+    socket.emit('cancelFinding');
+    setIsFindingOpponent(false);
+  };
 
   return (
     <View className='mt-10 p-5'>
       <View className='flex flex-row justify-between bg-black p-5 rounded-full'>
         <View className='flex flex-row'>
-          <Text className='text-white text-base'>Finding Opponent</Text>
+          <Text className='text-white text-base'>{isFindingOpponent ? 'Finding Opponent' : 'Opponent Found'}</Text>
         </View>
         <View>
-          <Text className='text-white text-base'>5 / 5</Text>
+          <Text className='text-white text-base'>{isFindingOpponent ? '5 / 5' : `${matches.length} / 5`}</Text>
         </View>
         <View className='flex flex-row items-center gap-x-3'>
           <Text className='text-white text-base'>00 : 18</Text>
-          <AntDesign name="forward" onPress={() => navigation.navigate("Question")} size={20} color="white" />
+          {isFindingOpponent ? (
+            <AntDesign name="closecircle" onPress={handleCancelFinding} size={20} color="white" />
+          ) : (
+            <AntDesign name="forward" onPress={() => navigation.navigate("Question")} size={20} color="white" />
+          )}
         </View>
       </View>
       <View className='gap-y-10 mt-1 mb-14'>
         <FlatList
-          data={limitedData}
+          data={matches.length > 0 ? matches : limitedData}
           keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }: { item: ItemData }) => (
+          renderItem={({ item }: { item: MatchDto }) => (
             <View className="flex-row items-center py-4 bg-gray-800 rounded-full my-4" style={{ maxWidth: '100%' }}>
               <View className="absolute">
                 <Image
@@ -52,6 +84,6 @@ export default function MatchScreen({ navigation }: { navigation: any }) {
           onPress={() => navigation.goBack()}
         />
       </View>
-    </View >
+    </View>
   );
 }
