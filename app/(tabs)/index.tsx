@@ -12,6 +12,7 @@ import DiamondModal from "@/components/modal/DiamondModal";
 import DiamondScreen from "../screen/DiamondScreen";
 import MatchMaking from "@/components/MatchMaking";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+import LeaderboardScreen from "../screen/LeaderboardScreen";
 
 const queryClient = new QueryClient();
 
@@ -22,11 +23,11 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <NavigationContainer independent={true}>
         <Stack.Navigator initialRouteName="">
-          <Stack.Screen
+          {/* <Stack.Screen
             name="Login"
             component={LoginScreen}
             options={{ headerShown: false }}
-          />
+          /> */}
           <Stack.Screen
             name="Avatar"
             component={AvatarScreen}
@@ -67,6 +68,11 @@ function App() {
           <Stack.Screen
             name="DiamondShop"
             component={DiamondScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Ranking"
+            component={LeaderboardScreen}
             options={{ headerShown: false }}
           />
           {/* <Stack.Screen name="MatchMaking" component={MatchMaking} options={{ headerShown: false }} /> */}
