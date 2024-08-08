@@ -1,18 +1,18 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import HomeScreen from "../screen/HomeScreen";
-import LoginScreen from "../screen/LoginScreen";
-import MatchScreen from "../screen/MatchScreen";
-import QuestionScreen from "../screen/QuestionScreen";
-import WinnerScreen from "../screen/WinnerScreen";
-import AvatarScreen from "../screen/AvatarScreen";
-import LooserScreen from "../screen/LooserScreen";
+import HomeScreen from "./screen/HomeScreen";
+import LoginScreen from "./screen/LoginScreen";
+import MatchScreen from "./screen/MatchScreen";
+import QuestionScreen from "./screen/QuestionScreen";
+import WinnerScreen from "./screen/WinnerScreen";
+import AvatarScreen from "./screen/AvatarScreen";
+import LooserScreen from "./screen/LooserScreen";
 import AvatarModal from "@/components/modal/AvatarModal";
 import DiamondModal from "@/components/modal/DiamondModal";
-import DiamondScreen from "../screen/DiamondScreen";
+import DiamondScreen from "./screen/DiamondScreen";
 import MatchMaking from "@/components/MatchMaking";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
-import LeaderboardScreen from "../screen/LeaderboardScreen";
+import LeaderboardScreen from "./screen/LeaderboardScreen";
 
 const queryClient = new QueryClient();
 
@@ -22,12 +22,12 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <NavigationContainer independent={true}>
-        <Stack.Navigator initialRouteName="">
-          {/* <Stack.Screen
+        <Stack.Navigator initialRouteName="login">
+          <Stack.Screen
             name="Login"
             component={LoginScreen}
             options={{ headerShown: false }}
-          /> */}
+          />
           <Stack.Screen
             name="Avatar"
             component={AvatarScreen}
@@ -44,11 +44,11 @@ function App() {
             component={MatchScreen}
             options={{ headerShown: false }}
           />
-          {/* <Stack.Screen
+          <Stack.Screen
             name="Question"
             component={QuestionScreen}
             options={{ headerShown: false }}
-          /> */}
+          />
           <Stack.Screen
             name="Winner"
             component={WinnerScreen}
@@ -75,7 +75,7 @@ function App() {
             component={LeaderboardScreen}
             options={{ headerShown: false }}
           />
-          {/* <Stack.Screen name="MatchMaking" component={MatchMaking} options={{ headerShown: false }} /> */}
+          <Stack.Screen name="MatchMaking" component={MatchMaking} options={{ headerShown: false }} />
         </Stack.Navigator>
       </NavigationContainer>
     </QueryClientProvider>

@@ -133,11 +133,11 @@ export default function DiamondModal({
 
   return (
     <View style={styles.buttonContainer}>
-      <Button
+      {/* <Button
         title="Open Diamond Options"
         onPress={toggleModal}
         buttonStyle={styles.button}
-      />
+      /> */}
 
       <Modal
         animationType="slide"
