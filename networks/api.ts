@@ -103,7 +103,7 @@ const API = {
   QUESTION: {
     GET_ALL: async () => {
       try {
-        const response = await axios.post(`${CONFIG.BASE_URL}/questions`, {
+        const response = await axios.get(`${CONFIG.BASE_URL}/questions`, {
           headers: {
             Authorization: `Bearer ${ASYNC_STORAGE.GET()}`,
           },
@@ -115,16 +115,13 @@ const API = {
       }
     },
     GET_BY_ID: async (id: number) => {
-      console.log("test", id)
+      console.log("test", id);
       try {
-        const response = await axios.get(
-          `${CONFIG.BASE_URL}/questions/${id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${ASYNC_STORAGE.GET()}`,
-            },
-          }
-        );
+        const response = await axios.get(`${CONFIG.BASE_URL}/questions/${id}`, {
+          headers: {
+            Authorization: `Bearer ${ASYNC_STORAGE.GET()}`,
+          },
+        });
         return response.data;
       } catch (error) {
         console.error("Error creating invoice:", error);

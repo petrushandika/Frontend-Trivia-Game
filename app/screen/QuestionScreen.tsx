@@ -54,12 +54,12 @@ export default function QuestionScreen({ navigation }: { navigation: any }) {
   }, []);
 
   const handlePress = (index: number) => {
-    if (selectedAnswerIndex !== null) return; 
+    if (selectedAnswerIndex !== null) return;
 
     setSelectedAnswerIndex(index);
     const selectedAnswer = questionData?.answer[index];
     const isCorrect = selectedAnswer?.isCorrect ?? false;
-    
+
     console.log('Selected Answer Index:', index);
     console.log('Selected Answer IsCorrect:', isCorrect);
 
