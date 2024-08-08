@@ -49,7 +49,7 @@ export default function MatchScreen({ navigation }: { navigation: any }) {
           <Text className='text-white text-base'>{isFindingOpponent ? 'Finding Opponent' : 'Opponent Found'}</Text>
         </View>
         <View>
-          <Text className='text-white text-base'>{isFindingOpponent ? '5 / 5' : `${matches.length} / 5`}</Text>
+          <Text className='text-white text-base'>{isFindingOpponent ? '5 / 5' : `${listPlayers.length} / 5`}</Text>
         </View>
         <View className='flex flex-row items-center gap-x-3'>
           <Text className='text-white text-base'>00 : 18</Text>
@@ -68,7 +68,7 @@ export default function MatchScreen({ navigation }: { navigation: any }) {
             <View className="flex-row items-center py-4 bg-gray-800 rounded-full my-4" style={{ maxWidth: '100%' }}>
               <View className="absolute">
                 <Image
-                  source={{ uri: item.userAvatar[item.userAvatar.length - 1].image }}
+                  source={{ uri: item.userAvatar[item.userAvatar.length - 1].avatar.image }}
                   className="w-20 h-20 rounded-full bg-amber-400"
                 />
               </View>

@@ -3,9 +3,9 @@ import LeaderboardScreen from '../screen/LeaderboardScreen'
 
 const ranking = () => {
     return (
-      <View>
-        <LeaderboardScreen navigation={''} />
-      </View>
+        <View>
+            <LeaderboardScreen navigation={''} />
+        </View>
     );
 }
 
