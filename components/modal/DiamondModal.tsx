@@ -40,35 +40,35 @@ export default function DiamondModal({
   const handleImageClick = (image: string) => {
     setSelectedImage(image);
   };
-  
+
   const [count, setCount] = useState<number>(0);
-  const {profile} = useFetchProfile();
+  const { profile } = useFetchProfile();
 
   const queryClient = useQueryClient();
 
- const handleNavigationStateChange = (navState: any) => {
-   if (navState.url.includes("success")) {
-     console.log("Payment success");
-     updateDataUser();
-   }
- };
+  const handleNavigationStateChange = (navState: any) => {
+    if (navState.url.includes("success")) {
+      console.log("Payment success");
+      updateDataUser();
+    }
+  };
 
- const updateDataUser = () => {
-   if (!profile) {
-     console.error("Profile data is not available");
-     return;
-   }
+  const updateDataUser = () => {
+    if (!profile) {
+      console.error("Profile data is not available");
+      return;
+    }
 
-   queryClient.setQueryData(["profile"], {
-     ...profile,
-     name: "updated",
-   });
+    queryClient.setQueryData(["profile"], {
+      ...profile,
+      name: "updated",
+    });
 
-   setCount(count + 1);
-   console.log(count);
- };
+    setCount(count + 1);
+    console.log(count);
+  };
 
- 
+
   const handlePurchase = (id: number) => {
     setSelectedPackageId(id);
   };
@@ -133,11 +133,11 @@ export default function DiamondModal({
 
   return (
     <View style={styles.buttonContainer}>
-      <Button
+      {/* <Button
         title="Open Diamond Options"
         onPress={toggleModal}
         buttonStyle={styles.button}
-      />
+      /> */}
 
       <Modal
         animationType="slide"
@@ -164,12 +164,12 @@ export default function DiamondModal({
                       nativeEvent.statusCode
                     );
                   }}
-                  onNavigationStateChange={(navState : any) => {
-                     if (navState.url.includes("success")) {
-                        console.log("Payment success");
-                        updateDataUser();
-                        toggleModal();
-                     }
+                  onNavigationStateChange={(navState: any) => {
+                    if (navState.url.includes("success")) {
+                      console.log("Payment success");
+                      updateDataUser();
+                      toggleModal();
+                    }
                   }}
                 />
               </View>
@@ -183,7 +183,7 @@ export default function DiamondModal({
                         style={[
                           styles.packageCard,
                           selectedImage === diamondPackage.image &&
-                            styles.selectedImageContainer,
+                          styles.selectedImageContainer,
                         ]}
                         onPress={() => handleImageClick(diamondPackage.image)}
                       >
@@ -318,13 +318,13 @@ const styles = StyleSheet.create({
   webviewContainer: {
     flex: 1,
     width: "100%",
-    
+
     borderRadius: 20,
   },
-  webView : {
-  flex : 1,
-  height: "100%",
-},
+  webView: {
+    flex: 1,
+    height: "100%",
+  },
   loader: {
     marginTop: 20,
   },

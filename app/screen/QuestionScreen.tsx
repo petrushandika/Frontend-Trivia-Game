@@ -3,7 +3,8 @@ import { View, Text } from "react-native";
 import { Button, Image } from "react-native-elements";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import API from "../../networks/api";
+import socket from "../../services/socketService";
+import { useRoute } from "@react-navigation/native";
 
 interface Answer {
   content: string;
@@ -13,30 +14,18 @@ interface Answer {
 interface IQuestions {
   content: string;
   answer: Answer[];
-  onAnswerSelected?: (isCorrect: boolean) => void;
 }
 
 export default function QuestionScreen({ navigation }: { navigation: any }) {
+  const route = useRoute()
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [questionData, setQuestionData] = useState<IQuestions | null>(null);
   const [selectedAnswerIndex, setSelectedAnswerIndex] = useState<number | null>(null);
   const [isAnswerCorrect, setIsAnswerCorrect] = useState<boolean | null>(null);
   const [timeLeft, setTimeLeft] = useState(30);
   const [points, setPoints] = useState(0);
+  console.log(route);
 
-  useEffect(() => {
-    const fetchQuestion = async () => {
-      try {
-        const question = await API.QUESTION.GET_BY_ID(currentQuestionIndex + 1);
-        console.table('Fetched question:', question);
-        setQuestionData(question);
-      } catch (error) {
-        console.error("Error fetching question:", error);
-      }
-    };
-
-    fetchQuestion();
-  }, [currentQuestionIndex]);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -50,8 +39,36 @@ export default function QuestionScreen({ navigation }: { navigation: any }) {
       });
     }, 1000);
 
-    return () => clearInterval(timer);
+
+    socket.emit('requestQuestion', { ...route.params, currentIndex: currentQuestionIndex });
+
+    socket.on('questionData', (data: IQuestions) => {
+      console.log(data);
+
+      setQuestionData(data);
+      setSelectedAnswerIndex(null);
+      setIsAnswerCorrect(null);
+      setTimeLeft(30);
+    });
+
+    socket.on('error', (error: Error) => {
+      console.error("Socket error:", error);
+      navigation.navigate('Home');
+    });
+
+    socket.on('questionTimeout', () => {
+      handleTimeUp();
+    });
+
+    return () => {
+      socket.off('questionData');
+      socket.off('error');
+      socket.off('questionTimeout');
+      clearInterval(timer);
+    };
   }, []);
+
+
 
   const handlePress = (index: number) => {
     if (selectedAnswerIndex !== null) return;
@@ -64,10 +81,6 @@ export default function QuestionScreen({ navigation }: { navigation: any }) {
     console.log('Selected Answer IsCorrect:', isCorrect);
 
     setIsAnswerCorrect(isCorrect);
-    if (questionData && questionData.onAnswerSelected) {
-      questionData.onAnswerSelected(isCorrect);
-    }
-
     if (isCorrect) {
       const earnedPoints = Math.floor(timeLeft * 3.3);
       setPoints(prevPoints => {
@@ -77,19 +90,27 @@ export default function QuestionScreen({ navigation }: { navigation: any }) {
       });
     }
 
+    socket.emit('submitAnswer', {
+      questionIndex: currentQuestionIndex + 1,
+      answerIndex: index,
+      isCorrect,
+    });
+
+    socket.emit('requestQuestion', { ...route.params, currentIndex: currentQuestionIndex });
+
+
     setTimeout(() => {
       if (currentQuestionIndex >= 9) {
         navigation.navigate('Ranking', { points });
       } else {
         setCurrentQuestionIndex(prevIndex => prevIndex + 1);
-        setTimeLeft(30);
-        setSelectedAnswerIndex(null);
-        setIsAnswerCorrect(null);
+        socket.emit('requestQuestion', currentQuestionIndex + 2);
       }
     }, 1000);
   };
 
   const handleTimeUp = () => {
+    socket.emit('timeout');
     setCurrentQuestionIndex(prevIndex => prevIndex + 1);
     setTimeLeft(30);
     setSelectedAnswerIndex(null);
@@ -109,7 +130,7 @@ export default function QuestionScreen({ navigation }: { navigation: any }) {
           </View>
           <View className="items-center">
             <Text className="text-white text-xl">
-              {minutes.toString().padStart(2, '0')} : {seconds.toString().padStart(2, '0')}
+              {minutes.toString().padStart(2, '0')}:{seconds.toString().padStart(2, '0')}
             </Text>
           </View>
           <View className="bottom-0 right-0">

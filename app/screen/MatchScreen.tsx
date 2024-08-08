@@ -8,28 +8,58 @@ import socket from '../../services/socketService';
 export default function MatchScreen({ navigation }: { navigation: any }) {
   const [matches, setMatches] = useState<MatchDto[]>([]);
   const [isFindingOpponent, setIsFindingOpponent] = useState(true);
-  const [listPlayers, setListPlayers] = useState<any[]>([])
+  const [listPlayers, setListPlayers] = useState<any[]>([]);
+  const [timer, setTimer] = useState(10);
+  const [isRoomFull, setIsRoomFull] = useState(false);
   const limitedData = Data.slice(0, 5);
 
   useEffect(() => {
-    socket.on('matchFound', (matchData: MatchDto[]) => {
+    const interval = setInterval(() => {
+      setTimer((prevTimer) => {
+        if (prevTimer > 0) {
+          return prevTimer - 1;
+        } else {
+          if (!isRoomFull) {
+            navigation.navigate('Home');
+          }
+          // navigation.navigate("Question")
+          return 0;
+        }
+      });
+    }, 1000);
+
+    socket.on('matchFound', (matchData) => {
       setMatches(matchData);
       setIsFindingOpponent(false);
+      setIsRoomFull(false);
+      clearInterval(interval);
+      navigation.navigate('Question', { roomId: matchData });
     });
 
     socket.on('error', (error: Error) => {
       console.error('Socket error:', error);
       setIsFindingOpponent(false);
-    });
-    socket.on('waiting', (room: any) => {
-      console.log("list players", room.players);
-      setListPlayers(room.players)
+      clearInterval(interval);
+      navigation.navigate('Home');
     });
 
-    // Cleanup listener saat komponen di-unmount
+    socket.on('waiting', (room: any) => {
+      console.log("list players", room.players);
+      setListPlayers(room.players);
+      setIsRoomFull(room.players.length >= 2); // Room full condition for user length
+
+      // Navigate to Question screen if the room is full
+      if (room.players.length >= 2) {
+        clearInterval(interval);
+        navigation.navigate('Question');
+      }
+    });
+
     return () => {
+      clearInterval(interval);
       socket.off('matchFound');
       socket.off('error');
+      socket.off('waiting');
     };
   }, []);
 
@@ -42,6 +72,12 @@ export default function MatchScreen({ navigation }: { navigation: any }) {
     setIsFindingOpponent(false);
   };
 
+  const formatTime = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+  };
+
   return (
     <View className='mt-10 p-5'>
       <View className='flex flex-row justify-between bg-black p-5 rounded-full'>
@@ -49,10 +85,10 @@ export default function MatchScreen({ navigation }: { navigation: any }) {
           <Text className='text-white text-base'>{isFindingOpponent ? 'Finding Opponent' : 'Opponent Found'}</Text>
         </View>
         <View>
-          <Text className='text-white text-base'>{isFindingOpponent ? '5 / 5' : `${listPlayers.length} / 5`}</Text>
+          <Text className='text-white text-base'>{isFindingOpponent ? `${listPlayers.length} / 1` : '1 / 1'}</Text>
         </View>
         <View className='flex flex-row items-center gap-x-3'>
-          <Text className='text-white text-base'>00 : 18</Text>
+          <Text className='text-white text-base'>{formatTime(timer)}</Text>
           {isFindingOpponent ? (
             <AntDesign name="closecircle" onPress={handleCancelFinding} size={20} color="white" />
           ) : (

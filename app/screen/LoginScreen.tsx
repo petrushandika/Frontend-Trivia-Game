@@ -15,18 +15,18 @@ export default function LoginScreen({ navigation }: { navigation: any }) {
   const handleLogin = async () => {
     const redirectUrl = Linking.createURL("/");
     const response = await WebBrowser.openAuthSessionAsync(
-      `https://36e5-2404-8000-1005-37ac-9c8d-bad2-59f2-7f7e.ngrok-free.app/google/redirect?redirectTo=${redirectUrl}`,
+      `https://034c-2404-8000-1003-dfda-2c1c-bbd6-6b98-4468.ngrok-free.app/google/redirect?redirectTo=${redirectUrl}`,
       redirectUrl
     );
     const token = response.url.split("=")[1].split("&")[0];
     console.log(token)
-    ASYNC_STORAGE.SET(token);
-    //  try {
-    //   await AsyncStorage.setItem('token', token);
-    //   console.log('Token berhasil disimpan');
-    //  } catch (error) {
-    //   console.log('Gagal menyimpan token:', error);
-    //  }
+    // ASYNC_STORAGE.SET(token);
+    try {
+      await AsyncStorage.setItem('token', token);
+      console.log('Token berhasil disimpan');
+    } catch (error) {
+      console.log('Gagal menyimpan token:', error);
+    }
 
     navigation.navigate('Avatar');
 

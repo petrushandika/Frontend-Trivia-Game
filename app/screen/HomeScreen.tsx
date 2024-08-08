@@ -57,56 +57,42 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
 
     fetchUser();
     queryClient.invalidateQueries({ queryKey: ["profile"] });
-
-    const intervalId = setInterval(fetchUser, 60000);
-
-    return () => clearInterval(intervalId);
   }, [profile]);
 
-  useEffect(() => {
-    const handleError = (error: Error) => {
-      console.error("Socket error:", error);
-    };
+  // useEffect(() => {
+  //   const handleError = (error: Error) => {
+  //     console.error("Socket error:", error);
+  //   };
 
-    const handleMatchFound = ({ roomId, userId }: { roomId: string; userId: string }) => {
-      console.log(`Match found! Room ID: ${roomId}, User ID: ${profile.id}`);
-      setRoomId(roomId);
-    };
+  //   const handleMatchFound = ({ roomId, userId }: { roomId: string; userId: string }) => {
+  //     console.log(`Match found! Room ID: ${roomId}, User ID: ${profile.id}`);
+  //     setRoomId(roomId);
+  //   };
 
-    const handleRoomFull = (roomId: string) => {
-      console.log(`Room ${roomId} is full.`);
-    };
+  //   const handleRoomFull = (roomId: string) => {
+  //     console.log(`Room ${roomId} is full.`);
+  //   };
 
-    const handleUserLeft = (userId: string) => {
-      console.log(`User ${profile?.id} left the room.`);
-    };
+  //   const handleUserLeft = (userId: string) => {
+  //     console.log(`User ${profile?.id} left the room.`);
+  //   };
 
-    onMatchFound(handleMatchFound);
-    onRoomFull(handleRoomFull);
-    onUserLeft(handleUserLeft);
-    socket.on("waiting", (data) => console.log(data))
-    socket.on("error", handleError);
+  //   onMatchFound(handleMatchFound);
+  //   onRoomFull(handleRoomFull);
+  //   onUserLeft(handleUserLeft);
+  //   socket.on("waiting", (data) => console.log(data))
+  //   socket.on("error", handleError);
 
-    return () => {
-      leaveRoom();
-      socket.off("matchFound", handleMatchFound);
-      socket.off("roomFull", handleRoomFull);
-      socket.off("userLeft", handleUserLeft);
-      socket.off("error", handleError);
-    };
-  }, [profile]);
+  //   return () => {
+  //     leaveRoom();
+  //     socket.off("matchFound", handleMatchFound);
+  //     socket.off("roomFull", handleRoomFull);
+  //     socket.off("userLeft", handleUserLeft);
+  //     socket.off("error", handleError);
+  //   };
+  // }, []);
 
-  const handleJoinQueue = () => {
-    if (profile?.id) {
-      console.log(`User ${profile.id} is joining the queue.`);
-      socket.emit("ping")
-      socket.emit("joinQueue", {
-        id: profile.id
-      })
-    } else {
-      console.log("User ID is not available.");
-    }
-  };
+
 
   const handleLeaveRoom = () => {
     if (profile?.id && roomId) {
@@ -120,7 +106,9 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
 
   const handleStartGame = () => {
     navigation.navigate("Match");
-    handleJoinQueue();
+    socket.emit("joinQueue", {
+      id: profile.id
+    })
   };
 
   return (
