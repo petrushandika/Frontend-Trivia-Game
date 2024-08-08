@@ -23,11 +23,11 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <NavigationContainer independent={true}>
         <Stack.Navigator initialRouteName="">
-          {/* <Stack.Screen
+          <Stack.Screen
             name="Login"
             component={LoginScreen}
             options={{ headerShown: false }}
-          /> */}
+          />
           <Stack.Screen
             name="Avatar"
             component={AvatarScreen}
@@ -44,11 +44,11 @@ function App() {
             component={MatchScreen}
             options={{ headerShown: false }}
           />
-          {/* <Stack.Screen
+          <Stack.Screen
             name="Question"
             component={QuestionScreen}
             options={{ headerShown: false }}
-          /> */}
+          />
           <Stack.Screen
             name="Winner"
             component={WinnerScreen}
