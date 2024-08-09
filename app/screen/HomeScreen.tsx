@@ -54,6 +54,7 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
         console.error("Failed to fetch user:", error);
       }
     };
+    // console.log(count)
 
     fetchUser();
     queryClient.invalidateQueries({ queryKey: ["profile"] });
