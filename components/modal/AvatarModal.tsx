@@ -6,6 +6,7 @@ import { RootStackParamList } from '../navigation/types';
 import API from "@/networks/api";
 import { AvatarDto } from "@/dto/AvatarDto";
 import usePurchaseAvatar from "@/hooks/usePurchaseAvatar";
+import useFetchProfile from "@/hooks/useFetchProfile";
 
 interface AvatarModalProps {
   modalVisible: boolean;
@@ -16,12 +17,13 @@ interface AvatarModalProps {
 export default function AvatarModal({ modalVisible, toggleModal, setSelectedAvatar }: AvatarModalProps) {
   const [localSelectedAvatar, setLocalSelectedAvatar] = useState<number | null>(null);
   const [alertVisible, setAlertVisible] = useState<boolean>(false);
-  const userDiamonds = 0;
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const [avatars, setAvatars] = useState<AvatarDto[]>([]);
+  
+  const {profile} = useFetchProfile()
 
-  const handleAvatarClick = (avatarId: number, price: number | string, image: string) => {
-    if (typeof price === "number" && price > userDiamonds) {
+  const handleAvatarClick = (avatarId: number, diamond: number | string, image: string) => {
+    if (typeof diamond === "number" && diamond > profile.diamond) {
       setAlertVisible(true);
     } else {
       setLocalSelectedAvatar(avatarId);
@@ -36,20 +38,22 @@ export default function AvatarModal({ modalVisible, toggleModal, setSelectedAvat
     return priceA - priceB;
   });
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (localSelectedAvatar !== null) {
       const selectedAvatarImage = sortedAvatars.find(avatar => avatar.id === localSelectedAvatar)?.image;
       if (selectedAvatarImage) {
         setSelectedAvatar(selectedAvatarImage);
       }
+      console.log('avatarId', localSelectedAvatar);
+     try {
+       await mutateAsync({
+         avatarId: localSelectedAvatar,
+       });
+     } catch (error) {
+       console.error("Error purchasing avatar:", error);
+     }
     }
     toggleModal();
-  };
-
-  const handleYes = () => {
-    setAlertVisible(false);
-    toggleModal();
-    navigation.navigate("DiamondShop");
   };
 
   const handleNo = () => {
@@ -94,8 +98,8 @@ export default function AvatarModal({ modalVisible, toggleModal, setSelectedAvat
                       style={styles.avatarImage}
                     />
                     <View style={styles.avatarInfo}>
-                      <Text style={styles.avatarPrice}>{avatar.diamond == null ? 'Free' : avatar.diamond}</Text>
-                      {avatar.diamond != null && (
+                      <Text style={styles.avatarPrice}>{avatar.diamond == 0 ? 'Free' : avatar.diamond}</Text>
+                      {avatar.diamond != 0 && (
                         <Image
                           source={require("../../assets/images/diamond.png")}
                           style={styles.diamondIcon}
@@ -131,13 +135,15 @@ export default function AvatarModal({ modalVisible, toggleModal, setSelectedAvat
       >
         <View style={styles.centeredView}>
           <View style={styles.alertView}>
+            <TouchableOpacity onPress={handleNo}>
             <Image
               source={{ uri: 'https://cdn-icons-png.flaticon.com/512/9587/9587077.png' }}
               style={styles.alertImage}
             />
+            </TouchableOpacity>
             <Text style={styles.alertTitle}>Oops!</Text>
             <Text style={styles.alertMessage}>You don't have enough diamonds. Please visit the shop to buy more!</Text>
-            <View style={styles.alertActions}>
+            {/* <View style={styles.alertActions}>
               <Button
                 title="Go to Shop"
                 buttonStyle={styles.alertButton}
@@ -148,7 +154,7 @@ export default function AvatarModal({ modalVisible, toggleModal, setSelectedAvat
                 buttonStyle={styles.alertButton}
                 onPress={handleNo}
               />
-            </View>
+            </View> */}
           </View>
         </View>
       </Modal>

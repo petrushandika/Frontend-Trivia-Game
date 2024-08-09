@@ -7,9 +7,11 @@ import axios from 'axios';
 export default function usePurchaseAvatar() {
     const queryClient = useQueryClient();
     const {mutateAsync} = useMutation({
-        mutationFn: async (data: any) => {
+        mutationFn: async (data: {avatarId : number}) => {
+            const {avatarId} = data;
+            console.log('ini console dari hooks usePurchaseAvatar', data.avatarId);
             const token = await AsyncStorage.getItem("token");
-            const response = await axios.post(`${CONFIG.BASE_URL}/user/buy-avatar/${data.avatarId}`, {}, {
+            const response = await axios.post(`${CONFIG.BASE_URL}/user/buy-avatar`, {avatarId}, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
