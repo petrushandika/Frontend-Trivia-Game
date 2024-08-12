@@ -85,7 +85,7 @@ export default function MatchScreen({ navigation }: { navigation: any }) {
           <Text className='text-white text-base'>{isFindingOpponent ? 'Finding Opponent' : 'Opponent Found'}</Text>
         </View>
         <View>
-          <Text className='text-white text-base'>{isFindingOpponent ? `${listPlayers.length} / 1` : '1 / 1'}</Text>
+          <Text className='text-white text-base'>{isFindingOpponent ? `${listPlayers.length} / 2` : '2 / 2'}</Text>
         </View>
         <View className='flex flex-row items-center gap-x-3'>
           <Text className='text-white text-base'>{formatTime(timer)}</Text>

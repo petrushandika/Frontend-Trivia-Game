@@ -52,7 +52,7 @@ export default function LeaderboardScreen({ navigation }: { navigation: any }) {
           <Text className="text-white bg-blue-400 rounded-full h-[20px] w-[20px] absolute text-center">
             2
           </Text>
-          <Text className="text-black text-lg font-medium">Steve Jobs</Text>
+          <Text className="text-black text-lg font-medium">IKHSAN</Text>
           <Text className="text-slate-500 bg-white p-1 rounded-[10px]">
             1840 coins
           </Text>
@@ -70,7 +70,7 @@ export default function LeaderboardScreen({ navigation }: { navigation: any }) {
             1
           </Text>
           <Text className="text-black text-lg font-medium">
-            Albert Einstein
+            PETRUS
           </Text>
           <Text className="text-slate-500 bg-white p-1 rounded-[10px]">
             1900 coins
@@ -87,7 +87,7 @@ export default function LeaderboardScreen({ navigation }: { navigation: any }) {
           <Text className="text-white bg-orange-800 rounded-full h-[20px] w-[20px] absolute text-center">
             3
           </Text>
-          <Text className="text-black text-lg font-medium">Taylor Swift</Text>
+          <Text className="text-black text-lg font-medium">BOT</Text>
           <Text className="text-slate-500 bg-white p-1 rounded-[8px]">
             1620 coins
           </Text>
@@ -101,7 +101,7 @@ export default function LeaderboardScreen({ navigation }: { navigation: any }) {
             source={require("@/assets/images/person4.jpg")}
           />
           <View className="flex">
-            <Text className="text-black text-lg font-medium">Hatori Hanzo</Text>
+            <Text className="text-black text-lg font-medium">BOT</Text>
             <Text className="text-slate-500">1500 coins</Text>
           </View>
         </View>
@@ -118,7 +118,7 @@ export default function LeaderboardScreen({ navigation }: { navigation: any }) {
           />
           <View className="flex">
             <Text className="text-black text-lg font-medium">
-              Robert Downey
+              BOT
             </Text>
             <Text className="text-slate-500">1500 coins</Text>
           </View>
