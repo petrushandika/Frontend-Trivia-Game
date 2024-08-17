@@ -46,10 +46,10 @@ export default function MatchScreen({ navigation }: { navigation: any }) {
     socket.on('waiting', (room: any) => {
       console.log("list players", room.players);
       setListPlayers(room.players);
-      setIsRoomFull(room.players.length >= 2); // Room full condition for user length
+      setIsRoomFull(room.players.length >= 1); // Room full condition for user length
 
       // Navigate to Question screen if the room is full
-      if (room.players.length >= 2) {
+      if (room.players.length >= 1) {
         clearInterval(interval);
         navigation.navigate('Question');
       }
@@ -75,7 +75,7 @@ export default function MatchScreen({ navigation }: { navigation: any }) {
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
-    return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+    return `${minutes.toString().padStart(1, '0')}:${remainingSeconds.toString().padStart(1, '0')}`;
   };
 
   return (
@@ -85,7 +85,7 @@ export default function MatchScreen({ navigation }: { navigation: any }) {
           <Text className='text-white text-base'>{isFindingOpponent ? 'Finding Opponent' : 'Opponent Found'}</Text>
         </View>
         <View>
-          <Text className='text-white text-base'>{isFindingOpponent ? `${listPlayers.length} / 2` : '2 / 2'}</Text>
+          <Text className='text-white text-base'>{isFindingOpponent ? `${listPlayers.length} / 1` : '1 / 1'}</Text>
         </View>
         <View className='flex flex-row items-center gap-x-3'>
           <Text className='text-white text-base'>{formatTime(timer)}</Text>

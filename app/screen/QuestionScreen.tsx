@@ -1,7 +1,9 @@
+import {
+  StyleSheet
+} from 'react-native'
 import { useEffect, useState } from "react";
 import { View, Text } from "react-native";
 import { Button, Image } from "react-native-elements";
-import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import socket from "../../services/socketService";
 import { useRoute } from "@react-navigation/native";
@@ -68,8 +70,6 @@ export default function QuestionScreen({ navigation }: { navigation: any }) {
     };
   }, []);
 
-
-
   const handlePress = (index: number) => {
     if (selectedAnswerIndex !== null) return;
 
@@ -121,74 +121,97 @@ export default function QuestionScreen({ navigation }: { navigation: any }) {
   const seconds = timeLeft % 60;
 
   return (
-    <View className="mt-10 p-5 h-full bg-blue-400">
-      <View className="gap-y-10">
-        <View className="flex flex-row justify-between p-5 rounded-full">
-          <View className="flex flex-row items-center gap-x-3">
-            <FontAwesome6 name="crown" size={20} color="yellow" />
-            <Text className="text-white text-xl">{points}</Text>
-          </View>
-          <View className="items-center">
-            <Text className="text-white text-xl">
-              {minutes.toString().padStart(2, '0')}:{seconds.toString().padStart(2, '0')}
-            </Text>
-          </View>
-          <View className="bottom-0 right-0">
-            <AntDesign
-              name="closecircle"
-              size={25}
-              color="white"
-              onPress={() => navigation.goBack()}
+    <View className="mt-10 p-5 h-full">
+      <View className='flex flex-row items-center justify-between'>
+        <AntDesign
+          name="arrowleft"
+          size={25}
+          color="black"
+          onPress={() => navigation.goBack()}
+        />
+        <View className='flex-1 items-center'>
+          <View className='flex flex-row items-center gap-x-2'>
+            <Image
+              source={require('../../assets/images/crown.png')}
+              className='w-8 h-8'
             />
+            <Text className='text-xl'>{points}</Text>
           </View>
-        </View>
-        <View className="items-center gap-y-2">
-          <Image
-            source={require("../../assets/images/book.png")}
-            style={{
-              width: 150,
-              height: 150,
-            }}
-          />
-          <Text className="text-white text-xl">
-            Question {currentQuestionIndex + 1}
-          </Text>
-          <Text className="text-white text-3xl font-medium">{questionData?.content}</Text>
-        </View>
-        <View className="flex gap-y-5">
-          {questionData?.answer?.map((answer, index) => (
-            <Button
-              key={index}
-              title={answer.content}
-              buttonStyle={{
-                backgroundColor: selectedAnswerIndex !== null
-                  ? answer.isCorrect
-                    ? "green"
-                    : index === selectedAnswerIndex
-                      ? "red"
-                      : "white"
-                  : "white",
-                borderRadius: 100,
-                borderColor: "black",
-                paddingVertical: 15,
-                marginBottom: 10
-              }}
-              titleStyle={{
-                color: selectedAnswerIndex !== null
-                  ? answer.isCorrect
-                    ? "white"
-                    : index === selectedAnswerIndex
-                      ? "white"
-                      : "black"
-                  : "black",
-                fontSize: 20,
-              }}
-              onPressIn={() => handlePress(index)}
-              disabled={selectedAnswerIndex !== null}
-            />
-          ))}
         </View>
       </View>
+      <View className='flex flex-row justify-between items-center my-5'>
+        <Text className='text-xl font-medium'>Question {currentQuestionIndex + 1}</Text>
+        <View className='flex flex-row items-center gap-x-2'>
+          <Image
+            source={require('../../assets/images/timer.png')}
+            className='w-8 h-8'
+          />
+          <Text className='text-xl font-medium'>{minutes.toString().padStart(2, '0')}:{seconds.toString().padStart(2, '0')}</Text>
+        </View>
+      </View>
+      <View className='relative mb-10'>
+        <Image
+          source={require('../../assets/images/planet.jpg')}
+          className='w-full h-60 rounded-xl object-cover'
+        />
+        <View className='absolute inset-0 flex items-center justify-center w-full h-full p-5'>
+          <Text className='text-white text-2xl font-medium'>
+            {questionData?.content}
+          </Text>
+        </View>
+      </View>
+      <View>
+        {questionData?.answer?.map((answer, index) => (
+          <Button
+            key={index}
+            title={answer.content}
+            buttonStyle={{
+              backgroundColor: selectedAnswerIndex !== null
+                ? answer.isCorrect
+                  ? "green"
+                  : index === selectedAnswerIndex
+                    ? "red"
+                    : "white"
+                : "white",
+              borderRadius: 100,
+              borderColor: "black",
+              paddingVertical: 15,
+              marginBottom: 10
+            }}
+            titleStyle={{
+              color: selectedAnswerIndex !== null
+                ? answer.isCorrect
+                  ? "white"
+                  : index === selectedAnswerIndex
+                    ? "white"
+                    : "black"
+                : "black",
+              fontSize: 20,
+            }}
+            onPressIn={() => handlePress(index)}
+            disabled={selectedAnswerIndex !== null}
+          // title={"Lorem ipsum, dolor sit amet."}
+          // buttonStyle={styles.OptionButton}
+          // titleStyle={styles.OptionButtonText}
+          />
+        ))}
+      </View>
     </View>
-  );
+  )
 }
+
+const styles = StyleSheet.create({
+  OptionButton: {
+    width: "100%",
+    padding: 20,
+    justifyContent: "flex-start",
+    borderRadius: 10,
+    backgroundColor: "transparent",
+    borderColor: "gray",
+    borderWidth: 1,
+    marginBottom: 20
+  },
+  OptionButtonText: {
+    color: "black",
+  },
+});

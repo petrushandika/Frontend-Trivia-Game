@@ -9,13 +9,13 @@ export default function LeaderboardScreen({ navigation }: { navigation: any }) {
   return (
     <SafeAreaView className="w-full h-full bg-slate-200 p-4">
       <View className="flex flex-row items-center justify-between mt-3">
-        <View className="bg-white h-10 w-10 rounded-full justify-center items-center">
+        {/* <View className="bg-white h-10 w-10 rounded-full justify-center items-center">
           <FontAwesome6 name="angle-left" size={25} color="black" />
-        </View>
-        <Text className="text-black text-2xl font-medium">Match Result</Text>
-        <View className="bg-white h-10 w-10 rounded-full items-center justify-center">
+        </View> */}
+        <Text className=" mt-5 mx-auto text-black text-2xl font-medium">Match Result</Text>
+        {/* <View className="bg-white h-10 w-10 rounded-full items-center justify-center">
           <Entypo name="dots-three-horizontal" size={30} color="black" />
-        </View>
+        </View> */}
       </View>
       {/* <Tab value={index} onChange={setIndex} dense>
         <Tab.Item>Winner</Tab.Item>
@@ -29,7 +29,7 @@ export default function LeaderboardScreen({ navigation }: { navigation: any }) {
           <Text>Favorite</Text>
         </TabView.Item>
       </TabView> */}
-      <View className="flex flex-row space-x-3 items-center p-4 bg-orange-300 mt-5 rounded-[8px] opacity-70">
+      <View className="flex flex-row space-x-3 items-center p-4 bg-orange-500 mt-5 rounded-[8px] opacity-70">
         <View className="justify-center items-center">
           <FontAwesome6 name="star" size={30} color="yellow" />
         </View>
@@ -66,7 +66,7 @@ export default function LeaderboardScreen({ navigation }: { navigation: any }) {
               source={require("@/assets/images/person2.jpg")}
             />
           </View>
-          <Text className="text-white bg-amber-400 rounded-full h-[20px] w-[20px] absolute text-center">
+          <Text className="text-white bg-amber-400 rounded-full h-[20px] w-[20px] absolute text-center top-[96px]">
             1
           </Text>
           <Text className="text-black text-lg font-medium">
@@ -136,6 +136,7 @@ export default function LeaderboardScreen({ navigation }: { navigation: any }) {
         />
         <Button
           title="Play Again"
+          onPress={() => navigation.navigate("Question")}
           buttonStyle={{ backgroundColor: "green", borderRadius: 20 }}
           containerStyle={{ width: "40%" }}
         />
