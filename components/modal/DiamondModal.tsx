@@ -257,7 +257,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     elevation: 5,
     width: "90%",
-    height: "50%",
+    height: "60%",
   },
   diamondGrid: {
     flexDirection: "row",
@@ -273,6 +273,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     marginHorizontal: 10,
     borderRadius: 10,
+    backgroundColor: '#f9f9f9',
   },
   selectedImageContainer: {
     borderColor: "yellow",

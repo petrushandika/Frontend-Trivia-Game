@@ -15,7 +15,7 @@ export default function LoginScreen({ navigation }: { navigation: any }) {
   const handleLogin = async () => {
     const redirectUrl = Linking.createURL("/");
     const response = await WebBrowser.openAuthSessionAsync(
-      `https://034c-2404-8000-1003-dfda-2c1c-bbd6-6b98-4468.ngrok-free.app/google/redirect?redirectTo=${redirectUrl}`,
+      `https://e81a-2404-8000-1003-dfe4-a98a-10dd-3d3e-c94b.ngrok-free.app/google/redirect?redirectTo=${redirectUrl}`,
       redirectUrl
     );
     const token = response.url.split("=")[1].split("&")[0];

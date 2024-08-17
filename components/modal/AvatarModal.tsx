@@ -19,8 +19,8 @@ export default function AvatarModal({ modalVisible, toggleModal, setSelectedAvat
   const [alertVisible, setAlertVisible] = useState<boolean>(false);
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const [avatars, setAvatars] = useState<AvatarDto[]>([]);
-  
-  const {profile} = useFetchProfile()
+
+  const { profile } = useFetchProfile()
 
   const handleAvatarClick = (avatarId: number, diamond: number | string, image: string) => {
     if (typeof diamond === "number" && diamond > profile.diamond) {
@@ -30,7 +30,7 @@ export default function AvatarModal({ modalVisible, toggleModal, setSelectedAvat
     }
   };
 
-  const {mutateAsync} = usePurchaseAvatar();
+  const { mutateAsync } = usePurchaseAvatar();
 
   const sortedAvatars: AvatarDto[] = [...avatars].sort((a: AvatarDto, b: AvatarDto) => {
     const priceA = a.diamond == null ? 0 : Number(a.diamond);
@@ -45,13 +45,13 @@ export default function AvatarModal({ modalVisible, toggleModal, setSelectedAvat
         setSelectedAvatar(selectedAvatarImage);
       }
       console.log('avatarId', localSelectedAvatar);
-     try {
-       await mutateAsync({
-         avatarId: localSelectedAvatar,
-       });
-     } catch (error) {
-       console.error("Error purchasing avatar:", error);
-     }
+      try {
+        await mutateAsync({
+          avatarId: localSelectedAvatar,
+        });
+      } catch (error) {
+        console.error("Error purchasing avatar:", error);
+      }
     }
     toggleModal();
   };
@@ -136,10 +136,10 @@ export default function AvatarModal({ modalVisible, toggleModal, setSelectedAvat
         <View style={styles.centeredView}>
           <View style={styles.alertView}>
             <TouchableOpacity onPress={handleNo}>
-            <Image
-              source={{ uri: 'https://cdn-icons-png.flaticon.com/512/9587/9587077.png' }}
-              style={styles.alertImage}
-            />
+              <Image
+                source={{ uri: 'https://cdn-icons-png.flaticon.com/512/9587/9587077.png' }}
+                style={styles.alertImage}
+              />
             </TouchableOpacity>
             <Text style={styles.alertTitle}>Oops!</Text>
             <Text style={styles.alertMessage}>You don't have enough diamonds. Please visit the shop to buy more!</Text>
@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f9f9f9',
   },
   selectedImageContainer: {
-    borderColor: "orange",
+    borderColor: "yellow",
     borderWidth: 3,
     borderRadius: 10,
   },
@@ -229,13 +229,17 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
   actionsContainer: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
     flexDirection: "row",
-    justifyContent: "space-between",
-    width: '100%',
-    paddingHorizontal: 20,
+    justifyContent: "center",
+    backgroundColor: "white",
     paddingVertical: 20,
-    borderTopWidth: 1,
-    borderTopColor: '#e9e9e9',
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    gap: 20,
   },
   cancelButton: {
     backgroundColor: "red",
